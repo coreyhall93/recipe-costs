@@ -37,6 +37,9 @@
         input[type="number"]::-webkit-inner-spin-button,
         input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
         input[type="number"] { -moz-appearance: textfield; }
+        .sparkline { display: inline-block; vertical-align: middle; }
+        .savings-positive { color: #16a34a; }
+        .savings-negative { color: #dc2626; }
     </style>
 </head>
 <body class="bg-stone-50 text-stone-900">
@@ -50,18 +53,20 @@
             </div>
             <div class="flex items-center gap-3 flex-shrink-0">
                 <div id="sync-status" class="text-xs text-stone-400 hidden sm:block"></div>
-                <button id="btn-save-github" onclick="saveToGitHub()" class="bg-stone-300 text-stone-500 font-semibold py-2.5 px-6 rounded-xl shadow-sm transition-all duration-200 text-sm cursor-not-allowed" disabled>
+                <button id="btn-save-github" class="bg-stone-300 text-stone-500 font-semibold py-2.5 px-6 rounded-xl shadow-sm transition-all duration-200 text-sm cursor-not-allowed" disabled>
                     Save to GitHub
                 </button>
             </div>
         </div>
 
         <!-- Tab Navigation -->
-        <nav class="flex gap-6 sm:gap-8 border-b border-stone-200 mb-8 overflow-x-auto whitespace-nowrap -mx-4 px-4 sm:mx-0 sm:px-0">
+        <nav class="flex gap-4 sm:gap-6 border-b border-stone-200 mb-8 overflow-x-auto whitespace-nowrap -mx-4 px-4 sm:mx-0 sm:px-0">
             <button class="tab-btn active text-sm font-semibold text-sky-600 flex-shrink-0" data-tab="ingredients" onclick="switchTab('ingredients')">Ingredients</button>
             <button class="tab-btn text-sm font-semibold text-stone-500 flex-shrink-0" data-tab="recipes" onclick="switchTab('recipes')">Recipes</button>
             <button class="tab-btn text-sm font-semibold text-stone-500 flex-shrink-0" data-tab="meals" onclick="switchTab('meals')">Meals</button>
             <button class="tab-btn text-sm font-semibold text-stone-500 flex-shrink-0" data-tab="consumption" onclick="switchTab('consumption')">Consumption</button>
+            <button class="tab-btn text-sm font-semibold text-stone-500 flex-shrink-0" data-tab="compare" onclick="switchTab('compare')">Compare</button>
+            <button class="tab-btn text-sm font-semibold text-stone-500 flex-shrink-0" data-tab="shopping" onclick="switchTab('shopping')">Shopping</button>
             <button class="tab-btn text-sm font-semibold text-stone-500 flex-shrink-0" data-tab="settings" onclick="switchTab('settings')">Settings</button>
         </nav>
 
@@ -70,6 +75,8 @@
         <div id="tab-recipes" class="tab-content" style="display:none"></div>
         <div id="tab-meals" class="tab-content" style="display:none"></div>
         <div id="tab-consumption" class="tab-content" style="display:none"></div>
+        <div id="tab-compare" class="tab-content" style="display:none"></div>
+        <div id="tab-shopping" class="tab-content" style="display:none"></div>
         <div id="tab-settings" class="tab-content" style="display:none"></div>
     </div>
 
@@ -81,26 +88,28 @@
     // SECTION 1: SEED DATA & CONSTANTS
     // ========================================
 
+    const CATEGORY_OPTIONS = ['Dairy', 'Dry Goods', 'Proteins', 'Oils & Fats', 'Sweeteners', 'Leavening', 'Seasonings', 'Produce', 'Other'];
+
     const SEED_DATA = {
         ingredients: [
-            { id: "bread_flour", name: "Bread Flour", packageSize: "5 lbs", packageAmount: 2268, packageUnit: "g", price: 5.58, costPerUnit: 0.00246 },
-            { id: "ap_flour", name: "King Arthur AP Flour", packageSize: "5 lbs", packageAmount: 2268, packageUnit: "g", price: 5.24, costPerUnit: 0.00231 },
-            { id: "self_rising_flour", name: "White Lily Self-Rising", packageSize: "5 lbs", packageAmount: 2268, packageUnit: "g", price: 4.44, costPerUnit: 0.00196 },
-            { id: "yeast", name: "Active Dry Yeast", packageSize: "4 oz", packageAmount: 113, packageUnit: "g", price: 5.48, costPerUnit: 0.04850 },
-            { id: "butter", name: "Unsalted Butter", packageSize: "4 lbs", packageAmount: 1814, packageUnit: "g", price: 8.24, costPerUnit: 0.00454 },
-            { id: "milk", name: "2% Milk", packageSize: "1 gallon", packageAmount: 3785, packageUnit: "g", price: 2.42, costPerUnit: 0.00064 },
-            { id: "honey", name: "Honey", packageSize: "12 oz", packageAmount: 340, packageUnit: "g", price: 3.74, costPerUnit: 0.01100 },
-            { id: "sugar", name: "Granulated Sugar", packageSize: "4 lbs", packageAmount: 1814, packageUnit: "g", price: 2.97, costPerUnit: 0.00164 },
-            { id: "brown_sugar", name: "Light Brown Sugar", packageSize: "32 oz", packageAmount: 907, packageUnit: "g", price: 1.94, costPerUnit: 0.00214 },
-            { id: "salt", name: "Morton Kosher Salt", packageSize: "48 oz", packageAmount: 1361, packageUnit: "g", price: 2.97, costPerUnit: 0.00218 },
-            { id: "olive_oil", name: "Extra Virgin Olive Oil", packageSize: "25.5 oz", packageAmount: 724, packageUnit: "g", price: 9.12, costPerUnit: 0.01260 },
-            { id: "eggs", name: "Large White Eggs", packageSize: "18 count", packageAmount: 18, packageUnit: "each", price: 2.92, costPerUnit: 0.16222 },
-            { id: "bacon", name: "Hickory Smoked Bacon", packageSize: "12 oz", packageAmount: 12, packageUnit: "oz", price: 3.77, costPerUnit: 0.31417 },
-            { id: "sausage", name: "Breakfast Sausage Patties", packageSize: "12 oz", packageAmount: 12, packageUnit: "oz", price: 2.42, costPerUnit: 0.20167 },
-            { id: "baking_powder", name: "Baking Powder", packageSize: "8.1 oz", packageAmount: 230, packageUnit: "g", price: 1.98, costPerUnit: 0.00861 },
-            { id: "baking_soda", name: "Baking Soda", packageSize: "8 oz", packageAmount: 227, packageUnit: "g", price: 0.87, costPerUnit: 0.00383 },
-            { id: "cheese", name: "American Cheese Singles", packageSize: "24 slices", packageAmount: 24, packageUnit: "slice", price: 2.48, costPerUnit: 0.10333 },
-            { id: "vinegar", name: "White Vinegar", packageSize: "16 oz", packageAmount: 473, packageUnit: "g", price: 1.50, costPerUnit: 0.00317 }
+            { id: "bread_flour", name: "Bread Flour", packageSize: "5 lbs", packageAmount: 2268, packageUnit: "g", price: 5.58, costPerUnit: 0.00246, category: "Dry Goods", priceHistory: [] },
+            { id: "ap_flour", name: "King Arthur AP Flour", packageSize: "5 lbs", packageAmount: 2268, packageUnit: "g", price: 5.24, costPerUnit: 0.00231, category: "Dry Goods", priceHistory: [] },
+            { id: "self_rising_flour", name: "White Lily Self-Rising", packageSize: "5 lbs", packageAmount: 2268, packageUnit: "g", price: 4.44, costPerUnit: 0.00196, category: "Dry Goods", priceHistory: [] },
+            { id: "yeast", name: "Active Dry Yeast", packageSize: "4 oz", packageAmount: 113, packageUnit: "g", price: 5.48, costPerUnit: 0.04850, category: "Leavening", priceHistory: [] },
+            { id: "butter", name: "Unsalted Butter", packageSize: "4 lbs", packageAmount: 1814, packageUnit: "g", price: 8.24, costPerUnit: 0.00454, category: "Dairy", priceHistory: [] },
+            { id: "milk", name: "2% Milk", packageSize: "1 gallon", packageAmount: 3785, packageUnit: "g", price: 2.42, costPerUnit: 0.00064, category: "Dairy", priceHistory: [] },
+            { id: "honey", name: "Honey", packageSize: "12 oz", packageAmount: 340, packageUnit: "g", price: 3.74, costPerUnit: 0.01100, category: "Sweeteners", priceHistory: [] },
+            { id: "sugar", name: "Granulated Sugar", packageSize: "4 lbs", packageAmount: 1814, packageUnit: "g", price: 2.97, costPerUnit: 0.00164, category: "Sweeteners", priceHistory: [] },
+            { id: "brown_sugar", name: "Light Brown Sugar", packageSize: "32 oz", packageAmount: 907, packageUnit: "g", price: 1.94, costPerUnit: 0.00214, category: "Sweeteners", priceHistory: [] },
+            { id: "salt", name: "Morton Kosher Salt", packageSize: "48 oz", packageAmount: 1361, packageUnit: "g", price: 2.97, costPerUnit: 0.00218, category: "Seasonings", priceHistory: [] },
+            { id: "olive_oil", name: "Extra Virgin Olive Oil", packageSize: "25.5 oz", packageAmount: 724, packageUnit: "g", price: 9.12, costPerUnit: 0.01260, category: "Oils & Fats", priceHistory: [] },
+            { id: "eggs", name: "Large White Eggs", packageSize: "18 count", packageAmount: 18, packageUnit: "each", price: 2.92, costPerUnit: 0.16222, category: "Proteins", priceHistory: [] },
+            { id: "bacon", name: "Hickory Smoked Bacon", packageSize: "12 oz", packageAmount: 12, packageUnit: "oz", price: 3.77, costPerUnit: 0.31417, category: "Proteins", priceHistory: [] },
+            { id: "sausage", name: "Breakfast Sausage Patties", packageSize: "12 oz", packageAmount: 12, packageUnit: "oz", price: 2.42, costPerUnit: 0.20167, category: "Proteins", priceHistory: [] },
+            { id: "baking_powder", name: "Baking Powder", packageSize: "8.1 oz", packageAmount: 230, packageUnit: "g", price: 1.98, costPerUnit: 0.00861, category: "Leavening", priceHistory: [] },
+            { id: "baking_soda", name: "Baking Soda", packageSize: "8 oz", packageAmount: 227, packageUnit: "g", price: 0.87, costPerUnit: 0.00383, category: "Leavening", priceHistory: [] },
+            { id: "cheese", name: "American Cheese Singles", packageSize: "24 slices", packageAmount: 24, packageUnit: "slice", price: 2.48, costPerUnit: 0.10333, category: "Dairy", priceHistory: [] },
+            { id: "vinegar", name: "White Vinegar", packageSize: "16 oz", packageAmount: 473, packageUnit: "g", price: 1.50, costPerUnit: 0.00317, category: "Seasonings", priceHistory: [] }
         ],
         recipes: [
             {
@@ -142,6 +151,7 @@
         ],
         meals: [],
         consumption: [],
+        comparisons: [],
         lastUpdated: null
     };
 
@@ -156,6 +166,7 @@
         recipes: [],
         meals: [],
         consumption: [],
+        comparisons: [],
         lastUpdated: null,
         _meta: {
             sha: null,
@@ -163,12 +174,12 @@
             lastSynced: null,
             activeTab: 'ingredients',
             editingIngredientId: null,
-            editingRecipeId: null,
-            editingMealId: null,
             dirty: false,
             addingIngredient: false,
             recipeForm: null,
-            mealForm: null
+            mealForm: null,
+            ingredientCategoryFilter: 'All',
+            recipeScaleMultipliers: {}
         }
     };
 
@@ -186,9 +197,7 @@
             ...state.recipes.map(r => r.id),
             ...state.meals.map(m => m.id)
         ];
-        while (allIds.includes(id)) {
-            id = base + '_' + counter++;
-        }
+        while (allIds.includes(id)) { id = base + '_' + counter++; }
         return id;
     }
 
@@ -238,9 +247,7 @@
     // SECTION 4: UTILITY FUNCTIONS
     // ========================================
 
-    function fmt(amount) {
-        return '$' + amount.toFixed(2);
-    }
+    function fmt(amount) { return '$' + amount.toFixed(2); }
 
     function fmtUnit(amount, unit) {
         const decimals = amount < 0.01 ? 4 : 2;
@@ -250,11 +257,7 @@
     function showToast(message, type = 'info') {
         const container = document.getElementById('toast-container');
         const toast = document.createElement('div');
-        const colors = {
-            success: 'bg-green-50 text-green-800 border-green-200',
-            error: 'bg-red-50 text-red-800 border-red-200',
-            info: 'bg-sky-50 text-sky-800 border-sky-200'
-        };
+        const colors = { success: 'bg-green-50 text-green-800 border-green-200', error: 'bg-red-50 text-red-800 border-red-200', info: 'bg-sky-50 text-sky-800 border-sky-200' };
         toast.className = `toast-enter px-4 py-3 rounded-xl border shadow-sm text-sm font-medium ${colors[type] || colors.info}`;
         toast.textContent = message;
         container.appendChild(toast);
@@ -265,6 +268,24 @@
         const div = document.createElement('div');
         div.textContent = str;
         return div.innerHTML;
+    }
+
+    function formatDate(iso) {
+        if (!iso) return '';
+        const d = new Date(iso);
+        return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    }
+
+    function renderSparkline(priceHistory) {
+        if (!priceHistory || priceHistory.length < 2) return '';
+        const prices = priceHistory.slice(-10).map(p => p.price);
+        const min = Math.min(...prices);
+        const max = Math.max(...prices);
+        const range = max - min || 1;
+        const w = 60, h = 20;
+        const points = prices.map((p, i) => `${(i / (prices.length - 1)) * w},${h - ((p - min) / range) * h}`).join(' ');
+        const trend = prices[prices.length - 1] > prices[0] ? '#dc2626' : '#16a34a';
+        return `<svg class="sparkline" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}"><polyline fill="none" stroke="${trend}" stroke-width="1.5" points="${points}"/></svg>`;
     }
 
     // ========================================
@@ -279,7 +300,7 @@
         };
     }
 
-    function saveSettings(pat, owner, repo) {
+    function saveSettingsToStorage(pat, owner, repo) {
         localStorage.setItem('recipeCosts_pat', pat);
         localStorage.setItem('recipeCosts_owner', owner);
         localStorage.setItem('recipeCosts_repo', repo);
@@ -302,6 +323,9 @@
         } else if (status === 'error') {
             el.innerHTML = '<span class="inline-block w-2 h-2 rounded-full bg-red-500 mr-1"></span> Sync error';
             el.classList.remove('hidden');
+        } else if (dirty && !hasSettings) {
+            el.innerHTML = '<span class="inline-block w-2 h-2 rounded-full bg-amber-500 mr-1"></span> Set up GitHub to sync';
+            el.classList.remove('hidden');
         } else if (dirty) {
             el.innerHTML = '<span class="inline-block w-2 h-2 rounded-full bg-amber-500 mr-1"></span> Unsaved changes';
             el.classList.remove('hidden');
@@ -315,25 +339,26 @@
         if (dirty && hasSettings) {
             btn.disabled = false;
             btn.className = 'bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2.5 px-6 rounded-xl shadow-sm transition-all duration-200 hover:shadow-md text-sm';
+            btn.onclick = saveToGitHub;
+        } else if (dirty && !hasSettings) {
+            btn.disabled = false;
+            btn.className = 'bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2.5 px-6 rounded-xl shadow-sm transition-all duration-200 hover:shadow-md text-sm';
+            btn.onclick = () => { switchTab('settings'); showToast('Set up GitHub sync to save your data', 'info'); };
         } else {
             btn.disabled = true;
             btn.className = 'bg-stone-300 text-stone-500 font-semibold py-2.5 px-6 rounded-xl shadow-sm transition-all duration-200 text-sm cursor-not-allowed';
+            btn.onclick = null;
         }
     }
 
     async function loadFromGitHub() {
         const { pat, owner, repo } = getSettings();
         if (!pat || !owner || !repo) return false;
-
         state._meta.syncStatus = 'loading';
         renderSyncStatus();
-
         try {
             const url = `https://api.github.com/repos/${owner}/${repo}/contents/data.json`;
-            const response = await fetch(url, {
-                headers: { 'Authorization': `Bearer ${pat}`, 'Accept': 'application/vnd.github.v3+json' }
-            });
-
+            const response = await fetch(url, { headers: { 'Authorization': `Bearer ${pat}`, 'Accept': 'application/vnd.github.v3+json' } });
             if (response.status === 404) {
                 initializeWithSeedData();
                 state._meta.dirty = true;
@@ -343,22 +368,24 @@
                 showToast('No data found on GitHub. Loaded defaults.', 'info');
                 return true;
             }
-
             if (!response.ok) throw new Error(`GitHub API error: ${response.status}`);
-
             const fileData = await response.json();
             const content = JSON.parse(decodeURIComponent(escape(atob(fileData.content))));
-
             state.ingredients = content.ingredients || [];
             state.recipes = content.recipes || [];
             state.meals = content.meals || [];
             state.consumption = content.consumption || [];
+            state.comparisons = content.comparisons || [];
             state.lastUpdated = content.lastUpdated;
             state._meta.sha = fileData.sha;
             state._meta.dirty = false;
             state._meta.syncStatus = 'idle';
             state._meta.lastSynced = new Date().toISOString();
-
+            // Ensure new fields exist on older data
+            for (const ing of state.ingredients) {
+                if (!ing.priceHistory) ing.priceHistory = [];
+                if (!ing.category) ing.category = 'Other';
+            }
             recalculateAll();
             render();
             renderSyncStatus();
@@ -374,64 +401,34 @@
 
     async function saveToGitHub() {
         const { pat, owner, repo } = getSettings();
-        if (!pat || !owner || !repo) {
-            showToast('Configure GitHub settings first', 'error');
-            switchTab('settings');
-            return false;
-        }
-
+        if (!pat || !owner || !repo) { showToast('Configure GitHub settings first', 'error'); switchTab('settings'); return false; }
         state._meta.syncStatus = 'saving';
         renderSyncStatus();
-
         const data = {
             ingredients: state.ingredients,
             recipes: state.recipes,
             meals: state.meals,
             consumption: state.consumption,
+            comparisons: state.comparisons,
             lastUpdated: new Date().toISOString()
         };
-
         try {
             const url = `https://api.github.com/repos/${owner}/${repo}/contents/data.json`;
-
             if (!state._meta.sha) {
-                const getResp = await fetch(url, {
-                    headers: { 'Authorization': `Bearer ${pat}`, 'Accept': 'application/vnd.github.v3+json' }
-                });
-                if (getResp.ok) {
-                    const fileData = await getResp.json();
-                    state._meta.sha = fileData.sha;
-                }
+                const getResp = await fetch(url, { headers: { 'Authorization': `Bearer ${pat}`, 'Accept': 'application/vnd.github.v3+json' } });
+                if (getResp.ok) { const fileData = await getResp.json(); state._meta.sha = fileData.sha; }
             }
-
-            const body = {
-                message: `Update recipe costs data - ${new Date().toLocaleString()}`,
-                content: btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))))
-            };
+            const body = { message: `Update recipe costs data - ${new Date().toLocaleString()}`, content: btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2)))) };
             if (state._meta.sha) body.sha = state._meta.sha;
-
-            const response = await fetch(url, {
-                method: 'PUT',
-                headers: { 'Authorization': `Bearer ${pat}`, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
-                body: JSON.stringify(body)
-            });
-
-            if (response.status === 409) {
-                showToast('Conflict: data was modified on another device. Reload the page.', 'error');
-                state._meta.syncStatus = 'error';
-                renderSyncStatus();
-                return false;
-            }
-
+            const response = await fetch(url, { method: 'PUT', headers: { 'Authorization': `Bearer ${pat}`, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+            if (response.status === 409) { showToast('Conflict: data was modified on another device. Reload the page.', 'error'); state._meta.syncStatus = 'error'; renderSyncStatus(); return false; }
             if (!response.ok) throw new Error(`GitHub API error: ${response.status}`);
-
             const result = await response.json();
             state._meta.sha = result.content.sha;
             state._meta.dirty = false;
             state._meta.syncStatus = 'idle';
             state._meta.lastSynced = new Date().toISOString();
             state.lastUpdated = data.lastUpdated;
-
             renderSyncStatus();
             showToast('Saved to GitHub', 'success');
             return true;
@@ -465,25 +462,49 @@
 
     function renderIngredients() {
         const container = document.getElementById('tab-ingredients');
-        const ingredients = state.ingredients;
+        const filter = state._meta.ingredientCategoryFilter;
+        let ingredients = [...state.ingredients].sort((a, b) => a.name.localeCompare(b.name));
+        if (filter !== 'All') {
+            ingredients = ingredients.filter(i => i.category === filter);
+        }
         const editing = state._meta.editingIngredientId;
         const adding = state._meta.addingIngredient;
 
-        let rows = '';
+        // Category counts
+        const allCount = state.ingredients.length;
+        const catCounts = {};
+        for (const ing of state.ingredients) {
+            const cat = ing.category || 'Other';
+            catCounts[cat] = (catCounts[cat] || 0) + 1;
+        }
 
+        let categoryPills = `<button onclick="setIngredientCategoryFilter('All')" class="px-3 py-1 rounded-full text-xs font-semibold transition-all ${filter === 'All' ? 'bg-sky-600 text-white' : 'bg-stone-200 text-stone-600 hover:bg-stone-300'}"">All (${allCount})</button>`;
+        for (const cat of CATEGORY_OPTIONS) {
+            if (catCounts[cat]) {
+                categoryPills += `<button onclick="setIngredientCategoryFilter('${cat}')" class="px-3 py-1 rounded-full text-xs font-semibold transition-all ${filter === cat ? 'bg-sky-600 text-white' : 'bg-stone-200 text-stone-600 hover:bg-stone-300'}">${cat} (${catCounts[cat]})</button>`;
+            }
+        }
+
+        let rows = '';
         if (adding) {
             rows += `<tr class="bg-sky-50">
-                <td class="px-4 sm:px-8 py-3"><input type="text" id="ing-new-name" placeholder="Name" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"></td>
-                <td class="px-4 sm:px-8 py-3"><input type="text" id="ing-new-pkgsize" placeholder="e.g. 5 lbs" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"></td>
-                <td class="px-4 sm:px-8 py-3"><input type="number" id="ing-new-pkgamt" placeholder="Amount" step="any" min="0" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"></td>
-                <td class="px-4 sm:px-8 py-3">
+                <td class="px-4 sm:px-6 py-3"><input type="text" id="ing-new-name" placeholder="Name" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"></td>
+                <td class="px-4 sm:px-6 py-3">
+                    <select id="ing-new-cat" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
+                        ${CATEGORY_OPTIONS.map(c => `<option value="${c}">${c}</option>`).join('')}
+                    </select>
+                </td>
+                <td class="px-4 sm:px-6 py-3"><input type="text" id="ing-new-pkgsize" placeholder="e.g. 5 lbs" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"></td>
+                <td class="px-4 sm:px-6 py-3"><input type="number" id="ing-new-pkgamt" placeholder="Amt" step="any" min="0" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"></td>
+                <td class="px-4 sm:px-6 py-3">
                     <select id="ing-new-unit" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
                         ${UNIT_OPTIONS.map(u => `<option value="${u}">${u}</option>`).join('')}
                     </select>
                 </td>
-                <td class="px-4 sm:px-8 py-3"><input type="number" id="ing-new-price" placeholder="0.00" step="0.01" min="0" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"></td>
-                <td class="px-4 sm:px-8 py-3 text-sm text-stone-400 font-mono">—</td>
-                <td class="px-4 sm:px-8 py-3">
+                <td class="px-4 sm:px-6 py-3"><input type="number" id="ing-new-price" placeholder="0.00" step="0.01" min="0" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"></td>
+                <td class="px-4 sm:px-6 py-3 text-sm text-stone-400 font-mono">—</td>
+                <td class="px-4 sm:px-6 py-3"></td>
+                <td class="px-4 sm:px-6 py-3">
                     <div class="flex gap-2">
                         <button onclick="saveNewIngredient()" class="text-sky-600 hover:text-sky-800 text-sm font-semibold">Save</button>
                         <button onclick="cancelAddIngredient()" class="text-stone-400 hover:text-stone-600 text-sm">Cancel</button>
@@ -495,17 +516,23 @@
         for (const ing of ingredients) {
             if (editing === ing.id) {
                 rows += `<tr class="bg-sky-50">
-                    <td class="px-4 sm:px-8 py-3"><input type="text" id="ing-edit-name" value="${escHtml(ing.name)}" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"></td>
-                    <td class="px-4 sm:px-8 py-3"><input type="text" id="ing-edit-pkgsize" value="${escHtml(ing.packageSize)}" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"></td>
-                    <td class="px-4 sm:px-8 py-3"><input type="number" id="ing-edit-pkgamt" value="${ing.packageAmount}" step="any" min="0" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"></td>
-                    <td class="px-4 sm:px-8 py-3">
+                    <td class="px-4 sm:px-6 py-3"><input type="text" id="ing-edit-name" value="${escHtml(ing.name)}" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"></td>
+                    <td class="px-4 sm:px-6 py-3">
+                        <select id="ing-edit-cat" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
+                            ${CATEGORY_OPTIONS.map(c => `<option value="${c}" ${c === ing.category ? 'selected' : ''}>${c}</option>`).join('')}
+                        </select>
+                    </td>
+                    <td class="px-4 sm:px-6 py-3"><input type="text" id="ing-edit-pkgsize" value="${escHtml(ing.packageSize)}" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"></td>
+                    <td class="px-4 sm:px-6 py-3"><input type="number" id="ing-edit-pkgamt" value="${ing.packageAmount}" step="any" min="0" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"></td>
+                    <td class="px-4 sm:px-6 py-3">
                         <select id="ing-edit-unit" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
                             ${UNIT_OPTIONS.map(u => `<option value="${u}" ${u === ing.packageUnit ? 'selected' : ''}>${u}</option>`).join('')}
                         </select>
                     </td>
-                    <td class="px-4 sm:px-8 py-3"><input type="number" id="ing-edit-price" value="${ing.price}" step="0.01" min="0" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"></td>
-                    <td class="px-4 sm:px-8 py-3 text-sm text-stone-400 font-mono">auto</td>
-                    <td class="px-4 sm:px-8 py-3">
+                    <td class="px-4 sm:px-6 py-3"><input type="number" id="ing-edit-price" value="${ing.price}" step="0.01" min="0" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"></td>
+                    <td class="px-4 sm:px-6 py-3 text-sm text-stone-400 font-mono">auto</td>
+                    <td class="px-4 sm:px-6 py-3"></td>
+                    <td class="px-4 sm:px-6 py-3">
                         <div class="flex gap-2">
                             <button onclick="saveEditIngredient('${ing.id}')" class="text-sky-600 hover:text-sky-800 text-sm font-semibold">Save</button>
                             <button onclick="cancelEditIngredient()" class="text-stone-400 hover:text-stone-600 text-sm">Cancel</button>
@@ -514,14 +541,17 @@
                 </tr>`;
             } else {
                 const deps = getIngredientDependencies(ing.id);
+                const spark = renderSparkline(ing.priceHistory);
+                const historyCount = (ing.priceHistory || []).length;
                 rows += `<tr class="hover:bg-stone-50 transition-colors">
-                    <td class="px-4 sm:px-8 py-4 text-sm font-medium text-stone-900">${escHtml(ing.name)}</td>
-                    <td class="px-4 sm:px-8 py-4 text-sm text-stone-600">${escHtml(ing.packageSize)}</td>
-                    <td class="px-4 sm:px-8 py-4 text-sm text-stone-600">${ing.packageAmount}</td>
-                    <td class="px-4 sm:px-8 py-4 text-sm text-stone-600">${ing.packageUnit}</td>
-                    <td class="px-4 sm:px-8 py-4 text-sm text-stone-900">${fmt(ing.price)}</td>
-                    <td class="px-4 sm:px-8 py-4 text-sm text-stone-600 font-mono">${fmtUnit(ing.costPerUnit, ing.packageUnit)}</td>
-                    <td class="px-4 sm:px-8 py-4">
+                    <td class="px-4 sm:px-6 py-4 text-sm font-medium text-stone-900">${escHtml(ing.name)}</td>
+                    <td class="px-4 sm:px-6 py-4"><span class="text-xs px-2 py-0.5 rounded-full bg-stone-100 text-stone-600">${escHtml(ing.category || 'Other')}</span></td>
+                    <td class="px-4 sm:px-6 py-4 text-sm text-stone-600">${escHtml(ing.packageSize)}</td>
+                    <td class="px-4 sm:px-6 py-4 text-sm text-stone-600">${ing.packageAmount} ${ing.packageUnit}</td>
+                    <td class="px-4 sm:px-6 py-4 text-sm text-stone-900">${fmt(ing.price)}</td>
+                    <td class="px-4 sm:px-6 py-4 text-sm text-stone-600 font-mono">${fmtUnit(ing.costPerUnit, ing.packageUnit)}</td>
+                    <td class="px-4 sm:px-6 py-4">${spark}${historyCount > 0 ? `<span class="text-xs text-stone-400 ml-1">${historyCount}</span>` : ''}</td>
+                    <td class="px-4 sm:px-6 py-4">
                         <div class="flex gap-3">
                             <button onclick="startEditIngredient('${ing.id}')" class="text-stone-400 hover:text-sky-600 transition-colors" title="Edit">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
@@ -536,32 +566,37 @@
         }
 
         container.innerHTML = `
-            <div class="flex justify-between items-center mb-6">
+            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-4">
                 <h2 class="text-2xl font-black tracking-tight text-stone-900">Ingredient Prices</h2>
-                <button onclick="startAddIngredient()" class="bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2 px-5 rounded-xl shadow-sm transition-all duration-200 hover:shadow-md text-sm">
-                    + Add Ingredient
-                </button>
+                <button onclick="startAddIngredient()" class="bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2 px-5 rounded-xl shadow-sm transition-all duration-200 hover:shadow-md text-sm">+ Add Ingredient</button>
             </div>
+            <div class="flex gap-2 flex-wrap mb-6">${categoryPills}</div>
             <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
                 <div class="overflow-x-auto">
                     <table class="min-w-full">
                         <thead>
                             <tr class="border-b border-stone-100">
-                                <th class="px-4 sm:px-8 py-4 text-left text-xs font-semibold text-stone-500 uppercase tracking-wider">Ingredient</th>
-                                <th class="px-4 sm:px-8 py-4 text-left text-xs font-semibold text-stone-500 uppercase tracking-wider">Pkg Size</th>
-                                <th class="px-4 sm:px-8 py-4 text-left text-xs font-semibold text-stone-500 uppercase tracking-wider">Amount</th>
-                                <th class="px-4 sm:px-8 py-4 text-left text-xs font-semibold text-stone-500 uppercase tracking-wider">Unit</th>
-                                <th class="px-4 sm:px-8 py-4 text-left text-xs font-semibold text-stone-500 uppercase tracking-wider">Price</th>
-                                <th class="px-4 sm:px-8 py-4 text-left text-xs font-semibold text-stone-500 uppercase tracking-wider">Cost/Unit</th>
-                                <th class="px-4 sm:px-8 py-4 text-left text-xs font-semibold text-stone-500 uppercase tracking-wider w-24"></th>
+                                <th class="px-4 sm:px-6 py-4 text-left text-xs font-semibold text-stone-500 uppercase tracking-wider">Ingredient</th>
+                                <th class="px-4 sm:px-6 py-4 text-left text-xs font-semibold text-stone-500 uppercase tracking-wider">Category</th>
+                                <th class="px-4 sm:px-6 py-4 text-left text-xs font-semibold text-stone-500 uppercase tracking-wider">Pkg Size</th>
+                                <th class="px-4 sm:px-6 py-4 text-left text-xs font-semibold text-stone-500 uppercase tracking-wider">Amount</th>
+                                <th class="px-4 sm:px-6 py-4 text-left text-xs font-semibold text-stone-500 uppercase tracking-wider">Price</th>
+                                <th class="px-4 sm:px-6 py-4 text-left text-xs font-semibold text-stone-500 uppercase tracking-wider">Cost/Unit</th>
+                                <th class="px-4 sm:px-6 py-4 text-left text-xs font-semibold text-stone-500 uppercase tracking-wider">Trend</th>
+                                <th class="px-4 sm:px-6 py-4 w-20"></th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-stone-100">${rows}</tbody>
                     </table>
                 </div>
             </div>
-            ${ingredients.length === 0 && !adding ? '<p class="text-center text-stone-400 mt-8">No ingredients yet. Add your first one.</p>' : ''}
+            ${ingredients.length === 0 && !adding ? '<p class="text-center text-stone-400 mt-8">No ingredients in this category.</p>' : ''}
         `;
+    }
+
+    function setIngredientCategoryFilter(cat) {
+        state._meta.ingredientCategoryFilter = cat;
+        renderIngredients();
     }
 
     function getIngredientDependencies(ingredientId) {
@@ -579,26 +614,21 @@
         document.getElementById('ing-new-name')?.focus();
     }
 
-    function cancelAddIngredient() {
-        state._meta.addingIngredient = false;
-        renderIngredients();
-    }
+    function cancelAddIngredient() { state._meta.addingIngredient = false; renderIngredients(); }
 
     function saveNewIngredient() {
         const name = document.getElementById('ing-new-name').value.trim();
+        const category = document.getElementById('ing-new-cat').value;
         const packageSize = document.getElementById('ing-new-pkgsize').value.trim();
         const packageAmount = parseFloat(document.getElementById('ing-new-pkgamt').value);
         const packageUnit = document.getElementById('ing-new-unit').value;
         const price = parseFloat(document.getElementById('ing-new-price').value);
-
         if (!name) { showToast('Name is required', 'error'); return; }
         if (!packageAmount || packageAmount <= 0) { showToast('Package amount must be positive', 'error'); return; }
         if (isNaN(price) || price < 0) { showToast('Price must be zero or positive', 'error'); return; }
-
         const id = generateId(name);
         const costPerUnit = price / packageAmount;
-
-        state.ingredients.push({ id, name, packageSize, packageAmount, packageUnit, price, costPerUnit });
+        state.ingredients.push({ id, name, packageSize, packageAmount, packageUnit, price, costPerUnit, category, priceHistory: [{ price, date: new Date().toISOString() }] });
         state._meta.addingIngredient = false;
         recalculateAll();
         markDirty();
@@ -606,38 +636,35 @@
         showToast(`Added ${name}`, 'success');
     }
 
-    function startEditIngredient(id) {
-        state._meta.editingIngredientId = id;
-        state._meta.addingIngredient = false;
-        renderIngredients();
-    }
-
-    function cancelEditIngredient() {
-        state._meta.editingIngredientId = null;
-        renderIngredients();
-    }
+    function startEditIngredient(id) { state._meta.editingIngredientId = id; state._meta.addingIngredient = false; renderIngredients(); }
+    function cancelEditIngredient() { state._meta.editingIngredientId = null; renderIngredients(); }
 
     function saveEditIngredient(id) {
         const ing = state.ingredients.find(i => i.id === id);
         if (!ing) return;
-
         const name = document.getElementById('ing-edit-name').value.trim();
+        const category = document.getElementById('ing-edit-cat').value;
         const packageSize = document.getElementById('ing-edit-pkgsize').value.trim();
         const packageAmount = parseFloat(document.getElementById('ing-edit-pkgamt').value);
         const packageUnit = document.getElementById('ing-edit-unit').value;
         const price = parseFloat(document.getElementById('ing-edit-price').value);
-
         if (!name) { showToast('Name is required', 'error'); return; }
         if (!packageAmount || packageAmount <= 0) { showToast('Package amount must be positive', 'error'); return; }
         if (isNaN(price) || price < 0) { showToast('Price must be zero or positive', 'error'); return; }
 
+        // Price history: log if price changed
+        if (price !== ing.price) {
+            if (!ing.priceHistory) ing.priceHistory = [];
+            ing.priceHistory.push({ price, date: new Date().toISOString() });
+        }
+
         ing.name = name;
+        ing.category = category;
         ing.packageSize = packageSize;
         ing.packageAmount = packageAmount;
         ing.packageUnit = packageUnit;
         ing.price = price;
         ing.costPerUnit = price / packageAmount;
-
         state._meta.editingIngredientId = null;
         recalculateAll();
         markDirty();
@@ -649,10 +676,7 @@
         const ing = state.ingredients.find(i => i.id === id);
         if (!ing) return;
         const deps = getIngredientDependencies(id);
-        if (deps.length) {
-            showToast(`Can't delete — used in: ${deps.join(', ')}`, 'error');
-            return;
-        }
+        if (deps.length) { showToast(`Can't delete — used in: ${deps.join(', ')}`, 'error'); return; }
         if (!confirm(`Delete "${ing.name}"?`)) return;
         state.ingredients = state.ingredients.filter(i => i.id !== id);
         recalculateAll();
@@ -662,8 +686,17 @@
     }
 
     // ========================================
-    // SECTION 8: RECIPES TAB
+    // SECTION 8: RECIPES TAB (with scaling)
     // ========================================
+
+    function getRecipeScale(recipeId) {
+        return state._meta.recipeScaleMultipliers[recipeId] || 1;
+    }
+
+    function setRecipeScale(recipeId, multiplier) {
+        state._meta.recipeScaleMultipliers[recipeId] = multiplier;
+        renderRecipes();
+    }
 
     function renderRecipes() {
         const container = document.getElementById('tab-recipes');
@@ -671,12 +704,16 @@
 
         let cards = '';
         for (const recipe of recipes) {
+            const scale = getRecipeScale(recipe.id);
+            const scaledCost = recipe.totalCost * scale;
+            const scaledYield = recipe.yield * scale;
+
             let breakdown = '';
             for (const item of recipe.ingredients) {
                 const ing = state.ingredients.find(i => i.id === item.ingredientId);
-                const cost = ing ? item.amount * ing.costPerUnit : 0;
+                const cost = ing ? item.amount * scale * ing.costPerUnit : 0;
                 breakdown += `<div class="flex justify-between items-center">
-                    <span class="text-sm text-stone-600">${ing ? escHtml(ing.name) : 'Unknown'} (${item.amount}${item.unit})</span>
+                    <span class="text-sm text-stone-600">${ing ? escHtml(ing.name) : 'Unknown'} (${(item.amount * scale).toFixed(item.amount * scale % 1 === 0 ? 0 : 1)}${item.unit})</span>
                     <span class="text-sm font-medium text-stone-900">${fmt(cost)}</span>
                 </div>`;
             }
@@ -690,12 +727,20 @@
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                     </button>
                 </div>
-                <div class="mb-6">
+                <div class="mb-4">
                     <h3 class="text-sm font-semibold text-sky-600 mb-1">${escHtml(recipe.name).toUpperCase()}</h3>
-                    <div class="text-4xl font-black text-stone-900 tracking-tight mb-2">${fmt(recipe.totalCost)}</div>
-                    <p class="text-sm text-stone-500">Per batch · ${recipe.yield} ${escHtml(recipe.yieldUnit)}</p>
+                    <div class="text-4xl font-black text-stone-900 tracking-tight mb-2">${fmt(scaledCost)}</div>
+                    <p class="text-sm text-stone-500">Per batch · ${scaledYield} ${escHtml(recipe.yieldUnit)}</p>
                 </div>
-                <div class="space-y-2 pt-6 border-t border-stone-100">
+                <div class="flex items-center gap-2 mb-4">
+                    <span class="text-xs text-stone-500">Scale:</span>
+                    <button onclick="setRecipeScale('${recipe.id}', 0.5)" class="px-2 py-0.5 rounded text-xs font-semibold ${scale === 0.5 ? 'bg-sky-600 text-white' : 'bg-stone-100 text-stone-600 hover:bg-stone-200'}">½×</button>
+                    <button onclick="setRecipeScale('${recipe.id}', 1)" class="px-2 py-0.5 rounded text-xs font-semibold ${scale === 1 ? 'bg-sky-600 text-white' : 'bg-stone-100 text-stone-600 hover:bg-stone-200'}">1×</button>
+                    <button onclick="setRecipeScale('${recipe.id}', 1.5)" class="px-2 py-0.5 rounded text-xs font-semibold ${scale === 1.5 ? 'bg-sky-600 text-white' : 'bg-stone-100 text-stone-600 hover:bg-stone-200'}">1.5×</button>
+                    <button onclick="setRecipeScale('${recipe.id}', 2)" class="px-2 py-0.5 rounded text-xs font-semibold ${scale === 2 ? 'bg-sky-600 text-white' : 'bg-stone-100 text-stone-600 hover:bg-stone-200'}">2×</button>
+                    <button onclick="setRecipeScale('${recipe.id}', 3)" class="px-2 py-0.5 rounded text-xs font-semibold ${scale === 3 ? 'bg-sky-600 text-white' : 'bg-stone-100 text-stone-600 hover:bg-stone-200'}">3×</button>
+                </div>
+                <div class="space-y-2 pt-4 border-t border-stone-100">
                     <div class="flex justify-between items-center">
                         <span class="text-sm text-stone-600">Per ${escHtml(recipe.yieldUnit.replace(/s$/, ''))}</span>
                         <span class="text-sm font-semibold text-stone-900">${fmt(recipe.costPerUnit)}</span>
@@ -710,9 +755,7 @@
         container.innerHTML = `
             <div class="flex justify-between items-center mb-6">
                 <h2 class="text-2xl font-black tracking-tight text-stone-900">Recipes</h2>
-                <button onclick="startNewRecipe()" class="bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2 px-5 rounded-xl shadow-sm transition-all duration-200 hover:shadow-md text-sm">
-                    + New Recipe
-                </button>
+                <button onclick="startNewRecipe()" class="bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2 px-5 rounded-xl shadow-sm transition-all duration-200 hover:shadow-md text-sm">+ New Recipe</button>
             </div>
             ${recipes.length ? `<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10">${cards}</div>` : '<p class="text-center text-stone-400 mb-10">No recipes yet. Create your first one.</p>'}
             ${form}
@@ -722,26 +765,19 @@
     function renderRecipeForm() {
         const rf = state._meta.recipeForm;
         if (!rf) return '';
-
         const isEditing = rf._editingId;
         let ingredientRows = '';
-
         for (let i = 0; i < rf.ingredients.length; i++) {
             const item = rf.ingredients[i];
-            const options = state.ingredients.map(ing =>
-                `<option value="${ing.id}" ${ing.id === item.ingredientId ? 'selected' : ''}>${escHtml(ing.name)} (${fmtUnit(ing.costPerUnit, ing.packageUnit)})</option>`
-            ).join('');
+            const sortedIngs = [...state.ingredients].sort((a, b) => a.name.localeCompare(b.name));
+            const options = sortedIngs.map(ing => `<option value="${ing.id}" ${ing.id === item.ingredientId ? 'selected' : ''}>${escHtml(ing.name)} (${fmtUnit(ing.costPerUnit, ing.packageUnit)})</option>`).join('');
             const ing = state.ingredients.find(x => x.id === item.ingredientId);
             const lineCost = ing ? item.amount * ing.costPerUnit : 0;
-
             ingredientRows += `<div class="flex flex-col sm:flex-row gap-2 sm:items-center">
                 <select onchange="updateRecipeFormIngredient(${i}, 'ingredientId', this.value)" class="flex-1 border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
-                    <option value="">Select ingredient...</option>
-                    ${options}
+                    <option value="">Select ingredient...</option>${options}
                 </select>
-                <input type="number" value="${item.amount || ''}" placeholder="Amount" step="any" min="0"
-                    onchange="updateRecipeFormIngredient(${i}, 'amount', parseFloat(this.value) || 0)"
-                    class="w-full sm:w-24 border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
+                <input type="number" value="${item.amount || ''}" placeholder="Amount" step="any" min="0" onchange="updateRecipeFormIngredient(${i}, 'amount', parseFloat(this.value) || 0)" class="w-full sm:w-24 border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
                 <span class="text-sm text-stone-500 w-8">${item.ingredientId && ing ? ing.packageUnit : ''}</span>
                 <span class="text-sm font-medium text-stone-700 w-16 text-right">${lineCost > 0 ? fmt(lineCost) : '—'}</span>
                 <button onclick="removeRecipeFormIngredient(${i})" class="text-stone-400 hover:text-red-500 p-1 self-center">
@@ -749,30 +785,17 @@
                 </button>
             </div>`;
         }
-
         const totalCost = calcRecipeFormCost();
         const perUnit = rf.yield > 0 ? totalCost / rf.yield : 0;
-
         return `<div class="bg-white rounded-2xl p-8 shadow-sm">
             <h3 class="text-lg font-bold text-stone-900 mb-6">${isEditing ? 'Edit Recipe' : 'New Recipe'}</h3>
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-                <div>
-                    <label class="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-1">Recipe Name</label>
-                    <input type="text" id="recipe-name" value="${escHtml(rf.name)}" oninput="state._meta.recipeForm.name = this.value"
-                        class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-1">Yield</label>
-                    <input type="number" id="recipe-yield" value="${rf.yield || ''}" min="1" step="1"
-                        onchange="state._meta.recipeForm.yield = parseInt(this.value) || 0; renderRecipes()"
-                        class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-1">Yield Unit</label>
-                    <input type="text" id="recipe-yield-unit" value="${escHtml(rf.yieldUnit)}" placeholder="e.g. muffins"
-                        oninput="state._meta.recipeForm.yieldUnit = this.value"
-                        class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
-                </div>
+                <div><label class="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-1">Recipe Name</label>
+                    <input type="text" id="recipe-name" value="${escHtml(rf.name)}" oninput="state._meta.recipeForm.name = this.value" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"></div>
+                <div><label class="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-1">Yield</label>
+                    <input type="number" id="recipe-yield" value="${rf.yield || ''}" min="1" step="1" onchange="state._meta.recipeForm.yield = parseInt(this.value) || 0; renderRecipes()" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"></div>
+                <div><label class="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-1">Yield Unit</label>
+                    <input type="text" id="recipe-yield-unit" value="${escHtml(rf.yieldUnit)}" placeholder="e.g. muffins" oninput="state._meta.recipeForm.yieldUnit = this.value" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"></div>
             </div>
             <div class="mb-4">
                 <label class="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-3">Ingredients</label>
@@ -780,16 +803,10 @@
                 <button onclick="addRecipeFormIngredient()" class="mt-3 text-sky-600 hover:text-sky-800 text-sm font-semibold">+ Add Ingredient</button>
             </div>
             <div class="flex items-center justify-between pt-6 border-t border-stone-100">
-                <div>
-                    <span class="text-2xl font-black text-stone-900">${fmt(totalCost)}</span>
-                    <span class="text-sm text-stone-500 ml-2">total</span>
-                    ${perUnit > 0 ? `<span class="text-sm text-stone-500 ml-4">${fmt(perUnit)} each</span>` : ''}
-                </div>
+                <div><span class="text-2xl font-black text-stone-900">${fmt(totalCost)}</span><span class="text-sm text-stone-500 ml-2">total</span>${perUnit > 0 ? `<span class="text-sm text-stone-500 ml-4">${fmt(perUnit)} each</span>` : ''}</div>
                 <div class="flex gap-3">
                     <button onclick="cancelRecipeForm()" class="text-stone-500 hover:text-stone-700 font-semibold py-2 px-5 rounded-xl text-sm">Cancel</button>
-                    <button onclick="saveRecipeForm()" class="bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2 px-5 rounded-xl shadow-sm transition-all duration-200 text-sm">
-                        ${isEditing ? 'Update Recipe' : 'Save Recipe'}
-                    </button>
+                    <button onclick="saveRecipeForm()" class="bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2 px-5 rounded-xl shadow-sm transition-all duration-200 text-sm">${isEditing ? 'Update Recipe' : 'Save Recipe'}</button>
                 </div>
             </div>
         </div>`;
@@ -806,85 +823,42 @@
         return total;
     }
 
-    function startNewRecipe() {
-        state._meta.recipeForm = { name: '', yield: 0, yieldUnit: '', ingredients: [{ ingredientId: '', amount: 0, unit: '' }], _editingId: null };
-        renderRecipes();
-        document.getElementById('recipe-name')?.focus();
-    }
-
+    function startNewRecipe() { state._meta.recipeForm = { name: '', yield: 0, yieldUnit: '', ingredients: [{ ingredientId: '', amount: 0, unit: '' }], _editingId: null }; renderRecipes(); document.getElementById('recipe-name')?.focus(); }
     function startEditRecipe(id) {
         const recipe = state.recipes.find(r => r.id === id);
         if (!recipe) return;
-        state._meta.recipeForm = {
-            name: recipe.name,
-            yield: recipe.yield,
-            yieldUnit: recipe.yieldUnit,
-            ingredients: recipe.ingredients.map(i => ({ ...i })),
-            _editingId: id
-        };
+        state._meta.recipeForm = { name: recipe.name, yield: recipe.yield, yieldUnit: recipe.yieldUnit, ingredients: recipe.ingredients.map(i => ({ ...i })), _editingId: id };
         renderRecipes();
         document.getElementById('recipe-name')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
-
-    function cancelRecipeForm() {
-        state._meta.recipeForm = null;
-        renderRecipes();
-    }
-
-    function addRecipeFormIngredient() {
-        state._meta.recipeForm.ingredients.push({ ingredientId: '', amount: 0, unit: '' });
-        renderRecipes();
-    }
-
-    function removeRecipeFormIngredient(index) {
-        state._meta.recipeForm.ingredients.splice(index, 1);
-        renderRecipes();
-    }
-
+    function cancelRecipeForm() { state._meta.recipeForm = null; renderRecipes(); }
+    function addRecipeFormIngredient() { state._meta.recipeForm.ingredients.push({ ingredientId: '', amount: 0, unit: '' }); renderRecipes(); }
+    function removeRecipeFormIngredient(index) { state._meta.recipeForm.ingredients.splice(index, 1); renderRecipes(); }
     function updateRecipeFormIngredient(index, field, value) {
         state._meta.recipeForm.ingredients[index][field] = value;
-        if (field === 'ingredientId') {
-            const ing = state.ingredients.find(i => i.id === value);
-            if (ing) state._meta.recipeForm.ingredients[index].unit = ing.packageUnit;
-        }
+        if (field === 'ingredientId') { const ing = state.ingredients.find(i => i.id === value); if (ing) state._meta.recipeForm.ingredients[index].unit = ing.packageUnit; }
         renderRecipes();
     }
 
     function saveRecipeForm() {
         const rf = state._meta.recipeForm;
         if (!rf) return;
-
         const name = rf.name.trim();
         if (!name) { showToast('Recipe name is required', 'error'); return; }
         if (!rf.yield || rf.yield <= 0) { showToast('Yield must be positive', 'error'); return; }
         if (!rf.yieldUnit.trim()) { showToast('Yield unit is required (e.g. muffins)', 'error'); return; }
-
         const validIngredients = rf.ingredients.filter(i => i.ingredientId && i.amount > 0);
         if (validIngredients.length === 0) { showToast('Add at least one ingredient', 'error'); return; }
-
         if (rf._editingId) {
             const recipe = state.recipes.find(r => r.id === rf._editingId);
-            if (recipe) {
-                recipe.name = name;
-                recipe.yield = rf.yield;
-                recipe.yieldUnit = rf.yieldUnit.trim();
-                recipe.ingredients = validIngredients;
-                recipe.totalCost = calcRecipeCost(recipe);
-                recipe.costPerUnit = recipe.totalCost / recipe.yield;
-                showToast(`Updated ${name}`, 'success');
-            }
+            if (recipe) { recipe.name = name; recipe.yield = rf.yield; recipe.yieldUnit = rf.yieldUnit.trim(); recipe.ingredients = validIngredients; recipe.totalCost = calcRecipeCost(recipe); recipe.costPerUnit = recipe.totalCost / recipe.yield; showToast(`Updated ${name}`, 'success'); }
         } else {
             const id = generateId(name);
-            const newRecipe = {
-                id, name, yield: rf.yield, yieldUnit: rf.yieldUnit.trim(),
-                ingredients: validIngredients, totalCost: 0, costPerUnit: 0
-            };
-            newRecipe.totalCost = calcRecipeCost(newRecipe);
-            newRecipe.costPerUnit = newRecipe.totalCost / newRecipe.yield;
+            const newRecipe = { id, name, yield: rf.yield, yieldUnit: rf.yieldUnit.trim(), ingredients: validIngredients, totalCost: 0, costPerUnit: 0 };
+            newRecipe.totalCost = calcRecipeCost(newRecipe); newRecipe.costPerUnit = newRecipe.totalCost / newRecipe.yield;
             state.recipes.push(newRecipe);
             showToast(`Created ${name}`, 'success');
         }
-
         state._meta.recipeForm = null;
         markDirty();
         renderRecipes();
@@ -894,17 +868,10 @@
         const recipe = state.recipes.find(r => r.id === id);
         if (!recipe) return;
         const mealDeps = state.meals.filter(m => m.components.some(c => c.type === 'recipe' && c.id === id)).map(m => m.name);
-        if (mealDeps.length) {
-            showToast(`Can't delete — used in meals: ${mealDeps.join(', ')}`, 'error');
-            return;
-        }
+        if (mealDeps.length) { showToast(`Can't delete — used in meals: ${mealDeps.join(', ')}`, 'error'); return; }
         if (!confirm(`Delete "${recipe.name}"?`)) return;
         state.recipes = state.recipes.filter(r => r.id !== id);
-        // Remove from consumption
-        state.consumption = state.consumption.filter(c => {
-            const meal = state.meals.find(m => m.id === c.mealId);
-            return meal !== undefined;
-        });
+        state.consumption = state.consumption.filter(c => { const meal = state.meals.find(m => m.id === c.mealId); return meal !== undefined; });
         markDirty();
         renderRecipes();
         showToast(`Deleted ${recipe.name}`, 'info');
@@ -917,141 +884,79 @@
     function renderMeals() {
         const container = document.getElementById('tab-meals');
         const meals = state.meals;
-
         let cards = '';
         for (const meal of meals) {
             let breakdown = '';
             let mealCost = 0;
             for (const comp of meal.components) {
-                let compName = 'Unknown';
-                let compCost = 0;
-                let compDetail = '';
+                let compName = 'Unknown', compCost = 0, compDetail = '';
                 if (comp.type === 'recipe') {
                     const recipe = state.recipes.find(r => r.id === comp.id);
-                    if (recipe) {
-                        compName = recipe.name;
-                        compCost = comp.quantity * (recipe.totalCost / recipe.yield);
-                        compDetail = `${comp.quantity}× ${escHtml(recipe.yieldUnit.replace(/s$/, ''))}`;
-                    }
+                    if (recipe) { compName = recipe.name; compCost = comp.quantity * (recipe.totalCost / recipe.yield); compDetail = `${comp.quantity}× ${escHtml(recipe.yieldUnit.replace(/s$/, ''))}`; }
                 } else {
                     const ing = state.ingredients.find(i => i.id === comp.id);
-                    if (ing) {
-                        compName = ing.name;
-                        compCost = comp.quantity * ing.costPerUnit;
-                        compDetail = `${comp.quantity} ${ing.packageUnit}`;
-                    }
+                    if (ing) { compName = ing.name; compCost = comp.quantity * ing.costPerUnit; compDetail = `${comp.quantity} ${ing.packageUnit}`; }
                 }
                 mealCost += compCost;
-                breakdown += `<div class="flex justify-between items-center">
-                    <span class="text-sm text-stone-600">${escHtml(compName)} (${compDetail})</span>
-                    <span class="text-sm font-medium text-stone-900">${fmt(compCost)}</span>
-                </div>`;
+                breakdown += `<div class="flex justify-between items-center"><span class="text-sm text-stone-600">${escHtml(compName)} (${compDetail})</span><span class="text-sm font-medium text-stone-900">${fmt(compCost)}</span></div>`;
             }
-
             cards += `<div class="bg-white rounded-2xl p-8 shadow-sm card-hover relative group">
                 <div class="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button onclick="startEditMeal('${meal.id}')" class="text-stone-400 hover:text-sky-600 p-1" title="Edit">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
-                    </button>
-                    <button onclick="deleteMeal('${meal.id}')" class="text-stone-400 hover:text-red-600 p-1" title="Delete">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                    </button>
+                    <button onclick="startEditMeal('${meal.id}')" class="text-stone-400 hover:text-sky-600 p-1" title="Edit"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg></button>
+                    <button onclick="deleteMeal('${meal.id}')" class="text-stone-400 hover:text-red-600 p-1" title="Delete"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>
                 </div>
-                <div class="mb-6">
-                    <h3 class="text-sm font-semibold text-sky-600 mb-1">${escHtml(meal.name).toUpperCase()}</h3>
+                <div class="mb-6"><h3 class="text-sm font-semibold text-sky-600 mb-1">${escHtml(meal.name).toUpperCase()}</h3>
                     <div class="text-4xl font-black text-stone-900 tracking-tight mb-2">${fmt(mealCost)}</div>
-                    <p class="text-sm text-stone-500">Per serving</p>
-                </div>
+                    <p class="text-sm text-stone-500">Per serving</p></div>
                 <div class="space-y-2 pt-6 border-t border-stone-100">${breakdown}</div>
             </div>`;
         }
-
         const form = renderMealForm();
-
         container.innerHTML = `
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-black tracking-tight text-stone-900">Meals</h2>
-                <button onclick="startNewMeal()" class="bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2 px-5 rounded-xl shadow-sm transition-all duration-200 hover:shadow-md text-sm">
-                    + New Meal
-                </button>
-            </div>
+            <div class="flex justify-between items-center mb-6"><h2 class="text-2xl font-black tracking-tight text-stone-900">Meals</h2>
+                <button onclick="startNewMeal()" class="bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2 px-5 rounded-xl shadow-sm transition-all duration-200 hover:shadow-md text-sm">+ New Meal</button></div>
             ${meals.length ? `<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10">${cards}</div>` : '<p class="text-center text-stone-400 mb-10">No meals yet. Create your first one.</p>'}
-            ${form}
-        `;
+            ${form}`;
     }
 
     function renderMealForm() {
         const mf = state._meta.mealForm;
         if (!mf) return '';
-
         const isEditing = mf._editingId;
         let componentRows = '';
-
         for (let i = 0; i < mf.components.length; i++) {
             const comp = mf.components[i];
-
-            let recipeOpts = state.recipes.map(r =>
-                `<option value="recipe:${r.id}" ${comp.type === 'recipe' && comp.id === r.id ? 'selected' : ''}>${escHtml(r.name)} (${fmt(r.costPerUnit)}/${r.yieldUnit.replace(/s$/, '')})</option>`
-            ).join('');
-
-            let ingredientOpts = state.ingredients.map(ing =>
-                `<option value="ingredient:${ing.id}" ${comp.type === 'ingredient' && comp.id === ing.id ? 'selected' : ''}>${escHtml(ing.name)} (${fmtUnit(ing.costPerUnit, ing.packageUnit)})</option>`
-            ).join('');
-
-            let lineCost = 0;
-            let unitLabel = '';
-            if (comp.type === 'recipe') {
-                const recipe = state.recipes.find(r => r.id === comp.id);
-                if (recipe) { lineCost = comp.quantity * (recipe.totalCost / recipe.yield); unitLabel = recipe.yieldUnit.replace(/s$/, ''); }
-            } else if (comp.type === 'ingredient') {
-                const ing = state.ingredients.find(x => x.id === comp.id);
-                if (ing) { lineCost = comp.quantity * ing.costPerUnit; unitLabel = ing.packageUnit; }
-            }
-
+            let recipeOpts = state.recipes.map(r => `<option value="recipe:${r.id}" ${comp.type === 'recipe' && comp.id === r.id ? 'selected' : ''}>${escHtml(r.name)} (${fmt(r.costPerUnit)}/${r.yieldUnit.replace(/s$/, '')})</option>`).join('');
+            let ingredientOpts = [...state.ingredients].sort((a, b) => a.name.localeCompare(b.name)).map(ing => `<option value="ingredient:${ing.id}" ${comp.type === 'ingredient' && comp.id === ing.id ? 'selected' : ''}>${escHtml(ing.name)} (${fmtUnit(ing.costPerUnit, ing.packageUnit)})</option>`).join('');
+            let lineCost = 0, unitLabel = '';
+            if (comp.type === 'recipe') { const recipe = state.recipes.find(r => r.id === comp.id); if (recipe) { lineCost = comp.quantity * (recipe.totalCost / recipe.yield); unitLabel = recipe.yieldUnit.replace(/s$/, ''); } }
+            else if (comp.type === 'ingredient') { const ing = state.ingredients.find(x => x.id === comp.id); if (ing) { lineCost = comp.quantity * ing.costPerUnit; unitLabel = ing.packageUnit; } }
             componentRows += `<div class="flex flex-col sm:flex-row gap-2 sm:items-center">
                 <select onchange="updateMealFormComponent(${i}, this.value)" class="flex-1 border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
                     <option value="">Select item...</option>
                     ${recipeOpts ? `<optgroup label="Recipes">${recipeOpts}</optgroup>` : ''}
                     <optgroup label="Ingredients">${ingredientOpts}</optgroup>
                 </select>
-                <input type="number" value="${comp.quantity || ''}" placeholder="Qty" step="any" min="0"
-                    onchange="updateMealFormQuantity(${i}, parseFloat(this.value) || 0)"
-                    class="w-full sm:w-24 border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
+                <input type="number" value="${comp.quantity || ''}" placeholder="Qty" step="any" min="0" onchange="updateMealFormQuantity(${i}, parseFloat(this.value) || 0)" class="w-full sm:w-24 border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
                 <span class="text-sm text-stone-500 w-12">${unitLabel}</span>
                 <span class="text-sm font-medium text-stone-700 w-16 text-right">${lineCost > 0 ? fmt(lineCost) : '—'}</span>
-                <button onclick="removeMealFormComponent(${i})" class="text-stone-400 hover:text-red-500 p-1 self-center">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-                </button>
+                <button onclick="removeMealFormComponent(${i})" class="text-stone-400 hover:text-red-500 p-1 self-center"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
             </div>`;
         }
-
         const totalCost = calcMealFormCost();
-
         return `<div class="bg-white rounded-2xl p-8 shadow-sm">
             <h3 class="text-lg font-bold text-stone-900 mb-6">${isEditing ? 'Edit Meal' : 'New Meal'}</h3>
-            <div class="mb-6">
-                <label class="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-1">Meal Name</label>
-                <input type="text" id="meal-name" value="${escHtml(mf.name)}" oninput="state._meta.mealForm.name = this.value"
-                    class="w-full sm:w-96 border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
-            </div>
-            <div class="mb-4">
-                <label class="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-3">Components</label>
+            <div class="mb-6"><label class="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-1">Meal Name</label>
+                <input type="text" id="meal-name" value="${escHtml(mf.name)}" oninput="state._meta.mealForm.name = this.value" class="w-full sm:w-96 border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"></div>
+            <div class="mb-4"><label class="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-3">Components</label>
                 <div class="space-y-2">${componentRows}</div>
-                <button onclick="addMealFormComponent()" class="mt-3 text-sky-600 hover:text-sky-800 text-sm font-semibold">+ Add Component</button>
-            </div>
+                <button onclick="addMealFormComponent()" class="mt-3 text-sky-600 hover:text-sky-800 text-sm font-semibold">+ Add Component</button></div>
             <div class="flex items-center justify-between pt-6 border-t border-stone-100">
-                <div>
-                    <span class="text-2xl font-black text-stone-900">${fmt(totalCost)}</span>
-                    <span class="text-sm text-stone-500 ml-2">per serving</span>
-                </div>
+                <div><span class="text-2xl font-black text-stone-900">${fmt(totalCost)}</span><span class="text-sm text-stone-500 ml-2">per serving</span></div>
                 <div class="flex gap-3">
                     <button onclick="cancelMealForm()" class="text-stone-500 hover:text-stone-700 font-semibold py-2 px-5 rounded-xl text-sm">Cancel</button>
-                    <button onclick="saveMealForm()" class="bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2 px-5 rounded-xl shadow-sm transition-all duration-200 text-sm">
-                        ${isEditing ? 'Update Meal' : 'Save Meal'}
-                    </button>
-                </div>
-            </div>
-        </div>`;
+                    <button onclick="saveMealForm()" class="bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2 px-5 rounded-xl shadow-sm transition-all duration-200 text-sm">${isEditing ? 'Update Meal' : 'Save Meal'}</button></div>
+            </div></div>`;
     }
 
     function calcMealFormCost() {
@@ -1059,90 +964,33 @@
         if (!mf) return 0;
         let total = 0;
         for (const comp of mf.components) {
-            if (comp.type === 'recipe') {
-                const recipe = state.recipes.find(r => r.id === comp.id);
-                if (recipe && recipe.yield > 0) total += comp.quantity * (recipe.totalCost / recipe.yield);
-            } else if (comp.type === 'ingredient') {
-                const ing = state.ingredients.find(i => i.id === comp.id);
-                if (ing) total += comp.quantity * ing.costPerUnit;
-            }
+            if (comp.type === 'recipe') { const recipe = state.recipes.find(r => r.id === comp.id); if (recipe && recipe.yield > 0) total += comp.quantity * (recipe.totalCost / recipe.yield); }
+            else if (comp.type === 'ingredient') { const ing = state.ingredients.find(i => i.id === comp.id); if (ing) total += comp.quantity * ing.costPerUnit; }
         }
         return total;
     }
 
-    function startNewMeal() {
-        state._meta.mealForm = { name: '', components: [{ type: '', id: '', quantity: 0 }], _editingId: null };
-        renderMeals();
-        document.getElementById('meal-name')?.focus();
-    }
-
-    function startEditMeal(id) {
-        const meal = state.meals.find(m => m.id === id);
-        if (!meal) return;
-        state._meta.mealForm = {
-            name: meal.name,
-            components: meal.components.map(c => ({ ...c })),
-            _editingId: id
-        };
-        renderMeals();
-        document.getElementById('meal-name')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-
-    function cancelMealForm() {
-        state._meta.mealForm = null;
-        renderMeals();
-    }
-
-    function addMealFormComponent() {
-        state._meta.mealForm.components.push({ type: '', id: '', quantity: 0 });
-        renderMeals();
-    }
-
-    function removeMealFormComponent(index) {
-        state._meta.mealForm.components.splice(index, 1);
-        renderMeals();
-    }
-
+    function startNewMeal() { state._meta.mealForm = { name: '', components: [{ type: '', id: '', quantity: 0 }], _editingId: null }; renderMeals(); document.getElementById('meal-name')?.focus(); }
+    function startEditMeal(id) { const meal = state.meals.find(m => m.id === id); if (!meal) return; state._meta.mealForm = { name: meal.name, components: meal.components.map(c => ({ ...c })), _editingId: id }; renderMeals(); document.getElementById('meal-name')?.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+    function cancelMealForm() { state._meta.mealForm = null; renderMeals(); }
+    function addMealFormComponent() { state._meta.mealForm.components.push({ type: '', id: '', quantity: 0 }); renderMeals(); }
+    function removeMealFormComponent(index) { state._meta.mealForm.components.splice(index, 1); renderMeals(); }
     function updateMealFormComponent(index, value) {
-        if (!value) {
-            state._meta.mealForm.components[index] = { type: '', id: '', quantity: state._meta.mealForm.components[index].quantity };
-        } else {
-            const [type, ...idParts] = value.split(':');
-            const id = idParts.join(':');
-            state._meta.mealForm.components[index].type = type;
-            state._meta.mealForm.components[index].id = id;
-        }
+        if (!value) { state._meta.mealForm.components[index] = { type: '', id: '', quantity: state._meta.mealForm.components[index].quantity }; }
+        else { const [type, ...idParts] = value.split(':'); const id = idParts.join(':'); state._meta.mealForm.components[index].type = type; state._meta.mealForm.components[index].id = id; }
         renderMeals();
     }
-
-    function updateMealFormQuantity(index, qty) {
-        state._meta.mealForm.components[index].quantity = qty;
-        renderMeals();
-    }
+    function updateMealFormQuantity(index, qty) { state._meta.mealForm.components[index].quantity = qty; renderMeals(); }
 
     function saveMealForm() {
         const mf = state._meta.mealForm;
         if (!mf) return;
-
         const name = mf.name.trim();
         if (!name) { showToast('Meal name is required', 'error'); return; }
-
         const validComponents = mf.components.filter(c => c.type && c.id && c.quantity > 0);
         if (validComponents.length === 0) { showToast('Add at least one component', 'error'); return; }
-
-        if (mf._editingId) {
-            const meal = state.meals.find(m => m.id === mf._editingId);
-            if (meal) {
-                meal.name = name;
-                meal.components = validComponents;
-                showToast(`Updated ${name}`, 'success');
-            }
-        } else {
-            const id = generateId(name);
-            state.meals.push({ id, name, components: validComponents });
-            showToast(`Created ${name}`, 'success');
-        }
-
+        if (mf._editingId) { const meal = state.meals.find(m => m.id === mf._editingId); if (meal) { meal.name = name; meal.components = validComponents; showToast(`Updated ${name}`, 'success'); } }
+        else { const id = generateId(name); state.meals.push({ id, name, components: validComponents }); showToast(`Created ${name}`, 'success'); }
         state._meta.mealForm = null;
         markDirty();
         renderMeals();
@@ -1167,11 +1015,7 @@
     function renderConsumption() {
         const container = document.getElementById('tab-consumption');
         const entries = state.consumption;
-
-        let totalDaily = 0;
-        let totalWeekly = 0;
-        let totalMonthly = 0;
-
+        let totalDaily = 0, totalWeekly = 0, totalMonthly = 0;
         let entryCards = '';
         for (const entry of entries) {
             const meal = state.meals.find(m => m.id === entry.mealId);
@@ -1180,94 +1024,41 @@
             const daily = entry.servingsPerDay * mealCost;
             const weekly = daily * 7;
             const monthly = daily * 30;
-            totalDaily += daily;
-            totalWeekly += weekly;
-            totalMonthly += monthly;
-
+            totalDaily += daily; totalWeekly += weekly; totalMonthly += monthly;
             entryCards += `<div class="bg-white rounded-2xl p-6 shadow-sm card-hover">
                 <div class="flex justify-between items-start mb-4">
-                    <div>
-                        <h3 class="text-sm font-semibold text-sky-600">${escHtml(meal.name).toUpperCase()}</h3>
-                        <p class="text-sm text-stone-500">${fmt(mealCost)} per serving</p>
-                    </div>
-                    <button onclick="removeConsumption('${entry.id}')" class="text-stone-400 hover:text-red-500 p-1" title="Remove">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-                    </button>
+                    <div><h3 class="text-sm font-semibold text-sky-600">${escHtml(meal.name).toUpperCase()}</h3><p class="text-sm text-stone-500">${fmt(mealCost)} per serving</p></div>
+                    <button onclick="removeConsumption('${entry.id}')" class="text-stone-400 hover:text-red-500 p-1" title="Remove"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
                 </div>
                 <div class="flex items-center gap-3 mb-4">
                     <label class="text-sm text-stone-600">Servings/day:</label>
-                    <input type="number" value="${entry.servingsPerDay}" min="0" step="any"
-                        onchange="updateConsumptionServings('${entry.id}', parseFloat(this.value) || 0)"
-                        class="w-20 border border-stone-300 rounded-lg px-3 py-1.5 text-sm text-center focus:outline-none focus:ring-2 focus:ring-sky-500">
+                    <input type="number" value="${entry.servingsPerDay}" min="0" step="any" onchange="updateConsumptionServings('${entry.id}', parseFloat(this.value) || 0)" class="w-20 border border-stone-300 rounded-lg px-3 py-1.5 text-sm text-center focus:outline-none focus:ring-2 focus:ring-sky-500">
                 </div>
                 <div class="grid grid-cols-3 gap-3 text-center">
-                    <div class="bg-stone-50 rounded-xl p-3">
-                        <div class="text-lg font-bold text-stone-900">${fmt(daily)}</div>
-                        <div class="text-xs text-stone-500">Daily</div>
-                    </div>
-                    <div class="bg-stone-50 rounded-xl p-3">
-                        <div class="text-lg font-bold text-stone-900">${fmt(weekly)}</div>
-                        <div class="text-xs text-stone-500">Weekly</div>
-                    </div>
-                    <div class="bg-stone-50 rounded-xl p-3">
-                        <div class="text-lg font-bold text-stone-900">${fmt(monthly)}</div>
-                        <div class="text-xs text-stone-500">Monthly</div>
-                    </div>
+                    <div class="bg-stone-50 rounded-xl p-3"><div class="text-lg font-bold text-stone-900">${fmt(daily)}</div><div class="text-xs text-stone-500">Daily</div></div>
+                    <div class="bg-stone-50 rounded-xl p-3"><div class="text-lg font-bold text-stone-900">${fmt(weekly)}</div><div class="text-xs text-stone-500">Weekly</div></div>
+                    <div class="bg-stone-50 rounded-xl p-3"><div class="text-lg font-bold text-stone-900">${fmt(monthly)}</div><div class="text-xs text-stone-500">Monthly</div></div>
                 </div>
             </div>`;
         }
-
-        const mealOptions = state.meals.map(m =>
-            `<option value="${m.id}">${escHtml(m.name)} (${fmt(calcMealCost(m))})</option>`
-        ).join('');
-
+        const mealOptions = state.meals.map(m => `<option value="${m.id}">${escHtml(m.name)} (${fmt(calcMealCost(m))})</option>`).join('');
         container.innerHTML = `
             <h2 class="text-2xl font-black tracking-tight text-stone-900 mb-6">Consumption Tracker</h2>
-
-            <!-- Summary Stats -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-                <div class="bg-white rounded-2xl p-8 shadow-sm text-center">
-                    <div class="text-4xl font-black text-sky-600 tracking-tight mb-2">${fmt(totalDaily)}</div>
-                    <p class="text-sm text-stone-500">Per Day</p>
-                </div>
-                <div class="bg-white rounded-2xl p-8 shadow-sm text-center">
-                    <div class="text-4xl font-black text-sky-600 tracking-tight mb-2">${fmt(totalWeekly)}</div>
-                    <p class="text-sm text-stone-500">Per Week</p>
-                </div>
-                <div class="bg-white rounded-2xl p-8 shadow-sm text-center">
-                    <div class="text-4xl font-black text-sky-600 tracking-tight mb-2">${fmt(totalMonthly)}</div>
-                    <p class="text-sm text-stone-500">Per Month</p>
-                </div>
+                <div class="bg-white rounded-2xl p-8 shadow-sm text-center"><div class="text-4xl font-black text-sky-600 tracking-tight mb-2">${fmt(totalDaily)}</div><p class="text-sm text-stone-500">Per Day</p></div>
+                <div class="bg-white rounded-2xl p-8 shadow-sm text-center"><div class="text-4xl font-black text-sky-600 tracking-tight mb-2">${fmt(totalWeekly)}</div><p class="text-sm text-stone-500">Per Week</p></div>
+                <div class="bg-white rounded-2xl p-8 shadow-sm text-center"><div class="text-4xl font-black text-sky-600 tracking-tight mb-2">${fmt(totalMonthly)}</div><p class="text-sm text-stone-500">Per Month</p></div>
             </div>
-
-            <!-- Tracked Meals -->
             ${entryCards ? `<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-10">${entryCards}</div>` : '<p class="text-center text-stone-400 mb-10">No meals tracked yet. Add one below.</p>'}
-
-            <!-- Add Meal Form -->
             <div class="bg-white rounded-2xl p-6 shadow-sm">
                 <h3 class="text-lg font-bold text-stone-900 mb-4">Track a Meal</h3>
-                ${state.meals.length === 0
-                    ? '<p class="text-sm text-stone-400">Create a meal first in the Meals tab.</p>'
-                    : `<div class="flex flex-col sm:flex-row gap-3 items-end">
-                        <div class="flex-1">
-                            <label class="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-1">Meal</label>
-                            <select id="consumption-meal" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
-                                <option value="">Select a meal...</option>
-                                ${mealOptions}
-                            </select>
-                        </div>
-                        <div class="w-full sm:w-32">
-                            <label class="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-1">Servings/Day</label>
-                            <input type="number" id="consumption-servings" value="1" min="0" step="any"
-                                class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
-                        </div>
-                        <button onclick="addConsumption()" class="bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2 px-5 rounded-xl shadow-sm transition-all duration-200 text-sm whitespace-nowrap">
-                            Track Meal
-                        </button>
-                    </div>`
-                }
-            </div>
-        `;
+                ${state.meals.length === 0 ? '<p class="text-sm text-stone-400">Create a meal first in the Meals tab.</p>' : `<div class="flex flex-col sm:flex-row gap-3 items-end">
+                    <div class="flex-1"><label class="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-1">Meal</label>
+                        <select id="consumption-meal" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"><option value="">Select a meal...</option>${mealOptions}</select></div>
+                    <div class="w-full sm:w-32"><label class="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-1">Servings/Day</label>
+                        <input type="number" id="consumption-servings" value="1" min="0" step="any" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"></div>
+                    <button onclick="addConsumption()" class="bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2 px-5 rounded-xl shadow-sm transition-all duration-200 text-sm whitespace-nowrap">Track Meal</button></div>`}
+            </div>`;
     }
 
     function addConsumption() {
@@ -1275,88 +1066,287 @@
         const servings = parseFloat(document.getElementById('consumption-servings').value) || 0;
         if (!mealId) { showToast('Select a meal', 'error'); return; }
         if (servings <= 0) { showToast('Servings must be positive', 'error'); return; }
-
-        const id = 'consumption_' + Date.now();
-        state.consumption.push({ id, mealId, servingsPerDay: servings });
-        markDirty();
-        renderConsumption();
-        showToast('Meal tracked', 'success');
+        state.consumption.push({ id: 'consumption_' + Date.now(), mealId, servingsPerDay: servings });
+        markDirty(); renderConsumption(); showToast('Meal tracked', 'success');
     }
+    function updateConsumptionServings(id, servings) { const entry = state.consumption.find(c => c.id === id); if (entry) { entry.servingsPerDay = servings; markDirty(); renderConsumption(); } }
+    function removeConsumption(id) { state.consumption = state.consumption.filter(c => c.id !== id); markDirty(); renderConsumption(); }
 
-    function updateConsumptionServings(id, servings) {
-        const entry = state.consumption.find(c => c.id === id);
-        if (entry) {
-            entry.servingsPerDay = servings;
-            markDirty();
-            renderConsumption();
+    // ========================================
+    // SECTION 11: COMPARISON TAB
+    // ========================================
+
+    function renderCompare() {
+        const container = document.getElementById('tab-compare');
+        const comparisons = state.comparisons || [];
+
+        let cards = '';
+        for (const comp of comparisons) {
+            const meal = state.meals.find(m => m.id === comp.mealId);
+            if (!meal) continue;
+            const homemadeCost = calcMealCost(meal);
+            const storeCost = comp.storePrice;
+            const savings = storeCost - homemadeCost;
+            const savingsPercent = storeCost > 0 ? ((savings / storeCost) * 100).toFixed(0) : 0;
+            const weeklySavings = savings * (comp.servingsPerWeek || 0);
+            const monthlySavings = weeklySavings * 4.33;
+            const isPositive = savings > 0;
+
+            cards += `<div class="bg-white rounded-2xl p-8 shadow-sm card-hover relative group">
+                <button onclick="removeComparison('${comp.id}')" class="absolute top-4 right-4 text-stone-400 hover:text-red-500 p-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+                <h3 class="text-sm font-semibold text-sky-600 mb-4">${escHtml(meal.name).toUpperCase()}</h3>
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div class="text-center p-4 bg-green-50 rounded-xl">
+                        <div class="text-2xl font-black text-green-700">${fmt(homemadeCost)}</div>
+                        <div class="text-xs text-green-600 mt-1">Homemade</div>
+                    </div>
+                    <div class="text-center p-4 bg-stone-100 rounded-xl">
+                        <div class="text-2xl font-black text-stone-700">${fmt(storeCost)}</div>
+                        <div class="text-xs text-stone-500 mt-1">${escHtml(comp.storeName || 'Store/Restaurant')}</div>
+                    </div>
+                </div>
+                <div class="text-center p-4 rounded-xl ${isPositive ? 'bg-green-50' : 'bg-red-50'} mb-4">
+                    <div class="text-3xl font-black ${isPositive ? 'text-green-700' : 'text-red-700'}">${isPositive ? '' : '-'}${fmt(Math.abs(savings))}</div>
+                    <div class="text-sm ${isPositive ? 'text-green-600' : 'text-red-600'}">You ${isPositive ? 'save' : 'spend extra'} ${Math.abs(savingsPercent)}% per serving</div>
+                </div>
+                ${comp.servingsPerWeek ? `<div class="grid grid-cols-2 gap-3 text-center">
+                    <div class="bg-stone-50 rounded-xl p-3"><div class="text-lg font-bold ${isPositive ? 'savings-positive' : 'savings-negative'}">${isPositive ? '+' : '-'}${fmt(Math.abs(weeklySavings))}</div><div class="text-xs text-stone-500">Weekly (${comp.servingsPerWeek}×)</div></div>
+                    <div class="bg-stone-50 rounded-xl p-3"><div class="text-lg font-bold ${isPositive ? 'savings-positive' : 'savings-negative'}">${isPositive ? '+' : '-'}${fmt(Math.abs(monthlySavings))}</div><div class="text-xs text-stone-500">Monthly</div></div>
+                </div>` : ''}
+            </div>`;
         }
+
+        const mealOpts = state.meals.map(m => `<option value="${m.id}">${escHtml(m.name)} (${fmt(calcMealCost(m))})</option>`).join('');
+
+        container.innerHTML = `
+            <h2 class="text-2xl font-black tracking-tight text-stone-900 mb-6">Homemade vs Store-Bought</h2>
+            ${cards ? `<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-10">${cards}</div>` : '<p class="text-center text-stone-400 mb-10">No comparisons yet. Add one below to see how much you save.</p>'}
+            <div class="bg-white rounded-2xl p-6 shadow-sm max-w-xl">
+                <h3 class="text-lg font-bold text-stone-900 mb-4">Add Comparison</h3>
+                ${state.meals.length === 0 ? '<p class="text-sm text-stone-400">Create a meal first in the Meals tab.</p>' : `
+                <div class="space-y-3">
+                    <div><label class="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-1">Your Meal</label>
+                        <select id="compare-meal" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"><option value="">Select a meal...</option>${mealOpts}</select></div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div><label class="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-1">Store/Restaurant Price</label>
+                            <input type="number" id="compare-price" placeholder="4.89" step="0.01" min="0" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"></div>
+                        <div><label class="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-1">Source Name</label>
+                            <input type="text" id="compare-source" placeholder="McDonald's" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"></div>
+                    </div>
+                    <div><label class="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-1">How many per week?</label>
+                        <input type="number" id="compare-weekly" placeholder="3" step="1" min="0" class="w-full sm:w-32 border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"></div>
+                    <button onclick="addComparison()" class="bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2 px-5 rounded-xl shadow-sm transition-all duration-200 text-sm">Add Comparison</button>
+                </div>`}
+            </div>`;
     }
 
-    function removeConsumption(id) {
-        state.consumption = state.consumption.filter(c => c.id !== id);
-        markDirty();
-        renderConsumption();
+    function addComparison() {
+        const mealId = document.getElementById('compare-meal').value;
+        const storePrice = parseFloat(document.getElementById('compare-price').value);
+        const storeName = document.getElementById('compare-source').value.trim();
+        const servingsPerWeek = parseInt(document.getElementById('compare-weekly').value) || 0;
+        if (!mealId) { showToast('Select a meal', 'error'); return; }
+        if (isNaN(storePrice) || storePrice <= 0) { showToast('Enter the store price', 'error'); return; }
+        if (!state.comparisons) state.comparisons = [];
+        state.comparisons.push({ id: 'comp_' + Date.now(), mealId, storePrice, storeName, servingsPerWeek });
+        markDirty(); renderCompare(); showToast('Comparison added', 'success');
+    }
+
+    function removeComparison(id) {
+        state.comparisons = state.comparisons.filter(c => c.id !== id);
+        markDirty(); renderCompare();
     }
 
     // ========================================
-    // SECTION 11: SETTINGS TAB
+    // SECTION 12: SHOPPING LIST TAB
+    // ========================================
+
+    function renderShopping() {
+        const container = document.getElementById('tab-shopping');
+        const recipes = state.recipes;
+        const meals = state.meals;
+
+        let recipeChecks = recipes.map(r => {
+            const scale = state._meta.shoppingScales?.[r.id] || 1;
+            return `<div class="flex items-center gap-3">
+                <input type="checkbox" id="shop-recipe-${r.id}" class="rounded border-stone-300 text-sky-600 focus:ring-sky-500" onchange="renderShoppingList()">
+                <label for="shop-recipe-${r.id}" class="text-sm text-stone-900 font-medium">${escHtml(r.name)}</label>
+                <select onchange="setShoppingScale('${r.id}', parseFloat(this.value)); renderShoppingList()" class="border border-stone-300 rounded-lg px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-sky-500">
+                    <option value="0.5" ${scale===0.5?'selected':''}>½×</option>
+                    <option value="1" ${scale===1?'selected':''}>1×</option>
+                    <option value="1.5" ${scale===1.5?'selected':''}>1.5×</option>
+                    <option value="2" ${scale===2?'selected':''}>2×</option>
+                    <option value="3" ${scale===3?'selected':''}>3×</option>
+                </select>
+            </div>`;
+        }).join('');
+
+        let mealChecks = meals.map(m => {
+            const qty = state._meta.shoppingMealQty?.[m.id] || 1;
+            return `<div class="flex items-center gap-3">
+                <input type="checkbox" id="shop-meal-${m.id}" class="rounded border-stone-300 text-sky-600 focus:ring-sky-500" onchange="renderShoppingList()">
+                <label for="shop-meal-${m.id}" class="text-sm text-stone-900 font-medium">${escHtml(m.name)}</label>
+                <input type="number" value="${qty}" min="1" step="1" onchange="setShoppingMealQty('${m.id}', parseInt(this.value) || 1); renderShoppingList()"
+                    class="w-16 border border-stone-300 rounded-lg px-2 py-1 text-xs text-center focus:outline-none focus:ring-2 focus:ring-sky-500">
+                <span class="text-xs text-stone-400">servings</span>
+            </div>`;
+        }).join('');
+
+        container.innerHTML = `
+            <h2 class="text-2xl font-black tracking-tight text-stone-900 mb-6">Shopping List</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="space-y-6">
+                    ${meals.length ? `<div class="bg-white rounded-2xl p-6 shadow-sm">
+                        <h3 class="text-lg font-bold text-stone-900 mb-4">Meals</h3>
+                        <p class="text-xs text-stone-400 mb-3">Includes recipe ingredients + raw ingredients for each meal.</p>
+                        <div class="space-y-3">${mealChecks}</div>
+                    </div>` : ''}
+                    <div class="bg-white rounded-2xl p-6 shadow-sm">
+                        <h3 class="text-lg font-bold text-stone-900 mb-4">Standalone Recipes</h3>
+                        ${recipes.length === 0 ? '<p class="text-sm text-stone-400">Create recipes first.</p>' : `<div class="space-y-3">${recipeChecks}</div>`}
+                    </div>
+                </div>
+                <div class="bg-white rounded-2xl p-6 shadow-sm">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-bold text-stone-900">Aggregated List</h3>
+                        <button onclick="copyShoppingList()" class="border border-stone-300 hover:border-stone-400 text-stone-700 font-semibold py-1.5 px-4 rounded-xl transition-all duration-200 text-sm">Copy to Clipboard</button>
+                    </div>
+                    <div id="shopping-list-output"><p class="text-sm text-stone-400">Check items on the left to generate your list.</p></div>
+                </div>
+            </div>`;
+    }
+
+    function setShoppingScale(recipeId, scale) {
+        if (!state._meta.shoppingScales) state._meta.shoppingScales = {};
+        state._meta.shoppingScales[recipeId] = scale;
+    }
+
+    function setShoppingMealQty(mealId, qty) {
+        if (!state._meta.shoppingMealQty) state._meta.shoppingMealQty = {};
+        state._meta.shoppingMealQty[mealId] = qty;
+    }
+
+    function addRecipeIngredientsToAggregated(recipe, multiplier, aggregated) {
+        for (const item of recipe.ingredients) {
+            const ing = state.ingredients.find(i => i.id === item.ingredientId);
+            if (!ing) continue;
+            const key = item.ingredientId;
+            if (!aggregated[key]) { aggregated[key] = { name: ing.name, amount: 0, unit: item.unit, costPerUnit: ing.costPerUnit, packageUnit: ing.packageUnit }; }
+            aggregated[key].amount += item.amount * multiplier;
+        }
+    }
+
+    function getShoppingListData() {
+        const aggregated = {};
+
+        // Standalone recipes
+        for (const recipe of state.recipes) {
+            const checkbox = document.getElementById(`shop-recipe-${recipe.id}`);
+            if (!checkbox || !checkbox.checked) continue;
+            const scale = state._meta.shoppingScales?.[recipe.id] || 1;
+            addRecipeIngredientsToAggregated(recipe, scale, aggregated);
+        }
+
+        // Meals: resolve each component into raw ingredients
+        for (const meal of state.meals) {
+            const checkbox = document.getElementById(`shop-meal-${meal.id}`);
+            if (!checkbox || !checkbox.checked) continue;
+            const qty = state._meta.shoppingMealQty?.[meal.id] || 1;
+            for (const comp of meal.components) {
+                if (comp.type === 'recipe') {
+                    // A recipe component in a meal: get the recipe, figure out how much
+                    // of one batch this uses (comp.quantity / recipe.yield), then multiply by servings
+                    const recipe = state.recipes.find(r => r.id === comp.id);
+                    if (recipe && recipe.yield > 0) {
+                        const batchFraction = comp.quantity / recipe.yield;
+                        addRecipeIngredientsToAggregated(recipe, batchFraction * qty, aggregated);
+                    }
+                } else {
+                    // Raw ingredient component
+                    const ing = state.ingredients.find(i => i.id === comp.id);
+                    if (!ing) continue;
+                    const key = comp.id;
+                    if (!aggregated[key]) { aggregated[key] = { name: ing.name, amount: 0, unit: ing.packageUnit, costPerUnit: ing.costPerUnit, packageUnit: ing.packageUnit }; }
+                    aggregated[key].amount += comp.quantity * qty;
+                }
+            }
+        }
+
+        return aggregated;
+    }
+
+    function renderShoppingList() {
+        const output = document.getElementById('shopping-list-output');
+        const aggregated = getShoppingListData();
+        const items = Object.values(aggregated).sort((a, b) => a.name.localeCompare(b.name));
+        if (items.length === 0) { output.innerHTML = '<p class="text-sm text-stone-400">Check items on the left to generate your list.</p>'; return; }
+        let totalCost = 0;
+        let html = '<div class="space-y-2">';
+        for (const item of items) {
+            const cost = item.amount * item.costPerUnit;
+            totalCost += cost;
+            const displayAmt = item.amount % 1 === 0 ? item.amount : item.amount.toFixed(1);
+            html += `<div class="flex justify-between items-center py-1.5 border-b border-stone-50">
+                <span class="text-sm text-stone-900">${escHtml(item.name)}</span>
+                <span class="text-sm text-stone-600">${displayAmt} ${item.unit} <span class="text-stone-400 ml-2">${fmt(cost)}</span></span>
+            </div>`;
+        }
+        html += `</div><div class="flex justify-between items-center pt-4 mt-2 border-t border-stone-200"><span class="text-sm font-bold text-stone-900">Total estimated cost</span><span class="text-lg font-black text-stone-900">${fmt(totalCost)}</span></div>`;
+        output.innerHTML = html;
+    }
+
+    function copyShoppingList() {
+        const aggregated = getShoppingListData();
+        const items = Object.values(aggregated).sort((a, b) => a.name.localeCompare(b.name));
+        if (items.length === 0) { showToast('No items to copy', 'error'); return; }
+        let text = '';
+        for (const item of items) {
+            const displayAmt = item.amount % 1 === 0 ? item.amount : item.amount.toFixed(1);
+            text += `${item.name} — ${displayAmt} ${item.unit}\n`;
+        }
+        navigator.clipboard.writeText(text.trim()).then(() => showToast('Copied to clipboard', 'success')).catch(() => showToast('Failed to copy', 'error'));
+    }
+
+    // ========================================
+    // SECTION 13: SETTINGS TAB
     // ========================================
 
     function renderSettings() {
         const container = document.getElementById('tab-settings');
         const settings = getSettings();
-
         container.innerHTML = `
             <h2 class="text-2xl font-black tracking-tight text-stone-900 mb-6">Settings</h2>
             <div class="bg-white rounded-2xl p-8 shadow-sm max-w-xl">
                 <h3 class="text-lg font-bold text-stone-900 mb-2">GitHub Sync</h3>
                 <p class="text-sm text-stone-500 mb-6">Connect to a GitHub repo to sync your data across devices. You'll need a <a href="https://github.com/settings/tokens/new?scopes=repo&description=Recipe+Cost+Dashboard" target="_blank" class="text-sky-600 hover:text-sky-700 underline">Personal Access Token</a> with <code class="bg-stone-100 px-1 rounded text-xs">repo</code> scope.</p>
-
                 <div class="space-y-4 mb-6">
-                    <div>
-                        <label class="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-1">Personal Access Token</label>
-                        <input type="password" id="settings-pat" value="${escHtml(settings.pat)}" placeholder="ghp_..."
-                            class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 font-mono">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-1">Repository Owner</label>
-                        <input type="text" id="settings-owner" value="${escHtml(settings.owner)}" placeholder="your-username"
-                            class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-1">Repository Name</label>
-                        <input type="text" id="settings-repo" value="${escHtml(settings.repo)}" placeholder="recipe-costs"
-                            class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
-                    </div>
+                    <div><label class="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-1">Personal Access Token</label>
+                        <input type="password" id="settings-pat" value="${escHtml(settings.pat)}" placeholder="ghp_..." class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 font-mono"></div>
+                    <div><label class="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-1">Repository Owner</label>
+                        <input type="text" id="settings-owner" value="${escHtml(settings.owner)}" placeholder="your-username" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"></div>
+                    <div><label class="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-1">Repository Name</label>
+                        <input type="text" id="settings-repo" value="${escHtml(settings.repo)}" placeholder="recipe-costs" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"></div>
                 </div>
-
                 <div class="flex gap-3">
-                    <button onclick="handleSaveSettings()" class="bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2 px-5 rounded-xl shadow-sm transition-all duration-200 text-sm">
-                        Save Settings
-                    </button>
-                    <button onclick="handleTestConnection()" class="border border-stone-300 hover:border-stone-400 text-stone-700 font-semibold py-2 px-5 rounded-xl transition-all duration-200 text-sm">
-                        Test Connection
-                    </button>
+                    <button onclick="handleSaveSettings()" class="bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2 px-5 rounded-xl shadow-sm transition-all duration-200 text-sm">Save Settings</button>
+                    <button onclick="handleTestConnection()" class="border border-stone-300 hover:border-stone-400 text-stone-700 font-semibold py-2 px-5 rounded-xl transition-all duration-200 text-sm">Test Connection</button>
                 </div>
-
                 <div id="settings-status" class="mt-4 text-sm"></div>
             </div>
-
             <div class="bg-white rounded-2xl p-8 shadow-sm max-w-xl mt-6">
                 <h3 class="text-lg font-bold text-stone-900 mb-2">Data Management</h3>
                 <p class="text-sm text-stone-500 mb-4">Reset to default seed data if you want to start fresh.</p>
-                <button onclick="handleResetData()" class="border border-red-300 hover:border-red-400 text-red-600 font-semibold py-2 px-5 rounded-xl transition-all duration-200 text-sm">
-                    Reset to Defaults
-                </button>
-            </div>
-        `;
+                <button onclick="handleResetData()" class="border border-red-300 hover:border-red-400 text-red-600 font-semibold py-2 px-5 rounded-xl transition-all duration-200 text-sm">Reset to Defaults</button>
+            </div>`;
     }
 
     function handleSaveSettings() {
         const pat = document.getElementById('settings-pat').value.trim();
         const owner = document.getElementById('settings-owner').value.trim();
         const repo = document.getElementById('settings-repo').value.trim();
-        saveSettings(pat, owner, repo);
+        saveSettingsToStorage(pat, owner, repo);
         renderSyncStatus();
         showToast('Settings saved', 'success');
     }
@@ -1365,32 +1355,16 @@
         const pat = document.getElementById('settings-pat').value.trim();
         const owner = document.getElementById('settings-owner').value.trim();
         const repo = document.getElementById('settings-repo').value.trim();
-
-        if (!pat || !owner || !repo) {
-            showToast('Fill in all fields first', 'error');
-            return;
-        }
-
+        if (!pat || !owner || !repo) { showToast('Fill in all fields first', 'error'); return; }
         const statusEl = document.getElementById('settings-status');
         statusEl.innerHTML = '<span class="text-sky-600">Testing connection...</span>';
-
         try {
-            const url = `https://api.github.com/repos/${owner}/${repo}`;
-            const resp = await fetch(url, {
-                headers: { 'Authorization': `Bearer ${pat}`, 'Accept': 'application/vnd.github.v3+json' }
-            });
-            if (resp.ok) {
-                statusEl.innerHTML = '<span class="text-green-600">✓ Connected successfully</span>';
-            } else if (resp.status === 404) {
-                statusEl.innerHTML = '<span class="text-red-600">✗ Repository not found. Check owner and repo name.</span>';
-            } else if (resp.status === 401) {
-                statusEl.innerHTML = '<span class="text-red-600">✗ Invalid token. Check your PAT.</span>';
-            } else {
-                statusEl.innerHTML = `<span class="text-red-600">✗ Error: ${resp.status}</span>`;
-            }
-        } catch (err) {
-            statusEl.innerHTML = `<span class="text-red-600">✗ Network error: ${err.message}</span>`;
-        }
+            const resp = await fetch(`https://api.github.com/repos/${owner}/${repo}`, { headers: { 'Authorization': `Bearer ${pat}`, 'Accept': 'application/vnd.github.v3+json' } });
+            if (resp.ok) statusEl.innerHTML = '<span class="text-green-600">✓ Connected successfully</span>';
+            else if (resp.status === 404) statusEl.innerHTML = '<span class="text-red-600">✗ Repository not found.</span>';
+            else if (resp.status === 401) statusEl.innerHTML = '<span class="text-red-600">✗ Invalid token.</span>';
+            else statusEl.innerHTML = `<span class="text-red-600">✗ Error: ${resp.status}</span>`;
+        } catch (err) { statusEl.innerHTML = `<span class="text-red-600">✗ Network error: ${err.message}</span>`; }
     }
 
     function handleResetData() {
@@ -1403,7 +1377,7 @@
     }
 
     // ========================================
-    // SECTION 12: INITIALIZATION
+    // SECTION 14: INITIALIZATION
     // ========================================
 
     function initializeWithSeedData() {
@@ -1411,6 +1385,7 @@
         state.recipes = JSON.parse(JSON.stringify(SEED_DATA.recipes));
         state.meals = JSON.parse(JSON.stringify(SEED_DATA.meals));
         state.consumption = JSON.parse(JSON.stringify(SEED_DATA.consumption));
+        state.comparisons = JSON.parse(JSON.stringify(SEED_DATA.comparisons));
         state.lastUpdated = null;
         recalculateAll();
     }
@@ -1420,26 +1395,22 @@
         renderRecipes();
         renderMeals();
         renderConsumption();
+        renderCompare();
+        renderShopping();
         renderSettings();
         renderSyncStatus();
     }
 
     window.addEventListener('beforeunload', (e) => {
-        if (state._meta.dirty) {
-            e.preventDefault();
-            e.returnValue = '';
-        }
+        if (state._meta.dirty) { e.preventDefault(); e.returnValue = ''; }
     });
 
     // Boot
     (async function init() {
         initializeWithSeedData();
         render();
-
         const settings = getSettings();
-        if (settings.pat && settings.owner && settings.repo) {
-            await loadFromGitHub();
-        }
+        if (settings.pat && settings.owner && settings.repo) { await loadFromGitHub(); }
     })();
 
     </script>
