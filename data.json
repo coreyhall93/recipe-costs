@@ -57,7 +57,7 @@
     },
     {
       "id": "milk",
-      "name": "Milk, 2%",
+      "name": "2% Milk",
       "packageSize": "1 gallon",
       "packageAmount": 3785,
       "packageUnit": "g",
@@ -324,5 +324,5 @@
   "meals": [],
   "consumption": [],
   "comparisons": [],
-  "lastUpdated": "2026-02-13T19:16:47.000Z"
+  "lastUpdated": "2026-02-13T19:23:48.755Z"
 }
