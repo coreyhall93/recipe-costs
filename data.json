@@ -2,7 +2,7 @@
   "ingredients": [
     {
       "id": "bread_flour",
-      "name": "Bread Flour, KA",
+      "name": "Flour, bread, KA",
       "packageSize": "5 lbs",
       "packageAmount": 2268,
       "packageUnit": "g",
@@ -340,5 +340,5 @@
   "meals": [],
   "consumption": [],
   "comparisons": [],
-  "lastUpdated": "2026-02-13T22:17:33.268Z"
+  "lastUpdated": "2026-02-13T22:17:54.005Z"
 }
