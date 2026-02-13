@@ -24,7 +24,7 @@
     },
     {
       "id": "self_rising_flour",
-      "name": "White Lily Self-Rising",
+      "name": "Self-Rising Flour, White Lily",
       "packageSize": "5 lbs",
       "packageAmount": 2268,
       "packageUnit": "g",
@@ -340,5 +340,5 @@
   "meals": [],
   "consumption": [],
   "comparisons": [],
-  "lastUpdated": "2026-02-13T22:16:30.896Z"
+  "lastUpdated": "2026-02-13T22:17:13.377Z"
 }
