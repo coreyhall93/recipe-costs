@@ -25,21 +25,52 @@
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
-        .card-hover { transition: box-shadow 0.2s ease, background-color 0.2s ease; }
-        .card-hover:hover { box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.06), 0 1px 2px -1px rgb(0 0 0 / 0.06); background-color: #fafaf9; }
-        .tab-btn { position: relative; transition: all 0.2s; padding: 8px 10px; border-radius: 8px; font-size: 12px; }
-        .tab-btn.active { background-color: #f0f9ff; color: #0284c7; }
-        .tab-btn:not(.active):hover { color: #44403c; background-color: #f5f5f4; }
-        #btn-settings-gear.active { color: #0284c7; }
+        /* Card depth — Apple 2009 layered shadows */
+        .bg-white.rounded-2xl { box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.05); }
+        .card-hover { transition: box-shadow 0.25s ease, transform 0.25s ease; }
+        .card-hover:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.1), 0 12px 32px rgba(0,0,0,0.06); }
+
+        /* Segmented control navigation */
+        .seg-control { display: inline-flex; background: #e7e8ea; border-radius: 10px; padding: 3px; gap: 2px; flex-wrap: wrap; }
+        .tab-btn { position: relative; z-index: 1; padding: 7px 14px; border-radius: 8px; font-size: 13px; font-weight: 600; white-space: nowrap; background: transparent; border: none; cursor: pointer; color: #57534e; transition: all 0.2s; }
+        .tab-btn.active { color: #0c4a6e; background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 0 0 0.5px rgba(0,0,0,0.04); }
+        .tab-btn:not(.active):hover { color: #292524; }
         @media (min-width: 640px) {
-            .tab-btn { padding: 0 0 12px 0; border-radius: 0; border-bottom: 2px solid transparent; font-size: 14px; background: none !important; }
-            .tab-btn.active { border-bottom-color: #0284c7; color: #0284c7; background: none !important; }
-            .tab-btn:not(.active):hover { background: none !important; }
-            #btn-settings-gear { border-bottom: 2px solid transparent; border-radius: 0; padding: 0 0 10px 0; background: none; }
-            #btn-settings-gear.active { border-bottom-color: #0284c7; background: none; }
-            #btn-settings-gear:not(.active):hover { background: none; }
+            .tab-btn { padding: 8px 18px; }
         }
-        .toast-enter { animation: slideUp 0.3s ease-out; }
+        #btn-settings-gear.active { color: #0284c7; background: rgba(14,165,233,0.08); border-radius: 8px; }
+
+        /* Apple 2009 gradient buttons */
+        .btn-primary { background: linear-gradient(to bottom, #38bdf8, #0284c7); border: 1px solid #0369a1; color: white; font-weight: 600; padding: 8px 20px; border-radius: 12px; font-size: 14px; box-shadow: 0 1px 2px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.2); transition: all 0.15s; cursor: pointer; }
+        .btn-primary:hover { background: linear-gradient(to bottom, #7dd3fc, #0284c7); box-shadow: 0 2px 4px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.25); }
+        .btn-primary:active { background: linear-gradient(to bottom, #0284c7, #0369a1); box-shadow: inset 0 2px 4px rgba(0,0,0,0.2); }
+        .btn-secondary { background: linear-gradient(to bottom, #ffffff, #f5f5f4); border: 1px solid #d6d3d1; color: #44403c; font-weight: 600; padding: 8px 20px; border-radius: 12px; font-size: 14px; box-shadow: 0 1px 2px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8); transition: all 0.15s; cursor: pointer; }
+        .btn-secondary:hover { background: linear-gradient(to bottom, #ffffff, #e7e5e4); border-color: #a8a29e; }
+        .btn-secondary:active { background: linear-gradient(to bottom, #e7e5e4, #d6d3d1); box-shadow: inset 0 1px 3px rgba(0,0,0,0.1); }
+        .btn-danger { background: linear-gradient(to bottom, #ffffff, #fef2f2); border: 1px solid #fca5a5; color: #dc2626; font-weight: 600; padding: 8px 20px; border-radius: 12px; font-size: 14px; box-shadow: 0 1px 2px rgba(0,0,0,0.06); transition: all 0.15s; cursor: pointer; }
+        .btn-danger:hover { background: linear-gradient(to bottom, #fef2f2, #fee2e2); border-color: #f87171; }
+        .btn-danger:active { box-shadow: inset 0 1px 3px rgba(0,0,0,0.1); }
+
+        /* Inset input fields — Apple 2009 recessed feel */
+        .input-inset { border: 1px solid #c8c5c2; border-radius: 8px; padding: 8px 12px; font-size: 14px; background: #fff; box-shadow: inset 0 1px 3px rgba(0,0,0,0.08); transition: border-color 0.2s, box-shadow 0.2s; outline: none; width: 100%; }
+        .input-inset:focus { border-color: #7dd3fc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.08), 0 0 0 3px rgba(56,189,248,0.15); }
+        .input-inset::placeholder { color: #a8a29e; }
+        select.input-inset { -webkit-appearance: none; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2378716c' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; }
+
+        /* Mini segmented control (recipe scale buttons) */
+        .mini-seg { display: inline-flex; background: #e7e8ea; border-radius: 6px; padding: 2px; gap: 1px; flex-wrap: wrap; }
+        .mini-seg button { padding: 3px 8px; border-radius: 5px; font-size: 12px; font-weight: 600; transition: all 0.15s; color: #57534e; }
+        .mini-seg button.active { background: white; color: #0c4a6e; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
+        .mini-seg button:not(.active):hover { color: #292524; }
+
+        /* Table header toolbar feel */
+        thead tr { background: linear-gradient(to bottom, #fafaf9, #f5f5f4); }
+
+        /* Toast with slight bounce */
+        .toast-enter { animation: slideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
+
+        /* Global polish */
+        *, *::before, *::after { -webkit-tap-highlight-color: transparent; }
         @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         @keyframes spin { to { transform: rotate(360deg); } }
         .spinner { animation: spin 1s linear infinite; }
@@ -56,7 +87,7 @@
         .row-menu-dropdown button:hover { background: #f5f5f4; }
     </style>
 </head>
-<body class="text-stone-900" style="background-color:#f0f1f3">
+<body class="text-stone-900" style="background: linear-gradient(180deg, #f2f3f5 0%, #e8e9ec 100%); background-attachment: fixed; min-height: 100vh;">
     <div class="max-w-[1280px] mx-auto px-4 sm:px-8 py-8 sm:py-12">
 
         <!-- Header -->
@@ -66,13 +97,15 @@
         </div>
 
         <!-- Tab Navigation -->
-        <nav class="flex flex-wrap items-center gap-1 sm:flex-nowrap sm:gap-6 sm:border-b sm:border-stone-200 mb-8">
-            <button class="tab-btn active font-semibold text-sky-600" data-tab="ingredients" onclick="switchTab('ingredients')">Ingredients</button>
-            <button class="tab-btn font-semibold text-stone-500" data-tab="recipes" onclick="switchTab('recipes')">Recipes</button>
-            <button class="tab-btn font-semibold text-stone-500" data-tab="meals" onclick="switchTab('meals')">Meals</button>
-            <button class="tab-btn font-semibold text-stone-500" data-tab="consumption" onclick="switchTab('consumption')">Consumption</button>
-            <button class="tab-btn font-semibold text-stone-500" data-tab="compare" onclick="switchTab('compare')">Compare</button>
-            <button class="tab-btn font-semibold text-stone-500" data-tab="shopping" onclick="switchTab('shopping')">Shopping</button>
+        <nav class="flex items-center gap-4 mb-8">
+            <div class="seg-control">
+                <button class="tab-btn active" data-tab="ingredients" onclick="switchTab('ingredients')">Ingredients</button>
+                <button class="tab-btn" data-tab="recipes" onclick="switchTab('recipes')">Recipes</button>
+                <button class="tab-btn" data-tab="meals" onclick="switchTab('meals')">Meals</button>
+                <button class="tab-btn" data-tab="consumption" onclick="switchTab('consumption')">Consumption</button>
+                <button class="tab-btn" data-tab="compare" onclick="switchTab('compare')">Compare</button>
+                <button class="tab-btn" data-tab="shopping" onclick="switchTab('shopping')">Shopping</button>
+            </div>
             <button id="btn-settings-gear" onclick="switchTab('settings')" class="ml-auto flex-shrink-0 p-2 rounded-lg text-stone-400 hover:text-sky-600 hover:bg-stone-100 transition-all duration-200" title="Settings" aria-label="Settings">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 010 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 010-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
             </button>
@@ -89,7 +122,7 @@
     </div>
 
     <!-- Floating Save Button (FAB) -->
-    <button id="btn-save-github" class="fixed bottom-6 right-6 z-40 bg-sky-600 hover:bg-sky-700 text-white font-semibold py-3 px-6 rounded-2xl shadow-lg transition-all duration-300 text-sm hover:shadow-xl" style="display:none">
+    <button id="btn-save-github" class="fixed bottom-6 right-6 z-40 btn-primary text-sm" style="display:none; padding: 12px 24px; border-radius: 16px; box-shadow: 0 4px 12px rgba(2,132,199,0.3), 0 1px 3px rgba(0,0,0,0.12);">
         Save to GitHub
     </button>
 
@@ -487,10 +520,7 @@
     function switchTab(tabName) {
         document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
         document.querySelectorAll('.tab-btn').forEach(btn => {
-            const isActive = btn.dataset.tab === tabName;
-            btn.classList.toggle('active', isActive);
-            btn.classList.toggle('text-sky-600', isActive);
-            btn.classList.toggle('text-stone-500', !isActive);
+            btn.classList.toggle('active', btn.dataset.tab === tabName);
         });
         // Gear icon active state (not a .tab-btn, handled separately)
         const gearBtn = document.getElementById('btn-settings-gear');
@@ -528,14 +558,14 @@
             catCounts[cat] = (catCounts[cat] || 0) + 1;
         }
 
-        let categoryPills = `<button onclick="setIngredientCategoryFilter('All')" class="px-3 py-1 rounded-full text-xs font-semibold transition-all ${filter === 'All' ? 'bg-sky-600 text-white' : 'bg-stone-200 text-stone-600 hover:bg-stone-300'}"">All (${allCount})</button>`;
+        let categoryPills = `<button onclick="setIngredientCategoryFilter('All')" class="${filter === 'All' ? 'active' : ''}">All (${allCount})</button>`;
         for (const cat of CATEGORY_OPTIONS) {
             if (catCounts[cat]) {
-                categoryPills += `<button onclick="setIngredientCategoryFilter('${cat}')" class="px-3 py-1 rounded-full text-xs font-semibold transition-all ${filter === cat ? 'bg-sky-600 text-white' : 'bg-stone-200 text-stone-600 hover:bg-stone-300'}">${cat} (${catCounts[cat]})</button>`;
+                categoryPills += `<button onclick="setIngredientCategoryFilter('${cat}')" class="${filter === cat ? 'active' : ''}">${cat} (${catCounts[cat]})</button>`;
             }
         }
 
-        const inputCls = 'w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500';
+        const inputCls = 'w-full input-inset text-sm';
         const labelCls = 'block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-1';
         let rows = '';
         let mobileForm = '';
@@ -555,7 +585,7 @@
                 </div></td>
             </tr>`;
         } else if (adding && isMobile) {
-            mobileForm = `<div class="bg-white rounded-2xl p-5 shadow-sm mt-4">
+            mobileForm = `<div class="bg-white rounded-2xl p-5 mt-4">
                 <h3 class="text-sm font-semibold text-stone-900 mb-4">New Ingredient</h3>
                 <div class="space-y-3">
                     <div><label class="${labelCls}">Name</label><input type="text" id="ing-new-name" placeholder="Ingredient name" class="${inputCls}"></div>
@@ -568,8 +598,8 @@
                     <div><label class="${labelCls}">Price</label><input type="number" id="ing-new-price" placeholder="0.00" step="0.01" min="0" class="${inputCls}"></div>
                 </div>
                 <div class="flex justify-end gap-3 mt-5 pt-4 border-t border-stone-100">
-                    <button onclick="cancelAddIngredient()" class="text-stone-500 hover:text-stone-700 font-semibold py-2 px-4 rounded-xl text-sm">Cancel</button>
-                    <button onclick="saveNewIngredient()" class="bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2 px-5 rounded-xl shadow-sm text-sm">Save</button>
+                    <button onclick="cancelAddIngredient()" class="btn-secondary text-sm">Cancel</button>
+                    <button onclick="saveNewIngredient()" class="btn-primary text-sm">Save</button>
                 </div>
             </div>`;
         }
@@ -591,7 +621,7 @@
                 </tr>`;
             } else if (editing === ing.id && isMobile) {
                 // On mobile: show normal display row + card form below table
-                mobileForm = `<div id="mobile-edit-form" class="bg-white rounded-2xl p-5 shadow-sm mt-4">
+                mobileForm = `<div id="mobile-edit-form" class="bg-white rounded-2xl p-5 mt-4">
                     <h3 class="text-sm font-semibold text-stone-900 mb-4">Edit: ${escHtml(ing.name)}</h3>
                     <div class="space-y-3">
                         <div><label class="${labelCls}">Name</label><input type="text" id="ing-edit-name" value="${escHtml(ing.name)}" class="${inputCls}"></div>
@@ -604,8 +634,8 @@
                         <div><label class="${labelCls}">Price</label><input type="number" id="ing-edit-price" value="${ing.price}" step="0.01" min="0" class="${inputCls}"></div>
                     </div>
                     <div class="flex justify-end gap-3 mt-5 pt-4 border-t border-stone-100">
-                        <button onclick="cancelEditIngredient()" class="text-stone-500 hover:text-stone-700 font-semibold py-2 px-4 rounded-xl text-sm">Cancel</button>
-                        <button onclick="saveEditIngredient('${ing.id}')" class="bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2 px-5 rounded-xl shadow-sm text-sm">Save</button>
+                        <button onclick="cancelEditIngredient()" class="btn-secondary text-sm">Cancel</button>
+                        <button onclick="saveEditIngredient('${ing.id}')" class="btn-primary text-sm">Save</button>
                     </div>
                 </div>`;
                 // Fall through to render normal display row
@@ -648,7 +678,7 @@
         container.innerHTML = `
             <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-4">
                 <h2 class="text-2xl font-black tracking-tight text-stone-900">Ingredient Prices</h2>
-                <button onclick="startAddIngredient()" class="bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2 px-5 rounded-xl shadow-sm transition-all duration-200 hover:shadow-md text-sm">+ Add Ingredient</button>
+                <button onclick="startAddIngredient()" class="btn-primary text-sm">+ Add Ingredient</button>
             </div>
             <div class="mb-6">
                 <button onclick="toggleIngredientFilters()" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-semibold transition-all ${filter !== 'All' ? 'bg-sky-100 text-sky-700' : 'bg-stone-200 text-stone-600 hover:bg-stone-300'}">
@@ -656,9 +686,9 @@
                     ${filter !== 'All' ? escHtml(filter) : 'Filters'}
                     <svg class="w-3 h-3 transition-transform ${state._meta.ingredientFiltersOpen ? 'rotate-180' : ''}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                 </button>
-                <div class="${state._meta.ingredientFiltersOpen ? 'flex' : 'hidden'} gap-2 flex-wrap mt-3">${categoryPills}</div>
+                <div class="${state._meta.ingredientFiltersOpen ? 'block' : 'hidden'} mt-3"><div class="mini-seg">${categoryPills}</div></div>
             </div>
-            <div class="bg-white rounded-2xl shadow-sm overflow-visible sm:overflow-hidden">
+            <div class="bg-white rounded-2xl overflow-visible sm:overflow-hidden">
                 <div class="overflow-x-hidden sm:overflow-x-auto overflow-y-visible">
                     <table class="w-full sm:min-w-full" style="table-layout:fixed">
                         <colgroup>
@@ -861,7 +891,7 @@
         summaryEl.innerHTML = `Per batch &middot; ${scaledYield} ${escHtml(recipe.yieldUnit)} &middot; <span class="font-semibold text-stone-700">${fmt(recipe.costPerUnit)}</span> each`;
         const scaleOpts = [{v:0.5,l:'½×'},{v:1,l:'1×'},{v:1.5,l:'1.5×'},{v:2,l:'2×'},{v:3,l:'3×'}];
         scaleEl.innerHTML = '<span class="text-xs text-stone-500">Scale:</span>' +
-            scaleOpts.map(o => `<button onclick="setRecipeScale('${recipeId}', ${o.v})" class="px-2 py-0.5 rounded text-xs font-semibold ${o.v === multiplier ? 'bg-sky-600 text-white' : 'bg-stone-100 text-stone-600 hover:bg-stone-200'}">${o.l}</button>`).join('');
+            '<div class="mini-seg">' + scaleOpts.map(o => `<button onclick="setRecipeScale('${recipeId}', ${o.v})" class="${o.v === multiplier ? 'active' : ''}">${o.l}</button>`).join('') + '</div>';
         let bh = '';
         for (const item of recipe.ingredients) {
             const ing = state.ingredients.find(i => i.id === item.ingredientId);
@@ -908,7 +938,7 @@
 
             const isExpanded = state._meta.expandedRecipes[recipe.id];
 
-            cards += `<div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm card-hover relative group">
+            cards += `<div class="bg-white rounded-2xl p-6 sm:p-8 card-hover relative group">
                 <div class="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                     <button onclick="startEditRecipe('${recipe.id}')" class="text-stone-400 hover:text-sky-600 p-1" title="Edit">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
@@ -930,13 +960,15 @@
                 </button>
                 <div id="recipe-details-${recipe.id}" style="${isExpanded ? '' : 'display:none'}">
                     <div class="mt-4">
-                        <div id="recipe-scale-${recipe.id}" class="flex items-center gap-2 mb-4">
+                        <div id="recipe-scale-${recipe.id}" class="flex items-center gap-3 mb-4">
                             <span class="text-xs text-stone-500">Scale:</span>
-                            <button onclick="setRecipeScale('${recipe.id}', 0.5)" class="px-2 py-0.5 rounded text-xs font-semibold ${scale === 0.5 ? 'bg-sky-600 text-white' : 'bg-stone-100 text-stone-600 hover:bg-stone-200'}">½×</button>
-                            <button onclick="setRecipeScale('${recipe.id}', 1)" class="px-2 py-0.5 rounded text-xs font-semibold ${scale === 1 ? 'bg-sky-600 text-white' : 'bg-stone-100 text-stone-600 hover:bg-stone-200'}">1×</button>
-                            <button onclick="setRecipeScale('${recipe.id}', 1.5)" class="px-2 py-0.5 rounded text-xs font-semibold ${scale === 1.5 ? 'bg-sky-600 text-white' : 'bg-stone-100 text-stone-600 hover:bg-stone-200'}">1.5×</button>
-                            <button onclick="setRecipeScale('${recipe.id}', 2)" class="px-2 py-0.5 rounded text-xs font-semibold ${scale === 2 ? 'bg-sky-600 text-white' : 'bg-stone-100 text-stone-600 hover:bg-stone-200'}">2×</button>
-                            <button onclick="setRecipeScale('${recipe.id}', 3)" class="px-2 py-0.5 rounded text-xs font-semibold ${scale === 3 ? 'bg-sky-600 text-white' : 'bg-stone-100 text-stone-600 hover:bg-stone-200'}">3×</button>
+                            <div class="mini-seg">
+                                <button onclick="setRecipeScale('${recipe.id}', 0.5)" class="${scale === 0.5 ? 'active' : ''}">½×</button>
+                                <button onclick="setRecipeScale('${recipe.id}', 1)" class="${scale === 1 ? 'active' : ''}">1×</button>
+                                <button onclick="setRecipeScale('${recipe.id}', 1.5)" class="${scale === 1.5 ? 'active' : ''}">1.5×</button>
+                                <button onclick="setRecipeScale('${recipe.id}', 2)" class="${scale === 2 ? 'active' : ''}">2×</button>
+                                <button onclick="setRecipeScale('${recipe.id}', 3)" class="${scale === 3 ? 'active' : ''}">3×</button>
+                            </div>
                         </div>
                         <div id="recipe-breakdown-${recipe.id}" class="space-y-2 pt-4 border-t border-stone-100">
                             ${breakdown}
@@ -951,7 +983,7 @@
         container.innerHTML = `
             <div class="flex justify-between items-center mb-6">
                 <h2 class="text-2xl font-black tracking-tight text-stone-900">Recipes</h2>
-                <button onclick="startNewRecipe()" class="bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2 px-5 rounded-xl shadow-sm transition-all duration-200 hover:shadow-md text-sm">+ New Recipe</button>
+                <button onclick="startNewRecipe()" class="btn-primary text-sm">+ New Recipe</button>
             </div>
             ${recipes.length ? `<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10" style="align-items:start">${cards}</div>` : '<p class="text-center text-stone-400 mb-10">No recipes yet. Create your first one.</p>'}
             ${form}
@@ -970,10 +1002,10 @@
             const ing = state.ingredients.find(x => x.id === item.ingredientId);
             const lineCost = ing ? item.amount * ing.costPerUnit : 0;
             ingredientRows += `<div class="flex flex-col sm:flex-row gap-2 sm:items-center">
-                <select onchange="updateRecipeFormIngredient(${i}, 'ingredientId', this.value)" class="flex-1 border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
+                <select onchange="updateRecipeFormIngredient(${i}, 'ingredientId', this.value)" class="flex-1 input-inset text-sm">
                     <option value="">Select ingredient...</option>${options}
                 </select>
-                <input type="number" value="${item.amount || ''}" placeholder="Amount" step="any" min="0" onchange="updateRecipeFormIngredient(${i}, 'amount', parseFloat(this.value) || 0)" class="w-full sm:w-24 border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
+                <input type="number" value="${item.amount || ''}" placeholder="Amount" step="any" min="0" onchange="updateRecipeFormIngredient(${i}, 'amount', parseFloat(this.value) || 0)" class="w-full sm:w-24 input-inset text-sm">
                 <span class="text-sm text-stone-500 w-8">${item.ingredientId && ing ? ing.packageUnit : ''}</span>
                 <span class="text-sm font-medium text-stone-700 w-16 text-right">${lineCost > 0 ? fmt(lineCost) : '—'}</span>
                 <button onclick="removeRecipeFormIngredient(${i})" class="text-stone-400 hover:text-red-500 p-1 self-center">
@@ -983,15 +1015,15 @@
         }
         const totalCost = calcRecipeFormCost();
         const perUnit = rf.yield > 0 ? totalCost / rf.yield : 0;
-        return `<div class="bg-white rounded-2xl p-8 shadow-sm">
+        return `<div class="bg-white rounded-2xl p-8">
             <h3 class="text-lg font-bold text-stone-900 mb-6">${isEditing ? 'Edit Recipe' : 'New Recipe'}</h3>
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
                 <div><label class="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-1">Recipe Name</label>
-                    <input type="text" id="recipe-name" value="${escHtml(rf.name)}" oninput="state._meta.recipeForm.name = this.value" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"></div>
+                    <input type="text" id="recipe-name" value="${escHtml(rf.name)}" oninput="state._meta.recipeForm.name = this.value" class="w-full input-inset text-sm"></div>
                 <div><label class="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-1">Yield</label>
-                    <input type="number" id="recipe-yield" value="${rf.yield || ''}" min="1" step="1" onchange="state._meta.recipeForm.yield = parseInt(this.value) || 0; renderRecipes()" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"></div>
+                    <input type="number" id="recipe-yield" value="${rf.yield || ''}" min="1" step="1" onchange="state._meta.recipeForm.yield = parseInt(this.value) || 0; renderRecipes()" class="w-full input-inset text-sm"></div>
                 <div><label class="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-1">Yield Unit</label>
-                    <input type="text" id="recipe-yield-unit" value="${escHtml(rf.yieldUnit)}" placeholder="e.g. muffins" oninput="state._meta.recipeForm.yieldUnit = this.value" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"></div>
+                    <input type="text" id="recipe-yield-unit" value="${escHtml(rf.yieldUnit)}" placeholder="e.g. muffins" oninput="state._meta.recipeForm.yieldUnit = this.value" class="w-full input-inset text-sm"></div>
             </div>
             <div class="mb-4">
                 <label class="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-3">Ingredients</label>
@@ -1001,8 +1033,8 @@
             <div class="flex items-center justify-between pt-6 border-t border-stone-100">
                 <div><span class="text-2xl font-black text-stone-900">${fmt(totalCost)}</span><span class="text-sm text-stone-500 ml-2">total</span>${perUnit > 0 ? `<span class="text-sm text-stone-500 ml-4">${fmt(perUnit)} each</span>` : ''}</div>
                 <div class="flex gap-3">
-                    <button onclick="cancelRecipeForm()" class="text-stone-500 hover:text-stone-700 font-semibold py-2 px-5 rounded-xl text-sm">Cancel</button>
-                    <button onclick="saveRecipeForm()" class="bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2 px-5 rounded-xl shadow-sm transition-all duration-200 text-sm">${isEditing ? 'Update Recipe' : 'Save Recipe'}</button>
+                    <button onclick="cancelRecipeForm()" class="btn-secondary text-sm">Cancel</button>
+                    <button onclick="saveRecipeForm()" class="btn-primary text-sm">${isEditing ? 'Update Recipe' : 'Save Recipe'}</button>
                 </div>
             </div>
         </div>`;
@@ -1096,7 +1128,7 @@
                 mealCost += compCost;
                 breakdown += `<div class="flex justify-between items-center"><span class="text-sm text-stone-600">${escHtml(compName)} (${compDetail})</span><span class="text-sm font-medium text-stone-900">${fmt(compCost)}</span></div>`;
             }
-            cards += `<div class="bg-white rounded-2xl p-8 shadow-sm card-hover relative group">
+            cards += `<div class="bg-white rounded-2xl p-8 card-hover relative group">
                 <div class="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                     <button onclick="startEditMeal('${meal.id}')" class="text-stone-400 hover:text-sky-600 p-1" title="Edit"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg></button>
                     <button onclick="deleteMeal('${meal.id}')" class="text-stone-400 hover:text-red-600 p-1" title="Delete"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>
@@ -1110,7 +1142,7 @@
         const form = renderMealForm();
         container.innerHTML = `
             <div class="flex justify-between items-center mb-6"><h2 class="text-2xl font-black tracking-tight text-stone-900">Meals</h2>
-                <button onclick="startNewMeal()" class="bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2 px-5 rounded-xl shadow-sm transition-all duration-200 hover:shadow-md text-sm">+ New Meal</button></div>
+                <button onclick="startNewMeal()" class="btn-primary text-sm">+ New Meal</button></div>
             ${meals.length ? `<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10" style="align-items:start">${cards}</div>` : '<p class="text-center text-stone-400 mb-10">No meals yet. Create your first one.</p>'}
             ${form}`;
     }
@@ -1128,30 +1160,30 @@
             if (comp.type === 'recipe') { const recipe = state.recipes.find(r => r.id === comp.id); if (recipe) { lineCost = comp.quantity * (recipe.totalCost / recipe.yield); unitLabel = recipe.yieldUnit.replace(/s$/, ''); } }
             else if (comp.type === 'ingredient') { const ing = state.ingredients.find(x => x.id === comp.id); if (ing) { lineCost = comp.quantity * ing.costPerUnit; unitLabel = ing.packageUnit; } }
             componentRows += `<div class="flex flex-col sm:flex-row gap-2 sm:items-center">
-                <select onchange="updateMealFormComponent(${i}, this.value)" class="flex-1 border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
+                <select onchange="updateMealFormComponent(${i}, this.value)" class="flex-1 input-inset text-sm">
                     <option value="">Select item...</option>
                     ${recipeOpts ? `<optgroup label="Recipes">${recipeOpts}</optgroup>` : ''}
                     <optgroup label="Ingredients">${ingredientOpts}</optgroup>
                 </select>
-                <input type="number" value="${comp.quantity || ''}" placeholder="Qty" step="any" min="0" onchange="updateMealFormQuantity(${i}, parseFloat(this.value) || 0)" class="w-full sm:w-24 border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
+                <input type="number" value="${comp.quantity || ''}" placeholder="Qty" step="any" min="0" onchange="updateMealFormQuantity(${i}, parseFloat(this.value) || 0)" class="w-full sm:w-24 input-inset text-sm">
                 <span class="text-sm text-stone-500 w-12">${unitLabel}</span>
                 <span class="text-sm font-medium text-stone-700 w-16 text-right">${lineCost > 0 ? fmt(lineCost) : '—'}</span>
                 <button onclick="removeMealFormComponent(${i})" class="text-stone-400 hover:text-red-500 p-1 self-center"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
             </div>`;
         }
         const totalCost = calcMealFormCost();
-        return `<div class="bg-white rounded-2xl p-8 shadow-sm">
+        return `<div class="bg-white rounded-2xl p-8">
             <h3 class="text-lg font-bold text-stone-900 mb-6">${isEditing ? 'Edit Meal' : 'New Meal'}</h3>
             <div class="mb-6"><label class="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-1">Meal Name</label>
-                <input type="text" id="meal-name" value="${escHtml(mf.name)}" oninput="state._meta.mealForm.name = this.value" class="w-full sm:w-96 border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"></div>
+                <input type="text" id="meal-name" value="${escHtml(mf.name)}" oninput="state._meta.mealForm.name = this.value" class="w-full sm:w-96 input-inset text-sm"></div>
             <div class="mb-4"><label class="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-3">Components</label>
                 <div class="space-y-2">${componentRows}</div>
                 <button onclick="addMealFormComponent()" class="mt-3 text-sky-600 hover:text-sky-800 text-sm font-semibold">+ Add Component</button></div>
             <div class="flex items-center justify-between pt-6 border-t border-stone-100">
                 <div><span class="text-2xl font-black text-stone-900">${fmt(totalCost)}</span><span class="text-sm text-stone-500 ml-2">per serving</span></div>
                 <div class="flex gap-3">
-                    <button onclick="cancelMealForm()" class="text-stone-500 hover:text-stone-700 font-semibold py-2 px-5 rounded-xl text-sm">Cancel</button>
-                    <button onclick="saveMealForm()" class="bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2 px-5 rounded-xl shadow-sm transition-all duration-200 text-sm">${isEditing ? 'Update Meal' : 'Save Meal'}</button></div>
+                    <button onclick="cancelMealForm()" class="btn-secondary text-sm">Cancel</button>
+                    <button onclick="saveMealForm()" class="btn-primary text-sm">${isEditing ? 'Update Meal' : 'Save Meal'}</button></div>
             </div></div>`;
     }
 
@@ -1221,7 +1253,7 @@
             const weekly = daily * 7;
             const monthly = daily * 30;
             totalDaily += daily; totalWeekly += weekly; totalMonthly += monthly;
-            entryCards += `<div class="bg-white rounded-2xl p-6 shadow-sm card-hover">
+            entryCards += `<div class="bg-white rounded-2xl p-6 card-hover">
                 <div class="flex justify-between items-start mb-4">
                     <div><h3 class="text-sm font-semibold text-sky-600">${escHtml(meal.name).toUpperCase()}</h3><p class="text-sm text-stone-500">${fmt(mealCost)} per serving</p></div>
                     <button onclick="removeConsumption('${entry.id}')" class="text-stone-400 hover:text-red-500 p-1" title="Remove"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
@@ -1241,19 +1273,19 @@
         container.innerHTML = `
             <h2 class="text-2xl font-black tracking-tight text-stone-900 mb-6">Consumption Tracker</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-                <div class="bg-white rounded-2xl p-8 shadow-sm text-center"><div class="text-4xl font-black text-sky-600 tracking-tight mb-2">${fmt(totalDaily)}</div><p class="text-sm text-stone-500">Per Day</p></div>
-                <div class="bg-white rounded-2xl p-8 shadow-sm text-center"><div class="text-4xl font-black text-sky-600 tracking-tight mb-2">${fmt(totalWeekly)}</div><p class="text-sm text-stone-500">Per Week</p></div>
-                <div class="bg-white rounded-2xl p-8 shadow-sm text-center"><div class="text-4xl font-black text-sky-600 tracking-tight mb-2">${fmt(totalMonthly)}</div><p class="text-sm text-stone-500">Per Month</p></div>
+                <div class="bg-white rounded-2xl p-8 text-center"><div class="text-4xl font-black text-sky-600 tracking-tight mb-2">${fmt(totalDaily)}</div><p class="text-sm text-stone-500">Per Day</p></div>
+                <div class="bg-white rounded-2xl p-8 text-center"><div class="text-4xl font-black text-sky-600 tracking-tight mb-2">${fmt(totalWeekly)}</div><p class="text-sm text-stone-500">Per Week</p></div>
+                <div class="bg-white rounded-2xl p-8 text-center"><div class="text-4xl font-black text-sky-600 tracking-tight mb-2">${fmt(totalMonthly)}</div><p class="text-sm text-stone-500">Per Month</p></div>
             </div>
             ${entryCards ? `<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-10">${entryCards}</div>` : '<p class="text-center text-stone-400 mb-10">No meals tracked yet. Add one below.</p>'}
-            <div class="bg-white rounded-2xl p-6 shadow-sm">
+            <div class="bg-white rounded-2xl p-6">
                 <h3 class="text-lg font-bold text-stone-900 mb-4">Track a Meal</h3>
                 ${state.meals.length === 0 ? '<p class="text-sm text-stone-400">Create a meal first in the Meals tab.</p>' : `<div class="flex flex-col sm:flex-row gap-3 items-end">
                     <div class="flex-1"><label class="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-1">Meal</label>
-                        <select id="consumption-meal" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"><option value="">Select a meal...</option>${mealOptions}</select></div>
+                        <select id="consumption-meal" class="w-full input-inset text-sm"><option value="">Select a meal...</option>${mealOptions}</select></div>
                     <div class="w-full sm:w-32"><label class="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-1">Servings/Day</label>
-                        <input type="number" id="consumption-servings" value="1" min="0" step="any" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"></div>
-                    <button onclick="addConsumption()" class="bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2 px-5 rounded-xl shadow-sm transition-all duration-200 text-sm whitespace-nowrap">Track Meal</button></div>`}
+                        <input type="number" id="consumption-servings" value="1" min="0" step="any" class="w-full input-inset text-sm"></div>
+                    <button onclick="addConsumption()" class="btn-primary text-sm whitespace-nowrap">Track Meal</button></div>`}
             </div>`;
     }
 
@@ -1288,7 +1320,7 @@
             const monthlySavings = weeklySavings * 4.33;
             const isPositive = savings > 0;
 
-            cards += `<div class="bg-white rounded-2xl p-8 shadow-sm card-hover relative group">
+            cards += `<div class="bg-white rounded-2xl p-8 card-hover relative group">
                 <button onclick="removeComparison('${comp.id}')" class="absolute top-4 right-4 text-stone-400 hover:text-red-500 p-1 opacity-0 group-hover:opacity-100 transition-opacity">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                 </button>
@@ -1319,21 +1351,21 @@
         container.innerHTML = `
             <h2 class="text-2xl font-black tracking-tight text-stone-900 mb-6">Homemade vs Store-Bought</h2>
             ${cards ? `<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-10">${cards}</div>` : '<p class="text-center text-stone-400 mb-10">No comparisons yet. Add one below to see how much you save.</p>'}
-            <div class="bg-white rounded-2xl p-6 shadow-sm max-w-xl">
+            <div class="bg-white rounded-2xl p-6 max-w-xl">
                 <h3 class="text-lg font-bold text-stone-900 mb-4">Add Comparison</h3>
                 ${state.meals.length === 0 ? '<p class="text-sm text-stone-400">Create a meal first in the Meals tab.</p>' : `
                 <div class="space-y-3">
                     <div><label class="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-1">Your Meal</label>
-                        <select id="compare-meal" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"><option value="">Select a meal...</option>${mealOpts}</select></div>
+                        <select id="compare-meal" class="w-full input-inset text-sm"><option value="">Select a meal...</option>${mealOpts}</select></div>
                     <div class="grid grid-cols-2 gap-3">
                         <div><label class="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-1">Store/Restaurant Price</label>
-                            <input type="number" id="compare-price" placeholder="4.89" step="0.01" min="0" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"></div>
+                            <input type="number" id="compare-price" placeholder="4.89" step="0.01" min="0" class="w-full input-inset text-sm"></div>
                         <div><label class="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-1">Source Name</label>
-                            <input type="text" id="compare-source" placeholder="McDonald's" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"></div>
+                            <input type="text" id="compare-source" placeholder="McDonald's" class="w-full input-inset text-sm"></div>
                     </div>
                     <div><label class="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-1">How many per week?</label>
-                        <input type="number" id="compare-weekly" placeholder="3" step="1" min="0" class="w-full sm:w-32 border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"></div>
-                    <button onclick="addComparison()" class="bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2 px-5 rounded-xl shadow-sm transition-all duration-200 text-sm">Add Comparison</button>
+                        <input type="number" id="compare-weekly" placeholder="3" step="1" min="0" class="w-full sm:w-32 input-inset text-sm"></div>
+                    <button onclick="addComparison()" class="btn-primary text-sm">Add Comparison</button>
                 </div>`}
             </div>`;
     }
@@ -1394,20 +1426,20 @@
             <h2 class="text-2xl font-black tracking-tight text-stone-900 mb-6">Shopping List</h2>
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div class="space-y-6">
-                    ${meals.length ? `<div class="bg-white rounded-2xl p-6 shadow-sm">
+                    ${meals.length ? `<div class="bg-white rounded-2xl p-6">
                         <h3 class="text-lg font-bold text-stone-900 mb-4">Meals</h3>
                         <p class="text-xs text-stone-400 mb-3">Includes recipe ingredients + raw ingredients for each meal.</p>
                         <div class="space-y-3">${mealChecks}</div>
                     </div>` : ''}
-                    <div class="bg-white rounded-2xl p-6 shadow-sm">
+                    <div class="bg-white rounded-2xl p-6">
                         <h3 class="text-lg font-bold text-stone-900 mb-4">Standalone Recipes</h3>
                         ${recipes.length === 0 ? '<p class="text-sm text-stone-400">Create recipes first.</p>' : `<div class="space-y-3">${recipeChecks}</div>`}
                     </div>
                 </div>
-                <div class="bg-white rounded-2xl p-6 shadow-sm">
+                <div class="bg-white rounded-2xl p-6">
                     <div class="flex justify-between items-center mb-4">
                         <h3 class="text-lg font-bold text-stone-900">Aggregated List</h3>
-                        <button onclick="copyShoppingList()" class="border border-stone-300 hover:border-stone-400 text-stone-700 font-semibold py-1.5 px-4 rounded-xl transition-all duration-200 text-sm">Copy to Clipboard</button>
+                        <button onclick="copyShoppingList()" class="btn-secondary text-sm">Copy to Clipboard</button>
                     </div>
                     <div id="shopping-list-output"><p class="text-sm text-stone-400">Check items on the left to generate your list.</p></div>
                 </div>
@@ -1514,28 +1546,28 @@
         const settings = getSettings();
         container.innerHTML = `
             <h2 class="text-2xl font-black tracking-tight text-stone-900 mb-6">Settings</h2>
-            <div class="bg-white rounded-2xl p-8 shadow-sm max-w-xl">
+            <div class="bg-white rounded-2xl p-8 max-w-xl">
                 <h3 class="text-lg font-bold text-stone-900 mb-2">GitHub Sync</h3>
                 <p class="text-sm text-stone-500 mb-4">Sync data across devices via a GitHub repo. Changes auto-save to this browser. Use <strong>Push</strong> to upload local changes, or <strong>Pull</strong> to download from GitHub.</p>
                 <p class="text-sm text-stone-500 mb-6">You'll need a <a href="https://github.com/settings/tokens/new?scopes=repo&description=Recipe+Cost+Dashboard" target="_blank" class="text-sky-600 hover:text-sky-700 underline">Personal Access Token</a> with <code class="bg-stone-100 px-1 rounded text-xs">repo</code> scope.</p>
                 <div class="space-y-4 mb-6">
                     <div><label class="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-1">Personal Access Token</label>
-                        <input type="password" id="settings-pat" value="${escHtml(settings.pat)}" placeholder="ghp_..." class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 font-mono"></div>
+                        <input type="password" id="settings-pat" value="${escHtml(settings.pat)}" placeholder="ghp_..." class="w-full input-inset text-sm font-mono"></div>
                     <div><label class="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-1">Repository Owner</label>
-                        <input type="text" id="settings-owner" value="${escHtml(settings.owner)}" placeholder="your-username" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"></div>
+                        <input type="text" id="settings-owner" value="${escHtml(settings.owner)}" placeholder="your-username" class="w-full input-inset text-sm"></div>
                     <div><label class="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-1">Repository Name</label>
-                        <input type="text" id="settings-repo" value="${escHtml(settings.repo)}" placeholder="recipe-costs" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"></div>
+                        <input type="text" id="settings-repo" value="${escHtml(settings.repo)}" placeholder="recipe-costs" class="w-full input-inset text-sm"></div>
                 </div>
                 <div class="flex gap-3 flex-wrap mb-4">
-                    <button onclick="handleSaveSettings()" class="bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2 px-5 rounded-xl shadow-sm transition-all duration-200 text-sm">Save Settings</button>
-                    <button onclick="handleTestConnection()" class="border border-stone-300 hover:border-stone-400 text-stone-700 font-semibold py-2 px-5 rounded-xl transition-all duration-200 text-sm">Test Connection</button>
+                    <button onclick="handleSaveSettings()" class="btn-primary text-sm">Save Settings</button>
+                    <button onclick="handleTestConnection()" class="btn-secondary text-sm">Test Connection</button>
                 </div>
                 <div class="flex gap-3 flex-wrap pt-4 border-t border-stone-100">
-                    <button onclick="saveToGitHub()" class="inline-flex items-center gap-2 border border-sky-300 hover:border-sky-400 text-sky-700 font-semibold py-2 px-5 rounded-xl transition-all duration-200 text-sm">
+                    <button onclick="saveToGitHub()" class="btn-secondary text-sm inline-flex items-center gap-2">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5-5m0 0l5 5m-5-5v12"/></svg>
                         Push to GitHub
                     </button>
-                    <button onclick="handlePullFromGitHub()" class="inline-flex items-center gap-2 border border-stone-300 hover:border-stone-400 text-stone-700 font-semibold py-2 px-5 rounded-xl transition-all duration-200 text-sm">
+                    <button onclick="handlePullFromGitHub()" class="btn-secondary text-sm inline-flex items-center gap-2">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 14l5 5m0 0l5-5m-5 5V3"/></svg>
                         Pull from GitHub
                     </button>
@@ -1543,10 +1575,10 @@
                 <div id="settings-status" class="mt-4 text-sm"></div>
                 ${state._meta.lastSynced ? '<p class="text-xs text-stone-400 mt-2">Last synced: ' + new Date(state._meta.lastSynced).toLocaleString() + '</p>' : ''}
             </div>
-            <div class="bg-white rounded-2xl p-8 shadow-sm max-w-xl mt-6">
+            <div class="bg-white rounded-2xl p-8 max-w-xl mt-6">
                 <h3 class="text-lg font-bold text-stone-900 mb-2">Data Management</h3>
                 <p class="text-sm text-stone-500 mb-4">Reset to default seed data if you want to start fresh.</p>
-                <button onclick="handleResetData()" class="border border-red-300 hover:border-red-400 text-red-600 font-semibold py-2 px-5 rounded-xl transition-all duration-200 text-sm">Reset to Defaults</button>
+                <button onclick="handleResetData()" class="btn-danger text-sm">Reset to Defaults</button>
             </div>`;
     }
 
