@@ -25,8 +25,8 @@
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
-        .card-hover { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .card-hover:hover { transform: translateY(-2px); box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1); }
+        .card-hover { transition: box-shadow 0.2s ease, background-color 0.2s ease; }
+        .card-hover:hover { box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.06), 0 1px 2px -1px rgb(0 0 0 / 0.06); background-color: #fafaf9; }
         .tab-btn { position: relative; transition: all 0.2s; padding: 8px 10px; border-radius: 8px; font-size: 12px; }
         .tab-btn.active { background-color: #f0f9ff; color: #0284c7; }
         .tab-btn:not(.active):hover { color: #44403c; background-color: #f5f5f4; }
@@ -476,6 +476,7 @@
         }
         const editing = state._meta.editingIngredientId;
         const adding = state._meta.addingIngredient;
+        const mobileHide = (editing || adding) ? '' : 'hidden sm:table-cell ';
 
         // Category counts
         const allCount = state.ingredients.length;
@@ -551,13 +552,16 @@
                 const spark = renderSparkline(ing.priceHistory);
                 const historyCount = (ing.priceHistory || []).length;
                 rows += `<tr class="hover:bg-stone-50 transition-colors">
-                    <td class="px-4 sm:px-6 py-4 text-sm font-medium text-stone-900">${escHtml(ing.name)}</td>
-                    <td class="px-4 sm:px-6 py-4"><span class="text-xs px-2 py-0.5 rounded-full bg-stone-100 text-stone-600">${escHtml(ing.category || 'Other')}</span></td>
-                    <td class="px-4 sm:px-6 py-4 text-sm text-stone-600">${escHtml(ing.packageSize)}</td>
-                    <td class="px-4 sm:px-6 py-4 text-sm text-stone-600">${ing.packageAmount} ${ing.packageUnit}</td>
+                    <td class="px-4 sm:px-6 py-4">
+                        <div class="text-sm font-medium text-stone-900">${escHtml(ing.name)}</div>
+                        <div class="sm:hidden mt-0.5"><span class="text-xs px-2 py-0.5 rounded-full bg-stone-100 text-stone-600">${escHtml(ing.category || 'Other')}</span></div>
+                    </td>
+                    <td class="${mobileHide}px-4 sm:px-6 py-4"><span class="text-xs px-2 py-0.5 rounded-full bg-stone-100 text-stone-600">${escHtml(ing.category || 'Other')}</span></td>
+                    <td class="${mobileHide}px-4 sm:px-6 py-4 text-sm text-stone-600">${escHtml(ing.packageSize)}</td>
+                    <td class="${mobileHide}px-4 sm:px-6 py-4 text-sm text-stone-600">${ing.packageAmount} ${ing.packageUnit}</td>
                     <td class="px-4 sm:px-6 py-4 text-sm text-stone-900">${fmt(ing.price)}</td>
                     <td class="px-4 sm:px-6 py-4 text-sm text-stone-600 font-mono">${fmtUnit(ing.costPerUnit, ing.packageUnit)}</td>
-                    <td class="px-4 sm:px-6 py-4">${spark}${historyCount > 0 ? `<span class="text-xs text-stone-400 ml-1">${historyCount}</span>` : ''}</td>
+                    <td class="${mobileHide}px-4 sm:px-6 py-4">${spark}${historyCount > 0 ? `<span class="text-xs text-stone-400 ml-1">${historyCount}</span>` : ''}</td>
                     <td class="px-4 sm:px-6 py-4">
                         <div class="flex gap-3">
                             <button onclick="startEditIngredient('${ing.id}')" class="text-stone-400 hover:text-sky-600 transition-colors" title="Edit">
@@ -591,12 +595,12 @@
                         <thead>
                             <tr class="border-b border-stone-100">
                                 <th class="px-4 sm:px-6 py-4 text-left text-xs font-semibold text-stone-500 uppercase tracking-wider">Ingredient</th>
-                                <th class="px-4 sm:px-6 py-4 text-left text-xs font-semibold text-stone-500 uppercase tracking-wider">Category</th>
-                                <th class="px-4 sm:px-6 py-4 text-left text-xs font-semibold text-stone-500 uppercase tracking-wider">Pkg Size</th>
-                                <th class="px-4 sm:px-6 py-4 text-left text-xs font-semibold text-stone-500 uppercase tracking-wider">Amount</th>
+                                <th class="${mobileHide}px-4 sm:px-6 py-4 text-left text-xs font-semibold text-stone-500 uppercase tracking-wider">Category</th>
+                                <th class="${mobileHide}px-4 sm:px-6 py-4 text-left text-xs font-semibold text-stone-500 uppercase tracking-wider">Pkg Size</th>
+                                <th class="${mobileHide}px-4 sm:px-6 py-4 text-left text-xs font-semibold text-stone-500 uppercase tracking-wider">Amount</th>
                                 <th class="px-4 sm:px-6 py-4 text-left text-xs font-semibold text-stone-500 uppercase tracking-wider">Price</th>
                                 <th class="px-4 sm:px-6 py-4 text-left text-xs font-semibold text-stone-500 uppercase tracking-wider">Cost/Unit</th>
-                                <th class="px-4 sm:px-6 py-4 text-left text-xs font-semibold text-stone-500 uppercase tracking-wider">Trend</th>
+                                <th class="${mobileHide}px-4 sm:px-6 py-4 text-left text-xs font-semibold text-stone-500 uppercase tracking-wider">Trend</th>
                                 <th class="px-4 sm:px-6 py-4 w-20"></th>
                             </tr>
                         </thead>
