@@ -74,21 +74,15 @@
         /* Toast with slight bounce */
         .toast-enter { animation: slideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
 
-        /* Tab content transitions */
+        /* Tab content transitions — barely perceptible crossfade, no movement */
         .tab-content {
+            display: none;
             opacity: 0;
-            transform: translateY(8px);
-            transition: opacity 200ms cubic-bezier(0.22, 1, 0.36, 1), transform 200ms cubic-bezier(0.22, 1, 0.36, 1);
-            pointer-events: none;
-            position: absolute;
-            width: 100%;
-            left: 0;
+            transition: opacity 120ms ease;
         }
         .tab-content.tab-active {
+            display: block;
             opacity: 1;
-            transform: translateY(0);
-            pointer-events: auto;
-            position: relative;
         }
 
         /* Button press feedback for interactive controls */
@@ -96,8 +90,8 @@
             transform: scale(0.97);
         }
 
-        /* Tabular numbers for prices — apply to all numeric-heavy elements */
-        td, .text-4xl, .text-3xl, .text-2xl, .text-lg { font-variant-numeric: tabular-nums; }
+        /* Tabular numbers for table price columns (alignment matters here) */
+        td { font-variant-numeric: tabular-nums; }
 
         /* Mobile dropdown menu animation */
         #mobile-tab-menu {
@@ -176,15 +170,13 @@
         </nav>
 
         <!-- Tab Content -->
-        <div style="position: relative;">
-            <div id="tab-ingredients" class="tab-content tab-active"></div>
-            <div id="tab-recipes" class="tab-content"></div>
-            <div id="tab-meals" class="tab-content"></div>
-            <div id="tab-consumption" class="tab-content"></div>
-            <div id="tab-compare" class="tab-content"></div>
-            <div id="tab-shopping" class="tab-content"></div>
-            <div id="tab-settings" class="tab-content"></div>
-        </div>
+        <div id="tab-ingredients" class="tab-content tab-active"></div>
+        <div id="tab-recipes" class="tab-content"></div>
+        <div id="tab-meals" class="tab-content"></div>
+        <div id="tab-consumption" class="tab-content"></div>
+        <div id="tab-compare" class="tab-content"></div>
+        <div id="tab-shopping" class="tab-content"></div>
+        <div id="tab-settings" class="tab-content"></div>
     </div>
 
     <!-- Floating Save Button (FAB) -->
@@ -584,8 +576,18 @@
     // ========================================
 
     function switchTab(tabName) {
-        // Fade out current tab, fade in new one
-        document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('tab-active'));
+        const target = document.getElementById(`tab-${tabName}`);
+        // Hide all tabs instantly, show target at opacity 0, then fade in
+        document.querySelectorAll('.tab-content').forEach(el => {
+            el.classList.remove('tab-active');
+            el.style.opacity = '0';
+        });
+        // Show target (display:block) at opacity 0
+        target.classList.add('tab-active');
+        target.style.opacity = '0';
+        // Force layout, then fade in
+        target.offsetHeight;
+        target.style.opacity = '';
         // Desktop segmented control
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.classList.toggle('active', btn.dataset.tab === tabName);
@@ -610,10 +612,6 @@
                 btn.classList.toggle('text-blue-600', settingsActive);
                 btn.classList.toggle('text-stone-400', !settingsActive);
             }
-        });
-        // Slight delay for the fade-in to feel sequential
-        requestAnimationFrame(() => {
-            document.getElementById(`tab-${tabName}`).classList.add('tab-active');
         });
         state._meta.activeTab = tabName;
     }
