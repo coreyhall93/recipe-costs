@@ -13,7 +13,7 @@
     },
     {
       "id": "ap_flour",
-      "name": "King Arthur AP Flour",
+      "name": "All-purpose Flour, KA",
       "packageSize": "5 lbs",
       "packageAmount": 2268,
       "packageUnit": "g",
@@ -340,5 +340,5 @@
   "meals": [],
   "consumption": [],
   "comparisons": [],
-  "lastUpdated": "2026-02-13T22:15:57.451Z"
+  "lastUpdated": "2026-02-13T22:16:28.580Z"
 }
