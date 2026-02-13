@@ -35,7 +35,7 @@
     },
     {
       "id": "yeast",
-      "name": "Active Dry Yeast",
+      "name": "Yeast, active dry",
       "packageSize": "4 oz",
       "packageAmount": 113,
       "packageUnit": "g",
@@ -134,7 +134,7 @@
     },
     {
       "id": "bacon",
-      "name": "Hickory Smoked Bacon",
+      "name": "Bacon, hickory smoked",
       "packageSize": "12 oz",
       "packageAmount": 12,
       "packageUnit": "oz",
@@ -178,7 +178,7 @@
     },
     {
       "id": "cheese",
-      "name": "American Cheese Singles",
+      "name": "Cheese, American singles",
       "packageSize": "24 slices",
       "packageAmount": 24,
       "packageUnit": "slice",
@@ -340,5 +340,5 @@
   "meals": [],
   "consumption": [],
   "comparisons": [],
-  "lastUpdated": "2026-02-13T22:17:54.005Z"
+  "lastUpdated": "2026-02-13T22:23:16.467Z"
 }
