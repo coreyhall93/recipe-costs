@@ -43,13 +43,13 @@
         /* Apple 2009 gradient buttons — Apple Blue #007AFF family */
         .btn-primary { background: linear-gradient(to bottom, #4da3ff, #007AFF); border: 1px solid #0063d1; color: white; font-weight: 600; padding: 8px 20px; border-radius: 12px; font-size: 14px; box-shadow: 0 1px 2px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.25); transition: all 0.15s; cursor: pointer; }
         .btn-primary:hover { background: linear-gradient(to bottom, #6bb4ff, #007AFF); box-shadow: 0 2px 4px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.3); }
-        .btn-primary:active { background: linear-gradient(to bottom, #007AFF, #0063d1); box-shadow: inset 0 2px 4px rgba(0,0,0,0.2); }
+        .btn-primary:active { background: linear-gradient(to bottom, #007AFF, #0063d1); box-shadow: inset 0 2px 4px rgba(0,0,0,0.2); transform: scale(0.97); }
         .btn-secondary { background: linear-gradient(to bottom, #ffffff, #f5f5f4); border: 1px solid #d6d3d1; color: #44403c; font-weight: 600; padding: 8px 20px; border-radius: 12px; font-size: 14px; box-shadow: 0 1px 2px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8); transition: all 0.15s; cursor: pointer; }
         .btn-secondary:hover { background: linear-gradient(to bottom, #ffffff, #e7e5e4); border-color: #a8a29e; }
-        .btn-secondary:active { background: linear-gradient(to bottom, #e7e5e4, #d6d3d1); box-shadow: inset 0 1px 3px rgba(0,0,0,0.1); }
+        .btn-secondary:active { background: linear-gradient(to bottom, #e7e5e4, #d6d3d1); box-shadow: inset 0 1px 3px rgba(0,0,0,0.1); transform: scale(0.97); }
         .btn-danger { background: linear-gradient(to bottom, #ffffff, #fef2f2); border: 1px solid #fca5a5; color: #dc2626; font-weight: 600; padding: 8px 20px; border-radius: 12px; font-size: 14px; box-shadow: 0 1px 2px rgba(0,0,0,0.06); transition: all 0.15s; cursor: pointer; }
         .btn-danger:hover { background: linear-gradient(to bottom, #fef2f2, #fee2e2); border-color: #f87171; }
-        .btn-danger:active { box-shadow: inset 0 1px 3px rgba(0,0,0,0.1); }
+        .btn-danger:active { box-shadow: inset 0 1px 3px rgba(0,0,0,0.1); transform: scale(0.97); }
 
         /* Inset input fields — Apple 2009 recessed feel */
         .input-inset { border: 1px solid #c8c5c2; border-radius: 8px; padding: 8px 12px; font-size: 14px; background: #fff; box-shadow: inset 0 1px 3px rgba(0,0,0,0.08); transition: border-color 0.2s, box-shadow 0.2s; outline: none; width: 100%; }
@@ -61,7 +61,7 @@
         .mini-seg { display: inline-flex; background: #e7e8ea; border-radius: 6px; padding: 2px; gap: 1px; flex-wrap: wrap; }
         .mini-seg button { padding: 3px 8px; border-radius: 5px; font-size: 12px; font-weight: 600; transition: all 0.15s; color: #57534e; }
         .mini-seg button.active { background: white; color: #1d4ed8; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
-        .mini-seg button:not(.active):hover { color: #292524; }
+        .mini-seg button:not(.active):hover { color: #292524; background: rgba(0,0,0,0.04); }
 
         /* Mobile tab dropdown */
         .mobile-tab-option { display: block; width: 100%; text-align: left; padding: 12px 16px; font-size: 15px; font-weight: 500; color: #44403c; transition: background 0.15s; }
@@ -73,6 +73,44 @@
 
         /* Toast with slight bounce */
         .toast-enter { animation: slideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
+
+        /* Tab content transitions */
+        .tab-content {
+            opacity: 0;
+            transform: translateY(8px);
+            transition: opacity 200ms cubic-bezier(0.22, 1, 0.36, 1), transform 200ms cubic-bezier(0.22, 1, 0.36, 1);
+            pointer-events: none;
+            position: absolute;
+            width: 100%;
+            left: 0;
+        }
+        .tab-content.tab-active {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+            position: relative;
+        }
+
+        /* Button press feedback for interactive controls */
+        .tab-btn:active, .mini-seg button:active, .mobile-tab-option:active {
+            transform: scale(0.97);
+        }
+
+        /* Tabular numbers for prices — apply to all numeric-heavy elements */
+        td, .text-4xl, .text-3xl, .text-2xl, .text-lg { font-variant-numeric: tabular-nums; }
+
+        /* Mobile dropdown menu animation */
+        #mobile-tab-menu {
+            opacity: 0;
+            transform: translateY(-8px) scale(0.98);
+            transition: opacity 150ms cubic-bezier(0.22, 1, 0.36, 1), transform 150ms cubic-bezier(0.22, 1, 0.36, 1);
+            pointer-events: none;
+        }
+        #mobile-tab-menu.menu-open {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            pointer-events: auto;
+        }
 
         /* Global polish */
         *, *::before, *::after { -webkit-tap-highlight-color: transparent; }
@@ -138,13 +176,15 @@
         </nav>
 
         <!-- Tab Content -->
-        <div id="tab-ingredients" class="tab-content"></div>
-        <div id="tab-recipes" class="tab-content" style="display:none"></div>
-        <div id="tab-meals" class="tab-content" style="display:none"></div>
-        <div id="tab-consumption" class="tab-content" style="display:none"></div>
-        <div id="tab-compare" class="tab-content" style="display:none"></div>
-        <div id="tab-shopping" class="tab-content" style="display:none"></div>
-        <div id="tab-settings" class="tab-content" style="display:none"></div>
+        <div style="position: relative;">
+            <div id="tab-ingredients" class="tab-content tab-active"></div>
+            <div id="tab-recipes" class="tab-content"></div>
+            <div id="tab-meals" class="tab-content"></div>
+            <div id="tab-consumption" class="tab-content"></div>
+            <div id="tab-compare" class="tab-content"></div>
+            <div id="tab-shopping" class="tab-content"></div>
+            <div id="tab-settings" class="tab-content"></div>
+        </div>
     </div>
 
     <!-- Floating Save Button (FAB) -->
@@ -544,7 +584,8 @@
     // ========================================
 
     function switchTab(tabName) {
-        document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
+        // Fade out current tab, fade in new one
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('tab-active'));
         // Desktop segmented control
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.classList.toggle('active', btn.dataset.tab === tabName);
@@ -558,9 +599,8 @@
             const tabNames = { ingredients: 'Ingredients', recipes: 'Recipes', meals: 'Meals', consumption: 'Consumption', compare: 'Compare', shopping: 'Shopping', settings: 'Settings' };
             mobileLabel.textContent = tabNames[tabName] || tabName;
         }
-        // Close mobile menu
-        const mobileMenu = document.getElementById('mobile-tab-menu');
-        if (mobileMenu) mobileMenu.classList.add('hidden');
+        // Close mobile menu with animation
+        closeMobileTabMenu();
         // Gear icons active state (both mobile and desktop)
         ['btn-settings-gear', 'btn-settings-gear-mobile'].forEach(id => {
             const btn = document.getElementById(id);
@@ -571,14 +611,36 @@
                 btn.classList.toggle('text-stone-400', !settingsActive);
             }
         });
-        document.getElementById(`tab-${tabName}`).style.display = 'block';
+        // Slight delay for the fade-in to feel sequential
+        requestAnimationFrame(() => {
+            document.getElementById(`tab-${tabName}`).classList.add('tab-active');
+        });
         state._meta.activeTab = tabName;
     }
 
     function toggleMobileTabMenu(event) {
         event.stopPropagation();
         const menu = document.getElementById('mobile-tab-menu');
-        menu.classList.toggle('hidden');
+        if (menu.classList.contains('menu-open')) {
+            closeMobileTabMenu();
+        } else {
+            menu.classList.remove('hidden');
+            // Force reflow so transition triggers
+            menu.offsetHeight;
+            menu.classList.add('menu-open');
+        }
+    }
+
+    function closeMobileTabMenu() {
+        const menu = document.getElementById('mobile-tab-menu');
+        if (!menu) return;
+        menu.classList.remove('menu-open');
+        // Hide after transition completes
+        setTimeout(() => {
+            if (!menu.classList.contains('menu-open')) {
+                menu.classList.add('hidden');
+            }
+        }, 160);
     }
 
     // ========================================
@@ -723,7 +785,7 @@
         }
 
         container.innerHTML = `
-            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-4">
+            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6">
                 <h2 class="text-2xl font-black tracking-tight text-stone-900">Ingredient Prices</h2>
                 <button onclick="startAddIngredient()" class="btn-primary text-sm">+ Add Ingredient</button>
             </div>
@@ -850,8 +912,7 @@
     // Close menus when tapping anywhere else
     document.addEventListener('click', () => {
         document.querySelectorAll('.row-menu-dropdown.open').forEach(el => el.classList.remove('open'));
-        const mobileMenu = document.getElementById('mobile-tab-menu');
-        if (mobileMenu) mobileMenu.classList.add('hidden');
+        closeMobileTabMenu();
     });
 
     function startEditIngredient(id) {
