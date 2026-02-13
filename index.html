@@ -49,6 +49,11 @@
         .sparkline { display: inline-block; vertical-align: middle; }
         .savings-positive { color: #16a34a; }
         .savings-negative { color: #dc2626; }
+        .row-menu { position: relative; }
+        .row-menu-dropdown { display: none; position: absolute; right: 0; top: 100%; z-index: 30; min-width: 120px; background: white; border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.12); padding: 4px 0; }
+        .row-menu-dropdown.open { display: block; }
+        .row-menu-dropdown button { display: flex; align-items: center; gap: 8px; width: 100%; padding: 10px 16px; font-size: 14px; text-align: left; transition: background 0.15s; }
+        .row-menu-dropdown button:hover { background: #f5f5f4; }
     </style>
 </head>
 <body class="text-stone-900" style="background-color:#f0f1f3">
@@ -618,12 +623,7 @@
                     <td class="px-4 sm:px-6 py-4 text-sm text-stone-900">${fmt(ing.price)}</td>
                     <td class="px-4 sm:px-6 py-4 text-sm text-stone-600 font-mono">${fmtUnit(ing.costPerUnit, ing.packageUnit)}</td>
                     <td class="${mobileHide}px-4 sm:px-6 py-4">${spark}${historyCount > 0 ? `<span class="text-xs text-stone-400 ml-1">${historyCount}</span>` : ''}</td>
-                    <td class="px-2 sm:px-6 py-4">
-                        <div class="flex gap-1">
-                            <button onclick="startEditIngredient('${ing.id}')" class="p-2 -m-1 text-stone-400 hover:text-sky-600 transition-colors" title="Edit"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg></button>
-                            <button onclick="deleteIngredient('${ing.id}')" class="p-2 -m-1 text-stone-400 hover:text-red-600 transition-colors ${deps.length ? 'opacity-50' : ''}" title="${deps.length ? 'Used in: ' + deps.join(', ') : 'Delete'}"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>
-                        </div>
-                    </td>
+                    ${renderActionCell(ing.id, deps)}
                 </tr>`;
             } else {
                 const deps = getIngredientDependencies(ing.id);
@@ -640,16 +640,7 @@
                     <td class="px-4 sm:px-6 py-4 text-sm text-stone-900">${fmt(ing.price)}</td>
                     <td class="px-4 sm:px-6 py-4 text-sm text-stone-600 font-mono">${fmtUnit(ing.costPerUnit, ing.packageUnit)}</td>
                     <td class="${mobileHide}px-4 sm:px-6 py-4">${spark}${historyCount > 0 ? `<span class="text-xs text-stone-400 ml-1">${historyCount}</span>` : ''}</td>
-                    <td class="px-2 sm:px-6 py-4">
-                        <div class="flex gap-1">
-                            <button onclick="startEditIngredient('${ing.id}')" class="p-2 -m-1 text-stone-400 hover:text-sky-600 transition-colors" title="Edit">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
-                            </button>
-                            <button onclick="deleteIngredient('${ing.id}')" class="p-2 -m-1 text-stone-400 hover:text-red-600 transition-colors ${deps.length ? 'opacity-50' : ''}" title="${deps.length ? 'Used in: ' + deps.join(', ') : 'Delete'}">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                            </button>
-                        </div>
-                    </td>
+                    ${renderActionCell(ing.id, deps)}
                 </tr>`;
             }
         }
@@ -667,8 +658,8 @@
                 </button>
                 <div class="${state._meta.ingredientFiltersOpen ? 'flex' : 'hidden'} gap-2 flex-wrap mt-3">${categoryPills}</div>
             </div>
-            <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
-                <div class="overflow-x-hidden sm:overflow-x-auto">
+            <div class="bg-white rounded-2xl shadow-sm overflow-visible sm:overflow-hidden">
+                <div class="overflow-x-hidden sm:overflow-x-auto overflow-y-visible">
                     <table class="w-full sm:min-w-full" style="table-layout:fixed">
                         <colgroup>
                             <col style="width:20%">
@@ -747,6 +738,44 @@
         renderIngredients();
         showToast(`Added ${name}`, 'success');
     }
+
+    function renderActionCell(ingId, deps) {
+        const depWarning = deps.length ? `Used in: ${deps.join(', ')}` : '';
+        return `<td class="px-2 sm:px-6 py-4">
+            <!-- Desktop: inline icons -->
+            <div class="hidden sm:flex gap-1">
+                <button onclick="startEditIngredient('${ingId}')" class="p-2 -m-1 text-stone-400 hover:text-sky-600 transition-colors" title="Edit">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+                </button>
+                <button onclick="deleteIngredient('${ingId}')" class="p-2 -m-1 text-stone-400 hover:text-red-600 transition-colors ${deps.length ? 'opacity-50' : ''}" title="${depWarning || 'Delete'}">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                </button>
+            </div>
+            <!-- Mobile: three-dot menu -->
+            <div class="sm:hidden row-menu">
+                <button onclick="toggleRowMenu('${ingId}', event)" class="p-2 text-stone-400 hover:text-stone-600" aria-label="Actions">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
+                </button>
+                <div id="row-menu-${ingId}" class="row-menu-dropdown">
+                    <button onclick="startEditIngredient('${ingId}')" class="text-stone-700"><svg class="w-4 h-4 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg> Edit</button>
+                    <button onclick="deleteIngredient('${ingId}')" class="text-red-600 ${deps.length ? 'opacity-50' : ''}"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg> Delete</button>
+                </div>
+            </div>
+        </td>`;
+    }
+
+    function toggleRowMenu(id, event) {
+        event.stopPropagation();
+        const menu = document.getElementById('row-menu-' + id);
+        const wasOpen = menu && menu.classList.contains('open');
+        // Close all open menus first
+        document.querySelectorAll('.row-menu-dropdown.open').forEach(el => el.classList.remove('open'));
+        if (!wasOpen && menu) menu.classList.add('open');
+    }
+    // Close menus when tapping anywhere else
+    document.addEventListener('click', () => {
+        document.querySelectorAll('.row-menu-dropdown.open').forEach(el => el.classList.remove('open'));
+    });
 
     function startEditIngredient(id) { state._meta.editingIngredientId = id; state._meta.addingIngredient = false; renderIngredients(); }
     function cancelEditIngredient() { state._meta.editingIngredientId = null; renderIngredients(); }
