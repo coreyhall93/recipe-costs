@@ -179,7 +179,7 @@
     {
       "id": "cheese",
       "name": "American Cheese Singles",
-      "packageSize": "24 slices",
+      "packageSize": "24 slice",
       "packageAmount": 24,
       "packageUnit": "slice",
       "price": 2.48,
@@ -324,5 +324,5 @@
   "meals": [],
   "consumption": [],
   "comparisons": [],
-  "lastUpdated": "2026-02-13T19:23:48.755Z"
+  "lastUpdated": "2026-02-13T19:25:57.384Z"
 }
