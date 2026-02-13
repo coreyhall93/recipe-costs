@@ -30,10 +30,14 @@
         .tab-btn { position: relative; transition: all 0.2s; padding: 8px 10px; border-radius: 8px; font-size: 12px; }
         .tab-btn.active { background-color: #f0f9ff; color: #0284c7; }
         .tab-btn:not(.active):hover { color: #44403c; background-color: #f5f5f4; }
+        #btn-settings-gear.active { color: #0284c7; }
         @media (min-width: 640px) {
             .tab-btn { padding: 0 0 12px 0; border-radius: 0; border-bottom: 2px solid transparent; font-size: 14px; background: none !important; }
             .tab-btn.active { border-bottom-color: #0284c7; color: #0284c7; background: none !important; }
             .tab-btn:not(.active):hover { background: none !important; }
+            #btn-settings-gear { border-bottom: 2px solid transparent; border-radius: 0; padding: 0 0 10px 0; background: none; }
+            #btn-settings-gear.active { border-bottom-color: #0284c7; background: none; }
+            #btn-settings-gear:not(.active):hover { background: none; }
         }
         .toast-enter { animation: slideUp 0.3s ease-out; }
         @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
@@ -51,28 +55,22 @@
     <div class="max-w-[1280px] mx-auto px-4 sm:px-8 py-8 sm:py-12">
 
         <!-- Header -->
-        <div class="mb-8 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-            <div>
-                <h1 class="text-4xl sm:text-5xl font-black tracking-tight text-stone-900 mb-1">Recipe Costs</h1>
-                <p class="text-lg sm:text-xl text-stone-500 font-light">Track what you spend on homemade meals</p>
-            </div>
-            <div class="flex items-center gap-3 flex-shrink-0">
-                <div id="sync-status" class="text-xs text-stone-400 hidden sm:block"></div>
-                <button id="btn-save-github" class="bg-stone-300 text-stone-500 font-semibold py-2.5 px-6 rounded-xl shadow-sm transition-all duration-200 text-sm cursor-not-allowed" disabled>
-                    Save to GitHub
-                </button>
-            </div>
+        <div class="mb-8">
+            <h1 class="text-4xl sm:text-5xl font-black tracking-tight text-stone-900 mb-1">Recipe Costs</h1>
+            <p class="text-lg sm:text-xl text-stone-500 font-light">Track what you spend on homemade meals</p>
         </div>
 
         <!-- Tab Navigation -->
-        <nav class="flex flex-wrap gap-1 sm:flex-nowrap sm:gap-6 sm:border-b sm:border-stone-200 mb-8">
+        <nav class="flex flex-wrap items-center gap-1 sm:flex-nowrap sm:gap-6 sm:border-b sm:border-stone-200 mb-8">
             <button class="tab-btn active font-semibold text-sky-600" data-tab="ingredients" onclick="switchTab('ingredients')">Ingredients</button>
             <button class="tab-btn font-semibold text-stone-500" data-tab="recipes" onclick="switchTab('recipes')">Recipes</button>
             <button class="tab-btn font-semibold text-stone-500" data-tab="meals" onclick="switchTab('meals')">Meals</button>
             <button class="tab-btn font-semibold text-stone-500" data-tab="consumption" onclick="switchTab('consumption')">Consumption</button>
             <button class="tab-btn font-semibold text-stone-500" data-tab="compare" onclick="switchTab('compare')">Compare</button>
             <button class="tab-btn font-semibold text-stone-500" data-tab="shopping" onclick="switchTab('shopping')">Shopping</button>
-            <button class="tab-btn font-semibold text-stone-500" data-tab="settings" onclick="switchTab('settings')">Settings</button>
+            <button id="btn-settings-gear" onclick="switchTab('settings')" class="ml-auto flex-shrink-0 p-2 rounded-lg text-stone-400 hover:text-sky-600 hover:bg-stone-100 transition-all duration-200" title="Settings" aria-label="Settings">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 010 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 010-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            </button>
         </nav>
 
         <!-- Tab Content -->
@@ -85,8 +83,13 @@
         <div id="tab-settings" class="tab-content" style="display:none"></div>
     </div>
 
+    <!-- Floating Save Button (FAB) -->
+    <button id="btn-save-github" class="fixed bottom-6 right-6 z-40 hidden bg-sky-600 hover:bg-sky-700 text-white font-semibold py-3 px-6 rounded-2xl shadow-lg transition-all duration-300 text-sm hover:shadow-xl" style="display:none">
+        Save to GitHub
+    </button>
+
     <!-- Toast Container -->
-    <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2"></div>
+    <div id="toast-container" class="fixed bottom-20 right-6 z-50 flex flex-col gap-2"></div>
 
     <script>
     // ========================================
@@ -314,46 +317,34 @@
     }
 
     function renderSyncStatus() {
-        const el = document.getElementById('sync-status');
         const btn = document.getElementById('btn-save-github');
         const status = state._meta.syncStatus;
         const dirty = state._meta.dirty;
         const settings = getSettings();
         const hasSettings = settings.pat && settings.owner && settings.repo;
 
-        if (status === 'loading') {
-            el.innerHTML = '<span class="inline-block w-2 h-2 rounded-full bg-sky-500 spinner mr-1"></span> Loading...';
-            el.classList.remove('hidden');
-        } else if (status === 'saving') {
-            el.innerHTML = '<span class="inline-block w-2 h-2 rounded-full bg-sky-500 spinner mr-1"></span> Saving...';
-            el.classList.remove('hidden');
-        } else if (status === 'error') {
-            el.innerHTML = '<span class="inline-block w-2 h-2 rounded-full bg-red-500 mr-1"></span> Sync error';
-            el.classList.remove('hidden');
-        } else if (dirty && !hasSettings) {
-            el.innerHTML = '<span class="inline-block w-2 h-2 rounded-full bg-amber-500 mr-1"></span> Set up GitHub to sync';
-            el.classList.remove('hidden');
-        } else if (dirty) {
-            el.innerHTML = '<span class="inline-block w-2 h-2 rounded-full bg-amber-500 mr-1"></span> Unsaved changes';
-            el.classList.remove('hidden');
-        } else if (state._meta.lastSynced) {
-            el.innerHTML = '<span class="inline-block w-2 h-2 rounded-full bg-green-500 mr-1"></span> Synced';
-            el.classList.remove('hidden');
-        } else {
-            el.classList.add('hidden');
-        }
-
-        if (dirty && hasSettings) {
+        // FAB: show when saving or when there are unsaved changes
+        if (status === 'saving') {
+            btn.disabled = true;
+            btn.style.display = '';
+            btn.style.opacity = '0.7';
+            btn.textContent = 'Saving…';
+            btn.onclick = null;
+        } else if (dirty && hasSettings) {
             btn.disabled = false;
-            btn.className = 'bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2.5 px-6 rounded-xl shadow-sm transition-all duration-200 hover:shadow-md text-sm';
+            btn.style.display = '';
+            btn.style.opacity = '1';
+            btn.textContent = 'Save to GitHub';
             btn.onclick = saveToGitHub;
         } else if (dirty && !hasSettings) {
             btn.disabled = false;
-            btn.className = 'bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2.5 px-6 rounded-xl shadow-sm transition-all duration-200 hover:shadow-md text-sm';
+            btn.style.display = '';
+            btn.style.opacity = '1';
+            btn.textContent = 'Set up sync';
             btn.onclick = () => { switchTab('settings'); showToast('Set up GitHub sync to save your data', 'info'); };
         } else {
+            btn.style.display = 'none';
             btn.disabled = true;
-            btn.className = 'bg-stone-300 text-stone-500 font-semibold py-2.5 px-6 rounded-xl shadow-sm transition-all duration-200 text-sm cursor-not-allowed';
             btn.onclick = null;
         }
     }
@@ -459,6 +450,14 @@
             btn.classList.toggle('text-sky-600', isActive);
             btn.classList.toggle('text-stone-500', !isActive);
         });
+        // Gear icon active state (not a .tab-btn, handled separately)
+        const gearBtn = document.getElementById('btn-settings-gear');
+        if (gearBtn) {
+            const settingsActive = tabName === 'settings';
+            gearBtn.classList.toggle('active', settingsActive);
+            gearBtn.classList.toggle('text-sky-600', settingsActive);
+            gearBtn.classList.toggle('text-stone-400', !settingsActive);
+        }
         document.getElementById(`tab-${tabName}`).style.display = 'block';
         state._meta.activeTab = tabName;
     }
@@ -1441,11 +1440,13 @@
                     <div><label class="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-1">Repository Name</label>
                         <input type="text" id="settings-repo" value="${escHtml(settings.repo)}" placeholder="recipe-costs" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"></div>
                 </div>
-                <div class="flex gap-3">
+                <div class="flex gap-3 flex-wrap">
                     <button onclick="handleSaveSettings()" class="bg-sky-600 hover:bg-sky-700 text-white font-semibold py-2 px-5 rounded-xl shadow-sm transition-all duration-200 text-sm">Save Settings</button>
                     <button onclick="handleTestConnection()" class="border border-stone-300 hover:border-stone-400 text-stone-700 font-semibold py-2 px-5 rounded-xl transition-all duration-200 text-sm">Test Connection</button>
+                    <button onclick="saveToGitHub()" class="border border-sky-300 hover:border-sky-400 text-sky-700 font-semibold py-2 px-5 rounded-xl transition-all duration-200 text-sm">Sync Now</button>
                 </div>
                 <div id="settings-status" class="mt-4 text-sm"></div>
+                ${state._meta.lastSynced ? '<p class="text-xs text-stone-400 mt-2">Last synced: ' + new Date(state._meta.lastSynced).toLocaleString() + '</p>' : ''}
             </div>
             <div class="bg-white rounded-2xl p-8 shadow-sm max-w-xl mt-6">
                 <h3 class="text-lg font-bold text-stone-900 mb-2">Data Management</h3>
