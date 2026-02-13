@@ -90,7 +90,7 @@
     },
     {
       "id": "brown_sugar",
-      "name": "Light Brown Sugar",
+      "name": "Brown Sugar, light",
       "packageSize": "32 oz",
       "packageAmount": 907,
       "packageUnit": "g",
@@ -340,5 +340,5 @@
   "meals": [],
   "consumption": [],
   "comparisons": [],
-  "lastUpdated": "2026-02-13T22:15:10.281Z"
+  "lastUpdated": "2026-02-13T22:15:43.717Z"
 }
