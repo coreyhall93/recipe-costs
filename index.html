@@ -503,8 +503,7 @@
                 <td class="px-4 sm:px-6 py-3"><input type="text" id="ing-new-name" placeholder="Name" class="${inputCls}"></td>
                 <td class="px-4 sm:px-6 py-3"><select id="ing-new-cat" class="${inputCls}">${CATEGORY_OPTIONS.map(c => `<option value="${c}">${c}</option>`).join('')}</select></td>
                 <td class="px-4 sm:px-6 py-3"><input type="text" id="ing-new-pkgsize" placeholder="e.g. 5 lbs" class="${inputCls}"></td>
-                <td class="px-4 sm:px-6 py-3"><input type="number" id="ing-new-pkgamt" placeholder="Amt" step="any" min="0" class="${inputCls}"></td>
-                <td class="px-4 sm:px-6 py-3"><select id="ing-new-unit" class="${inputCls}">${UNIT_OPTIONS.map(u => `<option value="${u}">${u}</option>`).join('')}</select></td>
+                <td class="px-4 sm:px-6 py-3"><div class="flex gap-1"><input type="number" id="ing-new-pkgamt" placeholder="Amt" step="any" min="0" class="${inputCls} w-20"><select id="ing-new-unit" class="${inputCls} w-16">${UNIT_OPTIONS.map(u => `<option value="${u}">${u}</option>`).join('')}</select></div></td>
                 <td class="px-4 sm:px-6 py-3"><input type="number" id="ing-new-price" placeholder="0.00" step="0.01" min="0" class="${inputCls}"></td>
                 <td class="px-4 sm:px-6 py-3 text-sm text-stone-400 font-mono">—</td>
                 <td class="px-4 sm:px-6 py-3"></td>
@@ -539,8 +538,7 @@
                     <td class="px-4 sm:px-6 py-3"><input type="text" id="ing-edit-name" value="${escHtml(ing.name)}" class="${inputCls}"></td>
                     <td class="px-4 sm:px-6 py-3"><select id="ing-edit-cat" class="${inputCls}">${CATEGORY_OPTIONS.map(c => `<option value="${c}" ${c === ing.category ? 'selected' : ''}>${c}</option>`).join('')}</select></td>
                     <td class="px-4 sm:px-6 py-3"><input type="text" id="ing-edit-pkgsize" value="${escHtml(ing.packageSize)}" class="${inputCls}"></td>
-                    <td class="px-4 sm:px-6 py-3"><input type="number" id="ing-edit-pkgamt" value="${ing.packageAmount}" step="any" min="0" class="${inputCls}"></td>
-                    <td class="px-4 sm:px-6 py-3"><select id="ing-edit-unit" class="${inputCls}">${UNIT_OPTIONS.map(u => `<option value="${u}" ${u === ing.packageUnit ? 'selected' : ''}>${u}</option>`).join('')}</select></td>
+                    <td class="px-4 sm:px-6 py-3"><div class="flex gap-1"><input type="number" id="ing-edit-pkgamt" value="${ing.packageAmount}" step="any" min="0" class="${inputCls} w-20"><select id="ing-edit-unit" class="${inputCls} w-16">${UNIT_OPTIONS.map(u => `<option value="${u}" ${u === ing.packageUnit ? 'selected' : ''}>${u}</option>`).join('')}</select></div></td>
                     <td class="px-4 sm:px-6 py-3"><input type="number" id="ing-edit-price" value="${ing.price}" step="0.01" min="0" class="${inputCls}"></td>
                     <td class="px-4 sm:px-6 py-3 text-sm text-stone-400 font-mono">auto</td>
                     <td class="px-4 sm:px-6 py-3"></td>
