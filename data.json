@@ -13,7 +13,7 @@
     },
     {
       "id": "ap_flour",
-      "name": "All-purpose Flour, KA",
+      "name": "Flour, all-purpose, KA",
       "packageSize": "5 lbs",
       "packageAmount": 2268,
       "packageUnit": "g",
@@ -24,7 +24,7 @@
     },
     {
       "id": "self_rising_flour",
-      "name": "Self-Rising Flour, White Lily",
+      "name": "Flour, self-rising, White Lily",
       "packageSize": "5 lbs",
       "packageAmount": 2268,
       "packageUnit": "g",
@@ -340,5 +340,5 @@
   "meals": [],
   "consumption": [],
   "comparisons": [],
-  "lastUpdated": "2026-02-13T22:17:13.377Z"
+  "lastUpdated": "2026-02-13T22:17:33.268Z"
 }
