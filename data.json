@@ -197,6 +197,22 @@
       "costPerUnit": 0.003171247357293869,
       "category": "Seasonings",
       "priceHistory": []
+    },
+    {
+      "id": "milk_whole",
+      "name": "Milk, whole",
+      "packageSize": "1 gallon",
+      "packageAmount": 3785,
+      "packageUnit": "g",
+      "price": 2.42,
+      "costPerUnit": 0.0006393659180977543,
+      "category": "Dairy",
+      "priceHistory": [
+        {
+          "price": 2.42,
+          "date": "2026-02-13T19:34:29.817Z"
+        }
+      ]
     }
   ],
   "recipes": [
@@ -324,5 +340,5 @@
   "meals": [],
   "consumption": [],
   "comparisons": [],
-  "lastUpdated": "2026-02-13T19:33:42.425Z"
+  "lastUpdated": "2026-02-13T19:34:31.568Z"
 }
