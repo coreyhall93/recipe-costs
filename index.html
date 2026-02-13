@@ -26,24 +26,24 @@
             -moz-osx-font-smoothing: grayscale;
         }
         /* Card depth — Apple 2009 layered shadows */
-        .bg-white.rounded-2xl { box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.05); }
+        .bg-white.rounded-2xl { box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 6px 16px rgba(0,0,0,0.06); border: 1px solid rgba(0,0,0,0.06); }
         .card-hover { transition: box-shadow 0.25s ease, transform 0.25s ease; }
         .card-hover:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.1), 0 12px 32px rgba(0,0,0,0.06); }
 
         /* Segmented control navigation */
         .seg-control { display: inline-flex; background: #e7e8ea; border-radius: 10px; padding: 3px; gap: 2px; flex-wrap: wrap; }
         .tab-btn { position: relative; z-index: 1; padding: 7px 14px; border-radius: 8px; font-size: 13px; font-weight: 600; white-space: nowrap; background: transparent; border: none; cursor: pointer; color: #57534e; transition: all 0.2s; }
-        .tab-btn.active { color: #0c4a6e; background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 0 0 0.5px rgba(0,0,0,0.04); }
+        .tab-btn.active { color: #1d4ed8; background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 0 0 0.5px rgba(0,0,0,0.04); }
         .tab-btn:not(.active):hover { color: #292524; }
         @media (min-width: 640px) {
             .tab-btn { padding: 8px 18px; }
         }
-        #btn-settings-gear.active { color: #0284c7; background: rgba(14,165,233,0.08); border-radius: 8px; }
+        #btn-settings-gear.active { color: #007AFF; background: rgba(0,122,255,0.08); border-radius: 8px; }
 
-        /* Apple 2009 gradient buttons */
-        .btn-primary { background: linear-gradient(to bottom, #38bdf8, #0284c7); border: 1px solid #0369a1; color: white; font-weight: 600; padding: 8px 20px; border-radius: 12px; font-size: 14px; box-shadow: 0 1px 2px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.2); transition: all 0.15s; cursor: pointer; }
-        .btn-primary:hover { background: linear-gradient(to bottom, #7dd3fc, #0284c7); box-shadow: 0 2px 4px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.25); }
-        .btn-primary:active { background: linear-gradient(to bottom, #0284c7, #0369a1); box-shadow: inset 0 2px 4px rgba(0,0,0,0.2); }
+        /* Apple 2009 gradient buttons — Apple Blue #007AFF family */
+        .btn-primary { background: linear-gradient(to bottom, #4da3ff, #007AFF); border: 1px solid #0063d1; color: white; font-weight: 600; padding: 8px 20px; border-radius: 12px; font-size: 14px; box-shadow: 0 1px 2px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.25); transition: all 0.15s; cursor: pointer; }
+        .btn-primary:hover { background: linear-gradient(to bottom, #6bb4ff, #007AFF); box-shadow: 0 2px 4px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.3); }
+        .btn-primary:active { background: linear-gradient(to bottom, #007AFF, #0063d1); box-shadow: inset 0 2px 4px rgba(0,0,0,0.2); }
         .btn-secondary { background: linear-gradient(to bottom, #ffffff, #f5f5f4); border: 1px solid #d6d3d1; color: #44403c; font-weight: 600; padding: 8px 20px; border-radius: 12px; font-size: 14px; box-shadow: 0 1px 2px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8); transition: all 0.15s; cursor: pointer; }
         .btn-secondary:hover { background: linear-gradient(to bottom, #ffffff, #e7e5e4); border-color: #a8a29e; }
         .btn-secondary:active { background: linear-gradient(to bottom, #e7e5e4, #d6d3d1); box-shadow: inset 0 1px 3px rgba(0,0,0,0.1); }
@@ -53,14 +53,14 @@
 
         /* Inset input fields — Apple 2009 recessed feel */
         .input-inset { border: 1px solid #c8c5c2; border-radius: 8px; padding: 8px 12px; font-size: 14px; background: #fff; box-shadow: inset 0 1px 3px rgba(0,0,0,0.08); transition: border-color 0.2s, box-shadow 0.2s; outline: none; width: 100%; }
-        .input-inset:focus { border-color: #7dd3fc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.08), 0 0 0 3px rgba(56,189,248,0.15); }
+        .input-inset:focus { border-color: #4da3ff; box-shadow: inset 0 1px 3px rgba(0,0,0,0.08), 0 0 0 3px rgba(0,122,255,0.15); }
         .input-inset::placeholder { color: #a8a29e; }
         select.input-inset { -webkit-appearance: none; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2378716c' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; }
 
         /* Mini segmented control (recipe scale buttons) */
         .mini-seg { display: inline-flex; background: #e7e8ea; border-radius: 6px; padding: 2px; gap: 1px; flex-wrap: wrap; }
         .mini-seg button { padding: 3px 8px; border-radius: 5px; font-size: 12px; font-weight: 600; transition: all 0.15s; color: #57534e; }
-        .mini-seg button.active { background: white; color: #0c4a6e; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
+        .mini-seg button.active { background: white; color: #1d4ed8; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
         .mini-seg button:not(.active):hover { color: #292524; }
 
         /* Table header toolbar feel */
@@ -106,7 +106,7 @@
                 <button class="tab-btn" data-tab="compare" onclick="switchTab('compare')">Compare</button>
                 <button class="tab-btn" data-tab="shopping" onclick="switchTab('shopping')">Shopping</button>
             </div>
-            <button id="btn-settings-gear" onclick="switchTab('settings')" class="ml-auto flex-shrink-0 p-2 rounded-lg text-stone-400 hover:text-sky-600 hover:bg-stone-100 transition-all duration-200" title="Settings" aria-label="Settings">
+            <button id="btn-settings-gear" onclick="switchTab('settings')" class="ml-auto flex-shrink-0 p-2 rounded-lg text-stone-400 hover:text-blue-600 hover:bg-stone-100 transition-all duration-200" title="Settings" aria-label="Settings">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 010 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 010-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
             </button>
         </nav>
@@ -122,7 +122,7 @@
     </div>
 
     <!-- Floating Save Button (FAB) -->
-    <button id="btn-save-github" class="fixed bottom-6 right-6 z-40 btn-primary text-sm" style="display:none; padding: 12px 24px; border-radius: 16px; box-shadow: 0 4px 12px rgba(2,132,199,0.3), 0 1px 3px rgba(0,0,0,0.12);">
+    <button id="btn-save-github" class="fixed bottom-6 right-6 z-40 btn-primary text-sm" style="display:none; padding: 12px 24px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,122,255,0.3), 0 1px 3px rgba(0,0,0,0.12);">
         Save to GitHub
     </button>
 
@@ -340,7 +340,7 @@
     function showToast(message, type = 'info') {
         const container = document.getElementById('toast-container');
         const toast = document.createElement('div');
-        const colors = { success: 'bg-green-50 text-green-800 border-green-200', error: 'bg-red-50 text-red-800 border-red-200', info: 'bg-sky-50 text-sky-800 border-sky-200' };
+        const colors = { success: 'bg-green-50 text-green-800 border-green-200', error: 'bg-red-50 text-red-800 border-red-200', info: 'bg-blue-50 text-blue-800 border-blue-200' };
         toast.className = `toast-enter px-4 py-3 rounded-xl border shadow-sm text-sm font-medium ${colors[type] || colors.info}`;
         toast.textContent = message;
         container.appendChild(toast);
@@ -527,7 +527,7 @@
         if (gearBtn) {
             const settingsActive = tabName === 'settings';
             gearBtn.classList.toggle('active', settingsActive);
-            gearBtn.classList.toggle('text-sky-600', settingsActive);
+            gearBtn.classList.toggle('text-blue-600', settingsActive);
             gearBtn.classList.toggle('text-stone-400', !settingsActive);
         }
         document.getElementById(`tab-${tabName}`).style.display = 'block';
@@ -571,16 +571,16 @@
         let mobileForm = '';
 
         if (adding && !isMobile) {
-            rows += `<tr class="bg-sky-50">
+            rows += `<tr class="bg-blue-50">
                 <td class="px-4 sm:px-6 py-3"><input type="text" id="ing-new-name" placeholder="Name" class="${inputCls}"></td>
                 <td class="px-4 sm:px-6 py-3"><select id="ing-new-cat" class="${inputCls}">${CATEGORY_OPTIONS.map(c => `<option value="${c}">${c}</option>`).join('')}</select></td>
                 <td class="px-4 sm:px-6 py-3"><input type="text" id="ing-new-pkgsize" placeholder="e.g. 5 lbs" class="${inputCls}"></td>
-                <td class="px-4 sm:px-6 py-3"><div class="flex gap-1"><input type="number" id="ing-new-pkgamt" placeholder="Amt" step="any" min="0" class="${inputCls} w-20"><select id="ing-new-unit" class="${inputCls} w-16">${UNIT_OPTIONS.map(u => `<option value="${u}">${u}</option>`).join('')}</select></div></td>
+                <td class="px-4 sm:px-6 py-3"><div class="flex gap-2"><input type="number" id="ing-new-pkgamt" placeholder="Amt" step="any" min="0" class="${inputCls}" style="flex:1;min-width:0"><select id="ing-new-unit" class="${inputCls}" style="width:70px;flex-shrink:0">${UNIT_OPTIONS.map(u => `<option value="${u}">${u}</option>`).join('')}</select></div></td>
                 <td class="px-4 sm:px-6 py-3"><input type="number" id="ing-new-price" placeholder="0.00" step="0.01" min="0" class="${inputCls}"></td>
                 <td class="px-4 sm:px-6 py-3 text-sm text-stone-400 font-mono">—</td>
                 <td class="px-4 sm:px-6 py-3"></td>
                 <td class="px-4 sm:px-6 py-3"><div class="flex gap-2">
-                    <button onclick="saveNewIngredient()" class="text-sky-600 hover:text-sky-800 text-sm font-semibold">Save</button>
+                    <button onclick="saveNewIngredient()" class="text-blue-600 hover:text-blue-800 text-sm font-semibold">Save</button>
                     <button onclick="cancelAddIngredient()" class="text-stone-400 hover:text-stone-600 text-sm">Cancel</button>
                 </div></td>
             </tr>`;
@@ -606,16 +606,16 @@
 
         for (const ing of ingredients) {
             if (editing === ing.id && !isMobile) {
-                rows += `<tr class="bg-sky-50">
+                rows += `<tr class="bg-blue-50">
                     <td class="px-4 sm:px-6 py-3"><input type="text" id="ing-edit-name" value="${escHtml(ing.name)}" class="${inputCls}"></td>
                     <td class="px-4 sm:px-6 py-3"><select id="ing-edit-cat" class="${inputCls}">${CATEGORY_OPTIONS.map(c => `<option value="${c}" ${c === ing.category ? 'selected' : ''}>${c}</option>`).join('')}</select></td>
                     <td class="px-4 sm:px-6 py-3"><input type="text" id="ing-edit-pkgsize" value="${escHtml(ing.packageSize)}" class="${inputCls}"></td>
-                    <td class="px-4 sm:px-6 py-3"><div class="flex gap-1"><input type="number" id="ing-edit-pkgamt" value="${ing.packageAmount}" step="any" min="0" class="${inputCls} w-20"><select id="ing-edit-unit" class="${inputCls} w-16">${UNIT_OPTIONS.map(u => `<option value="${u}" ${u === ing.packageUnit ? 'selected' : ''}>${u}</option>`).join('')}</select></div></td>
+                    <td class="px-4 sm:px-6 py-3"><div class="flex gap-2"><input type="number" id="ing-edit-pkgamt" value="${ing.packageAmount}" step="any" min="0" class="${inputCls}" style="flex:1;min-width:0"><select id="ing-edit-unit" class="${inputCls}" style="width:70px;flex-shrink:0">${UNIT_OPTIONS.map(u => `<option value="${u}" ${u === ing.packageUnit ? 'selected' : ''}>${u}</option>`).join('')}</select></div></td>
                     <td class="px-4 sm:px-6 py-3"><input type="number" id="ing-edit-price" value="${ing.price}" step="0.01" min="0" class="${inputCls}"></td>
                     <td class="px-4 sm:px-6 py-3 text-sm text-stone-400 font-mono">auto</td>
                     <td class="px-4 sm:px-6 py-3"></td>
                     <td class="px-4 sm:px-6 py-3"><div class="flex gap-2">
-                        <button onclick="saveEditIngredient('${ing.id}')" class="text-sky-600 hover:text-sky-800 text-sm font-semibold">Save</button>
+                        <button onclick="saveEditIngredient('${ing.id}')" class="text-blue-600 hover:text-blue-800 text-sm font-semibold">Save</button>
                         <button onclick="cancelEditIngredient()" class="text-stone-400 hover:text-stone-600 text-sm">Cancel</button>
                     </div></td>
                 </tr>`;
@@ -642,7 +642,7 @@
                 const deps = getIngredientDependencies(ing.id);
                 const spark = renderSparkline(ing.priceHistory);
                 const historyCount = (ing.priceHistory || []).length;
-                rows += `<tr class="hover:bg-stone-50 transition-colors bg-sky-50/50">
+                rows += `<tr class="hover:bg-stone-50 transition-colors bg-blue-50/50">
                     <td class="px-4 sm:px-6 py-4">
                         <div class="text-sm font-medium text-stone-900">${escHtml(ing.name)}</div>
                         <div class="sm:hidden mt-0.5"><span class="text-xs px-2 py-0.5 rounded-full bg-stone-100 text-stone-600">${escHtml(ing.category || 'Other')}</span></div>
@@ -681,7 +681,7 @@
                 <button onclick="startAddIngredient()" class="btn-primary text-sm">+ Add Ingredient</button>
             </div>
             <div class="mb-6">
-                <button onclick="toggleIngredientFilters()" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-semibold transition-all ${filter !== 'All' ? 'bg-sky-100 text-sky-700' : 'bg-stone-200 text-stone-600 hover:bg-stone-300'}">
+                <button onclick="toggleIngredientFilters()" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-semibold transition-all ${filter !== 'All' ? 'bg-blue-50 text-blue-700' : 'bg-stone-200 text-stone-600 hover:bg-stone-300'}">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>
                     ${filter !== 'All' ? escHtml(filter) : 'Filters'}
                     <svg class="w-3 h-3 transition-transform ${state._meta.ingredientFiltersOpen ? 'rotate-180' : ''}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
@@ -692,12 +692,12 @@
                 <div class="overflow-x-hidden sm:overflow-x-auto overflow-y-visible">
                     <table class="w-full sm:min-w-full" style="table-layout:fixed">
                         <colgroup>
-                            <col style="width:20%">
-                            <col class="${mobileHide}" style="width:12%">
-                            <col class="${mobileHide}" style="width:10%">
+                            <col style="width:18%">
                             <col class="${mobileHide}" style="width:14%">
+                            <col class="${mobileHide}" style="width:10%">
+                            <col class="${mobileHide}" style="width:16%">
                             <col style="width:10%">
-                            <col style="width:12%">
+                            <col style="width:10%">
                             <col class="${mobileHide}" style="width:10%">
                             <col style="width:12%">
                         </colgroup>
@@ -774,7 +774,7 @@
         return `<td class="px-2 sm:px-6 py-4 text-right">
             <!-- Desktop: inline icons -->
             <div class="hidden sm:inline-flex gap-1">
-                <button onclick="startEditIngredient('${ingId}')" class="p-2 -m-1 text-stone-400 hover:text-sky-600 transition-colors" title="Edit">
+                <button onclick="startEditIngredient('${ingId}')" class="p-2 -m-1 text-stone-400 hover:text-blue-600 transition-colors" title="Edit">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
                 </button>
                 <button onclick="deleteIngredient('${ingId}')" class="p-2 -m-1 text-stone-400 hover:text-red-600 transition-colors ${deps.length ? 'opacity-50' : ''}" title="${depWarning || 'Delete'}">
@@ -940,7 +940,7 @@
 
             cards += `<div class="bg-white rounded-2xl p-6 sm:p-8 card-hover relative group">
                 <div class="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button onclick="startEditRecipe('${recipe.id}')" class="text-stone-400 hover:text-sky-600 p-1" title="Edit">
+                    <button onclick="startEditRecipe('${recipe.id}')" class="text-stone-400 hover:text-blue-600 p-1" title="Edit">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
                     </button>
                     <button onclick="deleteRecipe('${recipe.id}')" class="text-stone-400 hover:text-red-600 p-1" title="Delete">
@@ -949,7 +949,7 @@
                 </div>
                 <div class="flex items-start justify-between">
                     <div>
-                        <h3 class="text-sm font-semibold text-sky-600 mb-1">${escHtml(recipe.name).toUpperCase()}</h3>
+                        <h3 class="text-sm font-semibold text-blue-600 mb-1">${escHtml(recipe.name).toUpperCase()}</h3>
                         <div id="recipe-cost-${recipe.id}" class="text-4xl font-black text-stone-900 tracking-tight mb-1">${fmt(scaledCost)}</div>
                         <p id="recipe-summary-${recipe.id}" class="text-sm text-stone-500">Per batch · ${scaledYield} ${escHtml(recipe.yieldUnit)} · <span class="font-semibold text-stone-700">${fmt(recipe.costPerUnit)}</span> each</p>
                     </div>
@@ -1028,7 +1028,7 @@
             <div class="mb-4">
                 <label class="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-3">Ingredients</label>
                 <div class="space-y-2">${ingredientRows}</div>
-                <button onclick="addRecipeFormIngredient()" class="mt-3 text-sky-600 hover:text-sky-800 text-sm font-semibold">+ Add Ingredient</button>
+                <button onclick="addRecipeFormIngredient()" class="mt-3 text-blue-600 hover:text-blue-800 text-sm font-semibold">+ Add Ingredient</button>
             </div>
             <div class="flex items-center justify-between pt-6 border-t border-stone-100">
                 <div><span class="text-2xl font-black text-stone-900">${fmt(totalCost)}</span><span class="text-sm text-stone-500 ml-2">total</span>${perUnit > 0 ? `<span class="text-sm text-stone-500 ml-4">${fmt(perUnit)} each</span>` : ''}</div>
@@ -1130,10 +1130,10 @@
             }
             cards += `<div class="bg-white rounded-2xl p-8 card-hover relative group">
                 <div class="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button onclick="startEditMeal('${meal.id}')" class="text-stone-400 hover:text-sky-600 p-1" title="Edit"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg></button>
+                    <button onclick="startEditMeal('${meal.id}')" class="text-stone-400 hover:text-blue-600 p-1" title="Edit"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg></button>
                     <button onclick="deleteMeal('${meal.id}')" class="text-stone-400 hover:text-red-600 p-1" title="Delete"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>
                 </div>
-                <div class="mb-6"><h3 class="text-sm font-semibold text-sky-600 mb-1">${escHtml(meal.name).toUpperCase()}</h3>
+                <div class="mb-6"><h3 class="text-sm font-semibold text-blue-600 mb-1">${escHtml(meal.name).toUpperCase()}</h3>
                     <div class="text-4xl font-black text-stone-900 tracking-tight mb-2">${fmt(mealCost)}</div>
                     <p class="text-sm text-stone-500">Per serving</p></div>
                 <div class="space-y-2 pt-6 border-t border-stone-100">${breakdown}</div>
@@ -1178,7 +1178,7 @@
                 <input type="text" id="meal-name" value="${escHtml(mf.name)}" oninput="state._meta.mealForm.name = this.value" class="w-full sm:w-96 input-inset text-sm"></div>
             <div class="mb-4"><label class="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-3">Components</label>
                 <div class="space-y-2">${componentRows}</div>
-                <button onclick="addMealFormComponent()" class="mt-3 text-sky-600 hover:text-sky-800 text-sm font-semibold">+ Add Component</button></div>
+                <button onclick="addMealFormComponent()" class="mt-3 text-blue-600 hover:text-blue-800 text-sm font-semibold">+ Add Component</button></div>
             <div class="flex items-center justify-between pt-6 border-t border-stone-100">
                 <div><span class="text-2xl font-black text-stone-900">${fmt(totalCost)}</span><span class="text-sm text-stone-500 ml-2">per serving</span></div>
                 <div class="flex gap-3">
@@ -1255,12 +1255,12 @@
             totalDaily += daily; totalWeekly += weekly; totalMonthly += monthly;
             entryCards += `<div class="bg-white rounded-2xl p-6 card-hover">
                 <div class="flex justify-between items-start mb-4">
-                    <div><h3 class="text-sm font-semibold text-sky-600">${escHtml(meal.name).toUpperCase()}</h3><p class="text-sm text-stone-500">${fmt(mealCost)} per serving</p></div>
+                    <div><h3 class="text-sm font-semibold text-blue-600">${escHtml(meal.name).toUpperCase()}</h3><p class="text-sm text-stone-500">${fmt(mealCost)} per serving</p></div>
                     <button onclick="removeConsumption('${entry.id}')" class="text-stone-400 hover:text-red-500 p-1" title="Remove"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
                 </div>
                 <div class="flex items-center gap-3 mb-4">
                     <label class="text-sm text-stone-600">Servings/day:</label>
-                    <input type="number" value="${entry.servingsPerDay}" min="0" step="any" onchange="updateConsumptionServings('${entry.id}', parseFloat(this.value) || 0)" class="w-20 border border-stone-300 rounded-lg px-3 py-1.5 text-sm text-center focus:outline-none focus:ring-2 focus:ring-sky-500">
+                    <input type="number" value="${entry.servingsPerDay}" min="0" step="any" onchange="updateConsumptionServings('${entry.id}', parseFloat(this.value) || 0)" class="w-20 input-inset text-sm text-center">
                 </div>
                 <div class="grid grid-cols-3 gap-3 text-center">
                     <div class="bg-stone-50 rounded-xl p-3"><div class="text-lg font-bold text-stone-900">${fmt(daily)}</div><div class="text-xs text-stone-500">Daily</div></div>
@@ -1273,9 +1273,9 @@
         container.innerHTML = `
             <h2 class="text-2xl font-black tracking-tight text-stone-900 mb-6">Consumption Tracker</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-                <div class="bg-white rounded-2xl p-8 text-center"><div class="text-4xl font-black text-sky-600 tracking-tight mb-2">${fmt(totalDaily)}</div><p class="text-sm text-stone-500">Per Day</p></div>
-                <div class="bg-white rounded-2xl p-8 text-center"><div class="text-4xl font-black text-sky-600 tracking-tight mb-2">${fmt(totalWeekly)}</div><p class="text-sm text-stone-500">Per Week</p></div>
-                <div class="bg-white rounded-2xl p-8 text-center"><div class="text-4xl font-black text-sky-600 tracking-tight mb-2">${fmt(totalMonthly)}</div><p class="text-sm text-stone-500">Per Month</p></div>
+                <div class="bg-white rounded-2xl p-8 text-center"><div class="text-4xl font-black text-blue-600 tracking-tight mb-2">${fmt(totalDaily)}</div><p class="text-sm text-stone-500">Per Day</p></div>
+                <div class="bg-white rounded-2xl p-8 text-center"><div class="text-4xl font-black text-blue-600 tracking-tight mb-2">${fmt(totalWeekly)}</div><p class="text-sm text-stone-500">Per Week</p></div>
+                <div class="bg-white rounded-2xl p-8 text-center"><div class="text-4xl font-black text-blue-600 tracking-tight mb-2">${fmt(totalMonthly)}</div><p class="text-sm text-stone-500">Per Month</p></div>
             </div>
             ${entryCards ? `<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-10">${entryCards}</div>` : '<p class="text-center text-stone-400 mb-10">No meals tracked yet. Add one below.</p>'}
             <div class="bg-white rounded-2xl p-6">
@@ -1324,7 +1324,7 @@
                 <button onclick="removeComparison('${comp.id}')" class="absolute top-4 right-4 text-stone-400 hover:text-red-500 p-1 opacity-0 group-hover:opacity-100 transition-opacity">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                 </button>
-                <h3 class="text-sm font-semibold text-sky-600 mb-4">${escHtml(meal.name).toUpperCase()}</h3>
+                <h3 class="text-sm font-semibold text-blue-600 mb-4">${escHtml(meal.name).toUpperCase()}</h3>
                 <div class="grid grid-cols-2 gap-4 mb-4">
                     <div class="text-center p-4 bg-green-50 rounded-xl">
                         <div class="text-2xl font-black text-green-700">${fmt(homemadeCost)}</div>
@@ -1399,9 +1399,9 @@
         let recipeChecks = recipes.map(r => {
             const scale = state._meta.shoppingScales?.[r.id] || 1;
             return `<div class="flex items-center gap-3">
-                <input type="checkbox" id="shop-recipe-${r.id}" class="rounded border-stone-300 text-sky-600 focus:ring-sky-500" onchange="renderShoppingList()">
+                <input type="checkbox" id="shop-recipe-${r.id}" class="rounded border-stone-300 text-blue-600 focus:ring-blue-500" onchange="renderShoppingList()">
                 <label for="shop-recipe-${r.id}" class="text-sm text-stone-900 font-medium">${escHtml(r.name)}</label>
-                <select onchange="setShoppingScale('${r.id}', parseFloat(this.value)); renderShoppingList()" class="border border-stone-300 rounded-lg px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-sky-500">
+                <select onchange="setShoppingScale('${r.id}', parseFloat(this.value)); renderShoppingList()" class="input-inset text-xs" style="width:60px;padding:4px 8px">
                     <option value="0.5" ${scale===0.5?'selected':''}>½×</option>
                     <option value="1" ${scale===1?'selected':''}>1×</option>
                     <option value="1.5" ${scale===1.5?'selected':''}>1.5×</option>
@@ -1414,10 +1414,10 @@
         let mealChecks = meals.map(m => {
             const qty = state._meta.shoppingMealQty?.[m.id] || 1;
             return `<div class="flex items-center gap-3">
-                <input type="checkbox" id="shop-meal-${m.id}" class="rounded border-stone-300 text-sky-600 focus:ring-sky-500" onchange="renderShoppingList()">
+                <input type="checkbox" id="shop-meal-${m.id}" class="rounded border-stone-300 text-blue-600 focus:ring-blue-500" onchange="renderShoppingList()">
                 <label for="shop-meal-${m.id}" class="text-sm text-stone-900 font-medium">${escHtml(m.name)}</label>
                 <input type="number" value="${qty}" min="1" step="1" onchange="setShoppingMealQty('${m.id}', parseInt(this.value) || 1); renderShoppingList()"
-                    class="w-16 border border-stone-300 rounded-lg px-2 py-1 text-xs text-center focus:outline-none focus:ring-2 focus:ring-sky-500">
+                    class="w-16 input-inset text-xs text-center" style="padding:4px 8px">
                 <span class="text-xs text-stone-400">servings</span>
             </div>`;
         }).join('');
@@ -1549,7 +1549,7 @@
             <div class="bg-white rounded-2xl p-8 max-w-xl">
                 <h3 class="text-lg font-bold text-stone-900 mb-2">GitHub Sync</h3>
                 <p class="text-sm text-stone-500 mb-4">Sync data across devices via a GitHub repo. Changes auto-save to this browser. Use <strong>Push</strong> to upload local changes, or <strong>Pull</strong> to download from GitHub.</p>
-                <p class="text-sm text-stone-500 mb-6">You'll need a <a href="https://github.com/settings/tokens/new?scopes=repo&description=Recipe+Cost+Dashboard" target="_blank" class="text-sky-600 hover:text-sky-700 underline">Personal Access Token</a> with <code class="bg-stone-100 px-1 rounded text-xs">repo</code> scope.</p>
+                <p class="text-sm text-stone-500 mb-6">You'll need a <a href="https://github.com/settings/tokens/new?scopes=repo&description=Recipe+Cost+Dashboard" target="_blank" class="text-blue-600 hover:text-blue-700 underline">Personal Access Token</a> with <code class="bg-stone-100 px-1 rounded text-xs">repo</code> scope.</p>
                 <div class="space-y-4 mb-6">
                     <div><label class="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-1">Personal Access Token</label>
                         <input type="password" id="settings-pat" value="${escHtml(settings.pat)}" placeholder="ghp_..." class="w-full input-inset text-sm font-mono"></div>
@@ -1604,7 +1604,7 @@
         const repo = document.getElementById('settings-repo').value.trim();
         if (!pat || !owner || !repo) { showToast('Fill in all fields first', 'error'); return; }
         const statusEl = document.getElementById('settings-status');
-        statusEl.innerHTML = '<span class="text-sky-600">Testing connection...</span>';
+        statusEl.innerHTML = '<span class="text-blue-600">Testing connection...</span>';
         try {
             const resp = await fetch(`https://api.github.com/repos/${owner}/${repo}`, { headers: { 'Authorization': `Bearer ${pat}`, 'Accept': 'application/vnd.github.v3+json' } });
             if (resp.ok) statusEl.innerHTML = '<span class="text-green-600">✓ Connected successfully</span>';
