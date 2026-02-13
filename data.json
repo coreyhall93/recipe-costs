@@ -1,23 +1,203 @@
 {
   "ingredients": [
-    { "id": "bread_flour", "name": "Bread Flour", "packageSize": "5 lbs", "packageAmount": 2268, "packageUnit": "g", "price": 5.58, "costPerUnit": 0.00246 },
-    { "id": "ap_flour", "name": "King Arthur AP Flour", "packageSize": "5 lbs", "packageAmount": 2268, "packageUnit": "g", "price": 5.24, "costPerUnit": 0.00231 },
-    { "id": "self_rising_flour", "name": "White Lily Self-Rising", "packageSize": "5 lbs", "packageAmount": 2268, "packageUnit": "g", "price": 4.44, "costPerUnit": 0.00196 },
-    { "id": "yeast", "name": "Active Dry Yeast", "packageSize": "4 oz", "packageAmount": 113, "packageUnit": "g", "price": 5.48, "costPerUnit": 0.04850 },
-    { "id": "butter", "name": "Unsalted Butter", "packageSize": "4 lbs", "packageAmount": 1814, "packageUnit": "g", "price": 8.24, "costPerUnit": 0.00454 },
-    { "id": "milk", "name": "2% Milk", "packageSize": "1 gallon", "packageAmount": 3785, "packageUnit": "g", "price": 2.42, "costPerUnit": 0.00064 },
-    { "id": "honey", "name": "Honey", "packageSize": "12 oz", "packageAmount": 340, "packageUnit": "g", "price": 3.74, "costPerUnit": 0.01100 },
-    { "id": "sugar", "name": "Granulated Sugar", "packageSize": "4 lbs", "packageAmount": 1814, "packageUnit": "g", "price": 2.97, "costPerUnit": 0.00164 },
-    { "id": "brown_sugar", "name": "Light Brown Sugar", "packageSize": "32 oz", "packageAmount": 907, "packageUnit": "g", "price": 1.94, "costPerUnit": 0.00214 },
-    { "id": "salt", "name": "Morton Kosher Salt", "packageSize": "48 oz", "packageAmount": 1361, "packageUnit": "g", "price": 2.97, "costPerUnit": 0.00218 },
-    { "id": "olive_oil", "name": "Extra Virgin Olive Oil", "packageSize": "25.5 oz", "packageAmount": 724, "packageUnit": "g", "price": 9.12, "costPerUnit": 0.01260 },
-    { "id": "eggs", "name": "Large White Eggs", "packageSize": "18 count", "packageAmount": 18, "packageUnit": "each", "price": 2.92, "costPerUnit": 0.16222 },
-    { "id": "bacon", "name": "Hickory Smoked Bacon", "packageSize": "12 oz", "packageAmount": 12, "packageUnit": "oz", "price": 3.77, "costPerUnit": 0.31417 },
-    { "id": "sausage", "name": "Breakfast Sausage Patties", "packageSize": "12 oz", "packageAmount": 12, "packageUnit": "oz", "price": 2.42, "costPerUnit": 0.20167 },
-    { "id": "baking_powder", "name": "Baking Powder", "packageSize": "8.1 oz", "packageAmount": 230, "packageUnit": "g", "price": 1.98, "costPerUnit": 0.00861 },
-    { "id": "baking_soda", "name": "Baking Soda", "packageSize": "8 oz", "packageAmount": 227, "packageUnit": "g", "price": 0.87, "costPerUnit": 0.00383 },
-    { "id": "cheese", "name": "American Cheese Singles", "packageSize": "24 slices", "packageAmount": 24, "packageUnit": "slice", "price": 2.48, "costPerUnit": 0.10333 },
-    { "id": "vinegar", "name": "White Vinegar", "packageSize": "16 oz", "packageAmount": 473, "packageUnit": "g", "price": 1.50, "costPerUnit": 0.00317 }
+    {
+      "id": "bread_flour",
+      "name": "Bread Flour",
+      "packageSize": "5 lbs",
+      "packageAmount": 2268,
+      "packageUnit": "g",
+      "price": 5.58,
+      "costPerUnit": 0.0024603174603174604,
+      "category": "Dry Goods",
+      "priceHistory": []
+    },
+    {
+      "id": "ap_flour",
+      "name": "King Arthur AP Flour",
+      "packageSize": "5 lbs",
+      "packageAmount": 2268,
+      "packageUnit": "g",
+      "price": 5.24,
+      "costPerUnit": 0.0023104056437389772,
+      "category": "Dry Goods",
+      "priceHistory": []
+    },
+    {
+      "id": "self_rising_flour",
+      "name": "White Lily Self-Rising",
+      "packageSize": "5 lbs",
+      "packageAmount": 2268,
+      "packageUnit": "g",
+      "price": 4.44,
+      "costPerUnit": 0.001957671957671958,
+      "category": "Dry Goods",
+      "priceHistory": []
+    },
+    {
+      "id": "yeast",
+      "name": "Active Dry Yeast",
+      "packageSize": "4 oz",
+      "packageAmount": 113,
+      "packageUnit": "g",
+      "price": 5.48,
+      "costPerUnit": 0.04849557522123894,
+      "category": "Leavening",
+      "priceHistory": []
+    },
+    {
+      "id": "butter",
+      "name": "Unsalted Butter",
+      "packageSize": "4 lbs",
+      "packageAmount": 1814,
+      "packageUnit": "g",
+      "price": 8.24,
+      "costPerUnit": 0.0045424476295479604,
+      "category": "Dairy",
+      "priceHistory": []
+    },
+    {
+      "id": "milk",
+      "name": "2% Milk",
+      "packageSize": "1 gallon",
+      "packageAmount": 3785,
+      "packageUnit": "g",
+      "price": 2.42,
+      "costPerUnit": 0.0006393659180977543,
+      "category": "Dairy",
+      "priceHistory": []
+    },
+    {
+      "id": "honey",
+      "name": "Honey",
+      "packageSize": "12 oz",
+      "packageAmount": 340,
+      "packageUnit": "g",
+      "price": 3.74,
+      "costPerUnit": 0.011000000000000001,
+      "category": "Sweeteners",
+      "priceHistory": []
+    },
+    {
+      "id": "sugar",
+      "name": "Granulated Sugar",
+      "packageSize": "4 lbs",
+      "packageAmount": 1814,
+      "packageUnit": "g",
+      "price": 2.97,
+      "costPerUnit": 0.001637265711135612,
+      "category": "Sweeteners",
+      "priceHistory": []
+    },
+    {
+      "id": "brown_sugar",
+      "name": "Light Brown Sugar",
+      "packageSize": "32 oz",
+      "packageAmount": 907,
+      "packageUnit": "g",
+      "price": 1.94,
+      "costPerUnit": 0.0021389195148842337,
+      "category": "Sweeteners",
+      "priceHistory": []
+    },
+    {
+      "id": "salt",
+      "name": "Morton Kosher Salt",
+      "packageSize": "48 oz",
+      "packageAmount": 1361,
+      "packageUnit": "g",
+      "price": 2.97,
+      "costPerUnit": 0.0021822189566495227,
+      "category": "Seasonings",
+      "priceHistory": []
+    },
+    {
+      "id": "olive_oil",
+      "name": "Extra Virgin Olive Oil",
+      "packageSize": "25.5 oz",
+      "packageAmount": 724,
+      "packageUnit": "g",
+      "price": 9.12,
+      "costPerUnit": 0.012596685082872927,
+      "category": "Oils & Fats",
+      "priceHistory": []
+    },
+    {
+      "id": "eggs",
+      "name": "Large White Eggs",
+      "packageSize": "18 count",
+      "packageAmount": 18,
+      "packageUnit": "each",
+      "price": 2.92,
+      "costPerUnit": 0.1622222222222222,
+      "category": "Proteins",
+      "priceHistory": []
+    },
+    {
+      "id": "bacon",
+      "name": "Hickory Smoked Bacon",
+      "packageSize": "12 oz",
+      "packageAmount": 12,
+      "packageUnit": "oz",
+      "price": 3.77,
+      "costPerUnit": 0.31416666666666665,
+      "category": "Proteins",
+      "priceHistory": []
+    },
+    {
+      "id": "sausage",
+      "name": "Breakfast Sausage Patties",
+      "packageSize": "12 oz",
+      "packageAmount": 12,
+      "packageUnit": "oz",
+      "price": 2.42,
+      "costPerUnit": 0.20166666666666666,
+      "category": "Proteins",
+      "priceHistory": []
+    },
+    {
+      "id": "baking_powder",
+      "name": "Baking Powder",
+      "packageSize": "8.1 oz",
+      "packageAmount": 230,
+      "packageUnit": "g",
+      "price": 1.98,
+      "costPerUnit": 0.008608695652173913,
+      "category": "Leavening",
+      "priceHistory": []
+    },
+    {
+      "id": "baking_soda",
+      "name": "Baking Soda",
+      "packageSize": "8 oz",
+      "packageAmount": 227,
+      "packageUnit": "g",
+      "price": 0.87,
+      "costPerUnit": 0.0038325991189427314,
+      "category": "Leavening",
+      "priceHistory": []
+    },
+    {
+      "id": "cheese",
+      "name": "American Cheese Singles",
+      "packageSize": "24 slices",
+      "packageAmount": 24,
+      "packageUnit": "slice",
+      "price": 2.48,
+      "costPerUnit": 0.10333333333333333,
+      "category": "Dairy",
+      "priceHistory": []
+    },
+    {
+      "id": "vinegar",
+      "name": "White Vinegar",
+      "packageSize": "16 oz",
+      "packageAmount": 473,
+      "packageUnit": "g",
+      "price": 1.5,
+      "costPerUnit": 0.003171247357293869,
+      "category": "Seasonings",
+      "priceHistory": []
+    }
   ],
   "recipes": [
     {
@@ -26,17 +206,49 @@
       "yield": 8,
       "yieldUnit": "muffins",
       "ingredients": [
-        { "ingredientId": "bread_flour", "amount": 430, "unit": "g" },
-        { "ingredientId": "yeast", "amount": 5, "unit": "g" },
-        { "ingredientId": "butter", "amount": 35, "unit": "g" },
-        { "ingredientId": "milk", "amount": 75, "unit": "g" },
-        { "ingredientId": "honey", "amount": 20, "unit": "g" },
-        { "ingredientId": "sugar", "amount": 12, "unit": "g" },
-        { "ingredientId": "salt", "amount": 12, "unit": "g" },
-        { "ingredientId": "olive_oil", "amount": 28, "unit": "g" }
+        {
+          "ingredientId": "bread_flour",
+          "amount": 430,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "yeast",
+          "amount": 5,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "butter",
+          "amount": 35,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "milk",
+          "amount": 75,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "honey",
+          "amount": 20,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "sugar",
+          "amount": 12,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "salt",
+          "amount": 12,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "olive_oil",
+          "amount": 28,
+          "unit": "g"
+        }
       ],
-      "totalCost": 2.13,
-      "costPerUnit": 0.27
+      "totalCost": 2.1258934932680766,
+      "costPerUnit": 0.2657366866585096
     },
     {
       "id": "pullman_loaf",
@@ -44,15 +256,39 @@
       "yield": 16,
       "yieldUnit": "slices",
       "ingredients": [
-        { "ingredientId": "bread_flour", "amount": 500, "unit": "g" },
-        { "ingredientId": "yeast", "amount": 9, "unit": "g" },
-        { "ingredientId": "butter", "amount": 55, "unit": "g" },
-        { "ingredientId": "milk", "amount": 30, "unit": "g" },
-        { "ingredientId": "sugar", "amount": 25, "unit": "g" },
-        { "ingredientId": "salt", "amount": 10, "unit": "g" }
+        {
+          "ingredientId": "bread_flour",
+          "amount": 500,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "yeast",
+          "amount": 9,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "butter",
+          "amount": 55,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "milk",
+          "amount": 30,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "sugar",
+          "amount": 25,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "salt",
+          "amount": 10,
+          "unit": "g"
+        }
       ],
-      "totalCost": 2.01,
-      "costPerUnit": 0.13
+      "totalCost": 1.9983883366628366,
+      "costPerUnit": 0.12489927104142728
     },
     {
       "id": "white_lily_biscuits",
@@ -60,16 +296,60 @@
       "yield": 12,
       "yieldUnit": "biscuits",
       "ingredients": [
-        { "ingredientId": "self_rising_flour", "amount": 240, "unit": "g" },
-        { "ingredientId": "butter", "amount": 85, "unit": "g" },
-        { "ingredientId": "milk", "amount": 177, "unit": "g" },
-        { "ingredientId": "vinegar", "amount": 5, "unit": "g" }
+        {
+          "ingredientId": "self_rising_flour",
+          "amount": 240,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "butter",
+          "amount": 85,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "milk",
+          "amount": 177,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "vinegar",
+          "amount": 5,
+          "unit": "g"
+        }
       ],
-      "totalCost": 0.89,
-      "costPerUnit": 0.07
+      "totalCost": 0.9849733226426184,
+      "costPerUnit": 0.0820811102202182
     }
   ],
-  "meals": [],
+  "meals": [
+    {
+      "id": "breakfast_sandwich",
+      "name": "Breakfast Sandwich",
+      "components": [
+        {
+          "type": "recipe",
+          "id": "english_muffins",
+          "quantity": 1
+        },
+        {
+          "type": "ingredient",
+          "id": "bacon",
+          "quantity": 2
+        },
+        {
+          "type": "ingredient",
+          "id": "eggs",
+          "quantity": 1
+        },
+        {
+          "type": "ingredient",
+          "id": "cheese",
+          "quantity": 1
+        }
+      ]
+    }
+  ],
   "consumption": [],
-  "lastUpdated": null
+  "comparisons": [],
+  "lastUpdated": "2026-02-13T15:52:55.910Z"
 }
