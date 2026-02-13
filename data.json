@@ -57,7 +57,7 @@
     },
     {
       "id": "milk",
-      "name": "2% Milk",
+      "name": "Milk, 2%",
       "packageSize": "1 gallon",
       "packageAmount": 3785,
       "packageUnit": "g",
@@ -321,35 +321,8 @@
       "costPerUnit": 0.0820811102202182
     }
   ],
-  "meals": [
-    {
-      "id": "breakfast_sandwich",
-      "name": "Breakfast Sandwich",
-      "components": [
-        {
-          "type": "recipe",
-          "id": "english_muffins",
-          "quantity": 1
-        },
-        {
-          "type": "ingredient",
-          "id": "bacon",
-          "quantity": 2
-        },
-        {
-          "type": "ingredient",
-          "id": "eggs",
-          "quantity": 1
-        },
-        {
-          "type": "ingredient",
-          "id": "cheese",
-          "quantity": 1
-        }
-      ]
-    }
-  ],
+  "meals": [],
   "consumption": [],
   "comparisons": [],
-  "lastUpdated": "2026-02-13T15:52:55.910Z"
+  "lastUpdated": "2026-02-13T19:14:09.092Z"
 }
