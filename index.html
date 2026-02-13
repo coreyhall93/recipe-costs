@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <title>Recipe Cost Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -196,6 +196,41 @@
     function markDirty() {
         state._meta.dirty = true;
         renderSyncStatus();
+        saveToLocalStorage();
+    }
+
+    function saveToLocalStorage() {
+        try {
+            const data = {
+                ingredients: state.ingredients,
+                recipes: state.recipes,
+                meals: state.meals,
+                consumption: state.consumption,
+                comparisons: state.comparisons,
+                lastUpdated: state.lastUpdated
+            };
+            localStorage.setItem('recipeCosts_data', JSON.stringify(data));
+        } catch (e) { /* quota exceeded — silent fail */ }
+    }
+
+    function loadFromLocalStorage() {
+        try {
+            const raw = localStorage.getItem('recipeCosts_data');
+            if (!raw) return false;
+            const data = JSON.parse(raw);
+            state.ingredients = data.ingredients || [];
+            state.recipes = data.recipes || [];
+            state.meals = data.meals || [];
+            state.consumption = data.consumption || [];
+            state.comparisons = data.comparisons || [];
+            state.lastUpdated = data.lastUpdated;
+            for (const ing of state.ingredients) {
+                if (!ing.priceHistory) ing.priceHistory = [];
+                if (!ing.category) ing.category = 'Other';
+            }
+            recalculateAll();
+            return true;
+        } catch (e) { return false; }
     }
 
     function generateId(name) {
@@ -385,6 +420,7 @@
                 if (!ing.category) ing.category = 'Other';
             }
             recalculateAll();
+            saveToLocalStorage();
             render();
             renderSyncStatus();
             showToast('Data loaded from GitHub', 'success');
@@ -427,6 +463,7 @@
             state._meta.syncStatus = 'idle';
             state._meta.lastSynced = new Date().toISOString();
             state.lastUpdated = data.lastUpdated;
+            saveToLocalStorage();
             renderSyncStatus();
             showToast('Saved to GitHub', 'success');
             return true;
@@ -581,10 +618,10 @@
                     <td class="px-4 sm:px-6 py-4 text-sm text-stone-900">${fmt(ing.price)}</td>
                     <td class="px-4 sm:px-6 py-4 text-sm text-stone-600 font-mono">${fmtUnit(ing.costPerUnit, ing.packageUnit)}</td>
                     <td class="${mobileHide}px-4 sm:px-6 py-4">${spark}${historyCount > 0 ? `<span class="text-xs text-stone-400 ml-1">${historyCount}</span>` : ''}</td>
-                    <td class="px-4 sm:px-6 py-4">
-                        <div class="flex gap-3">
-                            <button onclick="startEditIngredient('${ing.id}')" class="text-stone-400 hover:text-sky-600 transition-colors" title="Edit"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg></button>
-                            <button onclick="deleteIngredient('${ing.id}')" class="text-stone-400 hover:text-red-600 transition-colors ${deps.length ? 'opacity-50' : ''}" title="${deps.length ? 'Used in: ' + deps.join(', ') : 'Delete'}"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>
+                    <td class="px-2 sm:px-6 py-4">
+                        <div class="flex gap-1">
+                            <button onclick="startEditIngredient('${ing.id}')" class="p-2 -m-1 text-stone-400 hover:text-sky-600 transition-colors" title="Edit"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg></button>
+                            <button onclick="deleteIngredient('${ing.id}')" class="p-2 -m-1 text-stone-400 hover:text-red-600 transition-colors ${deps.length ? 'opacity-50' : ''}" title="${deps.length ? 'Used in: ' + deps.join(', ') : 'Delete'}"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>
                         </div>
                     </td>
                 </tr>`;
@@ -603,12 +640,12 @@
                     <td class="px-4 sm:px-6 py-4 text-sm text-stone-900">${fmt(ing.price)}</td>
                     <td class="px-4 sm:px-6 py-4 text-sm text-stone-600 font-mono">${fmtUnit(ing.costPerUnit, ing.packageUnit)}</td>
                     <td class="${mobileHide}px-4 sm:px-6 py-4">${spark}${historyCount > 0 ? `<span class="text-xs text-stone-400 ml-1">${historyCount}</span>` : ''}</td>
-                    <td class="px-4 sm:px-6 py-4">
-                        <div class="flex gap-3">
-                            <button onclick="startEditIngredient('${ing.id}')" class="text-stone-400 hover:text-sky-600 transition-colors" title="Edit">
+                    <td class="px-2 sm:px-6 py-4">
+                        <div class="flex gap-1">
+                            <button onclick="startEditIngredient('${ing.id}')" class="p-2 -m-1 text-stone-400 hover:text-sky-600 transition-colors" title="Edit">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
                             </button>
-                            <button onclick="deleteIngredient('${ing.id}')" class="text-stone-400 hover:text-red-600 transition-colors ${deps.length ? 'opacity-50' : ''}" title="${deps.length ? 'Used in: ' + deps.join(', ') : 'Delete'}">
+                            <button onclick="deleteIngredient('${ing.id}')" class="p-2 -m-1 text-stone-400 hover:text-red-600 transition-colors ${deps.length ? 'opacity-50' : ''}" title="${deps.length ? 'Used in: ' + deps.join(', ') : 'Delete'}">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                             </button>
                         </div>
@@ -632,7 +669,17 @@
             </div>
             <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
                 <div class="overflow-x-hidden sm:overflow-x-auto">
-                    <table class="w-full sm:min-w-full">
+                    <table class="w-full sm:min-w-full" style="table-layout:fixed">
+                        <colgroup>
+                            <col style="width:20%">
+                            <col class="${mobileHide}" style="width:12%">
+                            <col class="${mobileHide}" style="width:10%">
+                            <col class="${mobileHide}" style="width:14%">
+                            <col style="width:10%">
+                            <col style="width:12%">
+                            <col class="${mobileHide}" style="width:10%">
+                            <col style="width:12%">
+                        </colgroup>
                         <thead>
                             <tr class="border-b border-stone-100">
                                 <th class="px-4 sm:px-6 py-4 text-left text-xs font-semibold text-stone-500 uppercase tracking-wider">Ingredient</th>
@@ -642,7 +689,7 @@
                                 <th class="px-4 sm:px-6 py-4 text-left text-xs font-semibold text-stone-500 uppercase tracking-wider">Price</th>
                                 <th class="px-4 sm:px-6 py-4 text-left text-xs font-semibold text-stone-500 uppercase tracking-wider">Cost/Unit</th>
                                 <th class="${mobileHide}px-4 sm:px-6 py-4 text-left text-xs font-semibold text-stone-500 uppercase tracking-wider">Trend</th>
-                                <th class="px-4 sm:px-6 py-4 w-20"></th>
+                                <th class="px-4 sm:px-6 py-4"></th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-stone-100">${rows}</tbody>
@@ -1429,7 +1476,8 @@
             <h2 class="text-2xl font-black tracking-tight text-stone-900 mb-6">Settings</h2>
             <div class="bg-white rounded-2xl p-8 shadow-sm max-w-xl">
                 <h3 class="text-lg font-bold text-stone-900 mb-2">GitHub Sync</h3>
-                <p class="text-sm text-stone-500 mb-6">Connect to a GitHub repo to sync your data across devices. You'll need a <a href="https://github.com/settings/tokens/new?scopes=repo&description=Recipe+Cost+Dashboard" target="_blank" class="text-sky-600 hover:text-sky-700 underline">Personal Access Token</a> with <code class="bg-stone-100 px-1 rounded text-xs">repo</code> scope.</p>
+                <p class="text-sm text-stone-500 mb-4">Sync your data across devices via a GitHub repo. Changes auto-save to this browser. To sync to another device, tap <strong>Save to GitHub</strong> here, then reload on the other device.</p>
+                <p class="text-sm text-stone-500 mb-6">You'll need a <a href="https://github.com/settings/tokens/new?scopes=repo&description=Recipe+Cost+Dashboard" target="_blank" class="text-sky-600 hover:text-sky-700 underline">Personal Access Token</a> with <code class="bg-stone-100 px-1 rounded text-xs">repo</code> scope.</p>
                 <div class="space-y-4 mb-6">
                     <div><label class="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-1">Personal Access Token</label>
                         <input type="password" id="settings-pat" value="${escHtml(settings.pat)}" placeholder="ghp_..." class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 font-mono"></div>
@@ -1518,7 +1566,9 @@
 
     // Boot
     (async function init() {
-        initializeWithSeedData();
+        // Priority: GitHub > localStorage > seed data
+        const hasLocal = loadFromLocalStorage();
+        if (!hasLocal) initializeWithSeedData();
         render();
         const settings = getSettings();
         if (settings.pat && settings.owner && settings.repo) { await loadFromGitHub(); }
