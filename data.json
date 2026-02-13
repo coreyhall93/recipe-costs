@@ -101,7 +101,7 @@
     },
     {
       "id": "salt",
-      "name": "Morton Kosher Salt",
+      "name": "Kosher Salt, Morton",
       "packageSize": "48 oz",
       "packageAmount": 1361,
       "packageUnit": "g",
@@ -340,5 +340,5 @@
   "meals": [],
   "consumption": [],
   "comparisons": [],
-  "lastUpdated": "2026-02-13T19:34:31.568Z"
+  "lastUpdated": "2026-02-13T22:15:10.281Z"
 }
