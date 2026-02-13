@@ -591,7 +591,7 @@
                 </tr>`;
             } else if (editing === ing.id && isMobile) {
                 // On mobile: show normal display row + card form below table
-                mobileForm = `<div class="bg-white rounded-2xl p-5 shadow-sm mt-4">
+                mobileForm = `<div id="mobile-edit-form" class="bg-white rounded-2xl p-5 shadow-sm mt-4">
                     <h3 class="text-sm font-semibold text-stone-900 mb-4">Edit: ${escHtml(ing.name)}</h3>
                     <div class="space-y-3">
                         <div><label class="${labelCls}">Name</label><input type="text" id="ing-edit-name" value="${escHtml(ing.name)}" class="${inputCls}"></div>
@@ -741,9 +741,9 @@
 
     function renderActionCell(ingId, deps) {
         const depWarning = deps.length ? `Used in: ${deps.join(', ')}` : '';
-        return `<td class="px-2 sm:px-6 py-4">
+        return `<td class="px-2 sm:px-6 py-4 text-right">
             <!-- Desktop: inline icons -->
-            <div class="hidden sm:flex gap-1">
+            <div class="hidden sm:inline-flex gap-1">
                 <button onclick="startEditIngredient('${ingId}')" class="p-2 -m-1 text-stone-400 hover:text-sky-600 transition-colors" title="Edit">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
                 </button>
@@ -752,7 +752,7 @@
                 </button>
             </div>
             <!-- Mobile: three-dot menu -->
-            <div class="sm:hidden row-menu">
+            <div class="sm:hidden row-menu inline-block">
                 <button onclick="toggleRowMenu('${ingId}', event)" class="p-2 text-stone-400 hover:text-stone-600" aria-label="Actions">
                     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
                 </button>
@@ -777,7 +777,18 @@
         document.querySelectorAll('.row-menu-dropdown.open').forEach(el => el.classList.remove('open'));
     });
 
-    function startEditIngredient(id) { state._meta.editingIngredientId = id; state._meta.addingIngredient = false; renderIngredients(); }
+    function startEditIngredient(id) {
+        state._meta.editingIngredientId = id;
+        state._meta.addingIngredient = false;
+        renderIngredients();
+        // On mobile, scroll the edit form into view
+        if (window.innerWidth < 640) {
+            setTimeout(() => {
+                const form = document.getElementById('mobile-edit-form');
+                if (form) form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 50);
+        }
+    }
     function cancelEditIngredient() { state._meta.editingIngredientId = null; renderIngredients(); }
 
     function saveEditIngredient(id) {
