@@ -123,7 +123,7 @@
     },
     {
       "id": "eggs",
-      "name": "Large White Eggs",
+      "name": "Eggs, large",
       "packageSize": "18 count",
       "packageAmount": 18,
       "packageUnit": "each",
@@ -340,5 +340,5 @@
   "meals": [],
   "consumption": [],
   "comparisons": [],
-  "lastUpdated": "2026-02-13T22:15:43.717Z"
+  "lastUpdated": "2026-02-13T22:15:57.451Z"
 }
