@@ -489,12 +489,10 @@
             const url = `https://api.github.com/repos/${owner}/${repo}/contents/data.json`;
             const response = await fetch(url, { headers: { 'Authorization': `Bearer ${pat}`, 'Accept': 'application/vnd.github.v3+json' } });
             if (response.status === 404) {
-                initializeWithSeedData();
-                state._meta.dirty = true;
                 state._meta.syncStatus = 'idle';
                 renderSyncStatus();
                 render();
-                showToast('No data found on GitHub. Loaded defaults.', 'info');
+                showToast('No data found on GitHub. Add your first ingredient to get started.', 'info');
                 return true;
             }
             if (!response.ok) throw new Error(`GitHub API error: ${response.status}`);
@@ -780,6 +778,22 @@
                     ${renderActionCell(ing.id, deps)}
                 </tr>`;
             }
+        }
+
+        // Empty state for brand-new users (no ingredients at all)
+        if (state.ingredients.length === 0 && !adding) {
+            container.innerHTML = `
+                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6">
+                    <h2 class="text-2xl font-black tracking-tight text-stone-900">Ingredient Prices</h2>
+                </div>
+                <div class="bg-white rounded-2xl p-12 text-center">
+                    <div class="text-5xl mb-4">🧾</div>
+                    <h3 class="text-lg font-bold text-stone-900 mb-2">No ingredients yet</h3>
+                    <p class="text-sm text-stone-500 mb-6 max-w-sm mx-auto">Add the ingredients you buy to start tracking prices and building recipes.</p>
+                    <button onclick="startAddIngredient()" class="btn-primary text-sm">+ Add Your First Ingredient</button>
+                </div>
+            `;
+            return;
         }
 
         container.innerHTML = `
@@ -1683,8 +1697,8 @@
             </div>
             <div class="bg-white rounded-2xl p-8 max-w-xl mt-6">
                 <h3 class="text-lg font-bold text-stone-900 mb-2">Data Management</h3>
-                <p class="text-sm text-stone-500 mb-4">Reset to default seed data if you want to start fresh.</p>
-                <button onclick="handleResetData()" class="btn-danger text-sm">Reset to Defaults</button>
+                <p class="text-sm text-stone-500 mb-4">Clear all ingredients, recipes, and meals to start fresh.</p>
+                <button onclick="handleResetData()" class="btn-danger text-sm">Clear All Data</button>
             </div>`;
     }
 
@@ -1721,12 +1735,17 @@
     }
 
     function handleResetData() {
-        if (!confirm('This will replace all current data with defaults. Are you sure?')) return;
-        initializeWithSeedData();
+        if (!confirm('This will delete all your ingredients, recipes, and meals. Are you sure?')) return;
+        state.ingredients = [];
+        state.recipes = [];
+        state.meals = [];
+        state.consumption = [];
+        state.comparisons = [];
+        state.lastUpdated = null;
         state._meta.sha = null;
         markDirty();
         render();
-        showToast('Data reset to defaults', 'info');
+        showToast('All data cleared', 'info');
     }
 
     // ========================================
@@ -1760,9 +1779,9 @@
 
     // Boot
     (async function init() {
-        // Priority: GitHub > localStorage > seed data
+        // Priority: GitHub > localStorage > empty start
         const hasLocal = loadFromLocalStorage();
-        if (!hasLocal) initializeWithSeedData();
+        // New visitors start with a clean slate (no seed data)
         render();
         const settings = getSettings();
         if (settings.pat && settings.owner && settings.repo) { await loadFromGitHub(); }
