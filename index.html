@@ -293,6 +293,7 @@
         state._meta.dirty = true;
         renderSyncStatus();
         saveToLocalStorage();
+        notifyNativeDataChanged();
     }
 
     function saveToLocalStorage() {
@@ -1559,7 +1560,10 @@
                 <div class="bg-white rounded-2xl p-6">
                     <div class="flex justify-between items-center mb-4">
                         <h3 class="text-lg font-bold text-stone-900">Aggregated List</h3>
-                        <button onclick="copyShoppingList()" class="btn-secondary text-sm">Copy to Clipboard</button>
+                        <div class="flex gap-2">
+                            ${window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.exportToReminders ? '<button onclick="exportToReminders()" class="btn-primary text-sm">Add to Reminders</button>' : ''}
+                            <button onclick="copyShoppingList()" class="btn-secondary text-sm">Copy to Clipboard</button>
+                        </div>
                     </div>
                     <div id="shopping-list-output"><p class="text-sm text-stone-400">Check items on the left to generate your list.</p></div>
                 </div>
@@ -1655,6 +1659,58 @@
             text += `${item.name} — ${displayAmt} ${item.unit}\n`;
         }
         navigator.clipboard.writeText(text.trim()).then(() => showToast('Copied to clipboard', 'success')).catch(() => showToast('Failed to copy', 'error'));
+    }
+
+    function exportToReminders() {
+        const aggregated = getShoppingListData();
+        const items = Object.values(aggregated).sort((a, b) => a.name.localeCompare(b.name));
+        if (items.length === 0) { showToast('No items to export', 'error'); return; }
+        if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.exportToReminders) {
+            window.webkit.messageHandlers.exportToReminders.postMessage({
+                items: items.map(i => ({ name: i.name, amount: i.amount, unit: i.unit }))
+            });
+        }
+    }
+
+    // ========================================
+    // NATIVE APP BRIDGE (Swift ↔ JS)
+    // ========================================
+
+    // Called by Swift when iCloud data arrives from another device
+    window.receiveCloudData = function(jsonString) {
+        try {
+            const data = JSON.parse(jsonString);
+            if (data.ingredients) state.ingredients = data.ingredients;
+            if (data.recipes) state.recipes = data.recipes;
+            if (data.meals) state.meals = data.meals;
+            if (data.consumption) state.consumption = data.consumption;
+            if (data.comparisons) state.comparisons = data.comparisons;
+            if (data.lastUpdated) state.lastUpdated = data.lastUpdated;
+            recalculateAll();
+            saveToLocalStorage();
+            render();
+            showToast('Synced from iCloud', 'success');
+        } catch (e) {
+            console.error('receiveCloudData error:', e);
+        }
+    };
+
+    // Notify native app when data changes (for iCloud sync)
+    function notifyNativeDataChanged() {
+        if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.dataChanged) {
+            window.webkit.messageHandlers.dataChanged.postMessage(getExportData());
+        }
+    }
+
+    function getExportData() {
+        return {
+            ingredients: state.ingredients,
+            recipes: state.recipes,
+            meals: state.meals,
+            consumption: state.consumption,
+            comparisons: state.comparisons,
+            lastUpdated: state.lastUpdated
+        };
     }
 
     // ========================================
