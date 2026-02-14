@@ -337,8 +337,35 @@
       "costPerUnit": 0.0820811102202182
     }
   ],
-  "meals": [],
+  "meals": [
+    {
+      "id": "breakfast_sandie",
+      "name": "Breakfast Sandie",
+      "components": [
+        {
+          "type": "recipe",
+          "id": "english_muffins",
+          "quantity": 1
+        },
+        {
+          "type": "ingredient",
+          "id": "bacon",
+          "quantity": 2
+        },
+        {
+          "type": "ingredient",
+          "id": "eggs",
+          "quantity": 1
+        },
+        {
+          "type": "ingredient",
+          "id": "cheese",
+          "quantity": 1
+        }
+      ]
+    }
+  ],
   "consumption": [],
   "comparisons": [],
-  "lastUpdated": "2026-02-13T22:23:16.467Z"
+  "lastUpdated": "2026-02-14T01:03:55.021Z"
 }
