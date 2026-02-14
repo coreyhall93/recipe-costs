@@ -366,6 +366,14 @@
     }
   ],
   "consumption": [],
-  "comparisons": [],
-  "lastUpdated": "2026-02-14T01:03:55.021Z"
+  "comparisons": [
+    {
+      "id": "comp_1771031087458",
+      "mealId": "breakfast_sandie",
+      "storePrice": 4.49,
+      "storeName": "McDonald’s",
+      "servingsPerWeek": 5
+    }
+  ],
+  "lastUpdated": "2026-02-14T01:05:07.735Z"
 }
