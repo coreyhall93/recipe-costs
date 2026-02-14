@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
     <title>Recipe Cost Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -124,7 +124,7 @@
         .row-menu-dropdown button:hover { background: #f5f5f4; }
     </style>
 </head>
-<body class="text-stone-900" style="background: linear-gradient(180deg, #f2f3f5 0%, #e8e9ec 100%); background-attachment: fixed; min-height: 100vh;">
+<body class="text-stone-900" style="background: linear-gradient(180deg, #f2f3f5 0%, #e8e9ec 100%); background-attachment: fixed; min-height: 100vh; padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); padding-left: env(safe-area-inset-left); padding-right: env(safe-area-inset-right);">
     <div class="max-w-[1280px] mx-auto px-4 sm:px-8 py-8 sm:py-12">
 
         <!-- Header -->
@@ -653,7 +653,6 @@
         }
         const editing = state._meta.editingIngredientId;
         const adding = state._meta.addingIngredient;
-        const isMobile = window.innerWidth < 640;
         const mobileHide = 'hidden sm:table-cell ';
 
         // Category counts
@@ -676,21 +675,7 @@
         let rows = '';
         let mobileForm = '';
 
-        if (adding && !isMobile) {
-            rows += `<tr class="bg-blue-50">
-                <td class="px-4 sm:px-6 py-3"><input type="text" id="ing-new-name" placeholder="Name" class="${inputCls}"></td>
-                <td class="px-4 sm:px-6 py-3"><select id="ing-new-cat" class="${inputCls}">${CATEGORY_OPTIONS.map(c => `<option value="${c}">${c}</option>`).join('')}</select></td>
-                <td class="px-4 sm:px-6 py-3"><input type="text" id="ing-new-pkgsize" placeholder="e.g. 5 lbs" class="${inputCls}"></td>
-                <td class="px-4 sm:px-6 py-3" style="white-space:nowrap"><div class="flex gap-2 items-center"><input type="number" id="ing-new-pkgamt" placeholder="Amt" step="any" min="0" class="input-inset text-sm" style="width:80px"><select id="ing-new-unit" class="input-inset text-sm" style="width:90px">${UNIT_OPTIONS.map(u => `<option value="${u}">${u}</option>`).join('')}</select></div></td>
-                <td class="px-4 sm:px-6 py-3"><input type="number" id="ing-new-price" placeholder="0.00" step="0.01" min="0" class="${inputCls}"></td>
-                <td class="px-4 sm:px-6 py-3 text-sm text-stone-400 font-mono">—</td>
-                <td class="px-4 sm:px-6 py-3"></td>
-                <td class="px-4 sm:px-6 py-3"><div class="flex gap-2">
-                    <button onclick="saveNewIngredient()" class="text-blue-600 hover:text-blue-800 text-sm font-semibold">Save</button>
-                    <button onclick="cancelAddIngredient()" class="text-stone-400 hover:text-stone-600 text-sm">Cancel</button>
-                </div></td>
-            </tr>`;
-        } else if (adding && isMobile) {
+        if (adding) {
             mobileForm = `<div class="bg-white rounded-2xl p-5 mt-4 mb-20">
                 <h3 class="text-sm font-semibold text-stone-900 mb-4">New Ingredient</h3>
                 <div class="space-y-3">
@@ -711,22 +696,8 @@
         }
 
         for (const ing of ingredients) {
-            if (editing === ing.id && !isMobile) {
-                rows += `<tr class="bg-blue-50">
-                    <td class="px-4 sm:px-6 py-3"><input type="text" id="ing-edit-name" value="${escHtml(ing.name)}" class="${inputCls}"></td>
-                    <td class="px-4 sm:px-6 py-3"><select id="ing-edit-cat" class="${inputCls}">${CATEGORY_OPTIONS.map(c => `<option value="${c}" ${c === ing.category ? 'selected' : ''}>${c}</option>`).join('')}</select></td>
-                    <td class="px-4 sm:px-6 py-3"><input type="text" id="ing-edit-pkgsize" value="${escHtml(ing.packageSize)}" class="${inputCls}"></td>
-                    <td class="px-4 sm:px-6 py-3" style="white-space:nowrap"><div class="flex gap-2 items-center"><input type="number" id="ing-edit-pkgamt" value="${ing.packageAmount}" step="any" min="0" class="input-inset text-sm" style="width:80px"><select id="ing-edit-unit" class="input-inset text-sm" style="width:90px">${UNIT_OPTIONS.map(u => `<option value="${u}" ${u === ing.packageUnit ? 'selected' : ''}>${u}</option>`).join('')}</select></div></td>
-                    <td class="px-4 sm:px-6 py-3"><input type="number" id="ing-edit-price" value="${ing.price}" step="0.01" min="0" class="${inputCls}"></td>
-                    <td class="px-4 sm:px-6 py-3 text-sm text-stone-400 font-mono">auto</td>
-                    <td class="px-4 sm:px-6 py-3"></td>
-                    <td class="px-4 sm:px-6 py-3"><div class="flex gap-2">
-                        <button onclick="saveEditIngredient('${ing.id}')" class="text-blue-600 hover:text-blue-800 text-sm font-semibold">Save</button>
-                        <button onclick="cancelEditIngredient()" class="text-stone-400 hover:text-stone-600 text-sm">Cancel</button>
-                    </div></td>
-                </tr>`;
-            } else if (editing === ing.id && isMobile) {
-                // On mobile: show normal display row + card form below table
+            if (editing === ing.id) {
+                // Always use vertical card form for editing (cleaner on all screen sizes)
                 mobileForm = `<div id="mobile-edit-form" class="bg-white rounded-2xl p-5 mt-4 mb-20">
                     <h3 class="text-sm font-semibold text-stone-900 mb-4">Edit: ${escHtml(ing.name)}</h3>
                     <div class="space-y-3">
@@ -744,7 +715,7 @@
                         <button onclick="saveEditIngredient('${ing.id}')" class="btn-primary text-sm">Save</button>
                     </div>
                 </div>`;
-                // Fall through to render normal display row
+                // Highlight the row being edited
                 const deps = getIngredientDependencies(ing.id);
                 const spark = renderSparkline(ing.priceHistory);
                 const historyCount = (ing.priceHistory || []).length;
@@ -932,13 +903,11 @@
         state._meta.editingIngredientId = id;
         state._meta.addingIngredient = false;
         renderIngredients();
-        // On mobile, scroll the edit form into view
-        if (window.innerWidth < 640) {
-            setTimeout(() => {
-                const form = document.getElementById('mobile-edit-form');
-                if (form) form.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }, 50);
-        }
+        // Scroll the edit form into view
+        setTimeout(() => {
+            const form = document.getElementById('mobile-edit-form');
+            if (form) form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 50);
     }
     function cancelEditIngredient() { state._meta.editingIngredientId = null; renderIngredients(); }
 
