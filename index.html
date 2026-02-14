@@ -71,6 +71,15 @@
         /* Table header toolbar feel */
         thead tr { background: linear-gradient(to bottom, #fafaf9, #f5f5f4); }
 
+        /* Responsive table columns — priority-based hiding */
+        .col-p2 { display: none; }  /* Category, Cost/Unit: show at 640px+ */
+        .col-p3 { display: none; }  /* Pkg Size, Amount: show at 900px+ */
+        .col-p4 { display: none; }  /* Trend: show at 1100px+ */
+        .col-p2-inline { display: block; }  /* Inline badge: show when col-p2 column is hidden */
+        @media (min-width: 640px) { .col-p2 { display: table-cell; } .col-p2-inline { display: none; } }
+        @media (min-width: 900px) { .col-p3 { display: table-cell; } }
+        @media (min-width: 1100px) { .col-p4 { display: table-cell; } }
+
         /* Toast with slight bounce */
         .toast-enter { animation: slideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
 
@@ -653,7 +662,7 @@
         }
         const editing = state._meta.editingIngredientId;
         const adding = state._meta.addingIngredient;
-        const mobileHide = 'hidden sm:table-cell ';
+        // Column priority classes: col-p2 (640px+), col-p3 (900px+), col-p4 (1100px+)
 
         // Category counts
         const allCount = state.ingredients.length;
@@ -722,14 +731,14 @@
                 rows += `<tr class="hover:bg-stone-50 transition-colors bg-blue-50/50">
                     <td class="px-4 sm:px-6 py-4">
                         <div class="text-sm font-medium text-stone-900">${escHtml(ing.name)}</div>
-                        <div class="sm:hidden mt-0.5"><span class="text-xs px-2 py-0.5 rounded-full bg-stone-100 text-stone-600">${escHtml(ing.category || 'Other')}</span></div>
+                        <div class="col-p2-inline mt-0.5"><span class="text-xs px-2 py-0.5 rounded-full bg-stone-100 text-stone-600">${escHtml(ing.category || 'Other')}</span></div>
                     </td>
-                    <td class="${mobileHide}px-4 sm:px-6 py-4"><span class="text-xs px-2 py-0.5 rounded-full bg-stone-100 text-stone-600">${escHtml(ing.category || 'Other')}</span></td>
-                    <td class="${mobileHide}px-4 sm:px-6 py-4 text-sm text-stone-600">${escHtml(ing.packageSize)}</td>
-                    <td class="${mobileHide}px-4 sm:px-6 py-4 text-sm text-stone-600">${ing.packageAmount} ${ing.packageUnit}</td>
+                    <td class="col-p2 px-4 sm:px-6 py-4"><span class="text-xs px-2 py-0.5 rounded-full bg-stone-100 text-stone-600">${escHtml(ing.category || 'Other')}</span></td>
+                    <td class="col-p3 px-4 sm:px-6 py-4 text-sm text-stone-600">${escHtml(ing.packageSize)}</td>
+                    <td class="col-p3 px-4 sm:px-6 py-4 text-sm text-stone-600">${ing.packageAmount} ${ing.packageUnit}</td>
                     <td class="px-4 sm:px-6 py-4 text-sm text-stone-900">${fmt(ing.price)}</td>
-                    <td class="px-4 sm:px-6 py-4 text-sm text-stone-600 font-mono">${fmtUnit(ing.costPerUnit, ing.packageUnit)}</td>
-                    <td class="${mobileHide}px-4 sm:px-6 py-4">${spark}${historyCount > 0 ? `<span class="text-xs text-stone-400 ml-1">${historyCount}</span>` : ''}</td>
+                    <td class="col-p2 px-4 sm:px-6 py-4 text-sm text-stone-600 font-mono">${fmtUnit(ing.costPerUnit, ing.packageUnit)}</td>
+                    <td class="col-p4 px-4 sm:px-6 py-4">${spark}${historyCount > 0 ? `<span class="text-xs text-stone-400 ml-1">${historyCount}</span>` : ''}</td>
                     ${renderActionCell(ing.id, deps)}
                 </tr>`;
             } else {
@@ -739,14 +748,14 @@
                 rows += `<tr class="hover:bg-stone-50 transition-colors">
                     <td class="px-4 sm:px-6 py-4">
                         <div class="text-sm font-medium text-stone-900">${escHtml(ing.name)}</div>
-                        <div class="sm:hidden mt-0.5"><span class="text-xs px-2 py-0.5 rounded-full bg-stone-100 text-stone-600">${escHtml(ing.category || 'Other')}</span></div>
+                        <div class="col-p2-inline mt-0.5"><span class="text-xs px-2 py-0.5 rounded-full bg-stone-100 text-stone-600">${escHtml(ing.category || 'Other')}</span></div>
                     </td>
-                    <td class="${mobileHide}px-4 sm:px-6 py-4"><span class="text-xs px-2 py-0.5 rounded-full bg-stone-100 text-stone-600">${escHtml(ing.category || 'Other')}</span></td>
-                    <td class="${mobileHide}px-4 sm:px-6 py-4 text-sm text-stone-600">${escHtml(ing.packageSize)}</td>
-                    <td class="${mobileHide}px-4 sm:px-6 py-4 text-sm text-stone-600">${ing.packageAmount} ${ing.packageUnit}</td>
+                    <td class="col-p2 px-4 sm:px-6 py-4"><span class="text-xs px-2 py-0.5 rounded-full bg-stone-100 text-stone-600">${escHtml(ing.category || 'Other')}</span></td>
+                    <td class="col-p3 px-4 sm:px-6 py-4 text-sm text-stone-600">${escHtml(ing.packageSize)}</td>
+                    <td class="col-p3 px-4 sm:px-6 py-4 text-sm text-stone-600">${ing.packageAmount} ${ing.packageUnit}</td>
                     <td class="px-4 sm:px-6 py-4 text-sm text-stone-900">${fmt(ing.price)}</td>
-                    <td class="px-4 sm:px-6 py-4 text-sm text-stone-600 font-mono">${fmtUnit(ing.costPerUnit, ing.packageUnit)}</td>
-                    <td class="${mobileHide}px-4 sm:px-6 py-4">${spark}${historyCount > 0 ? `<span class="text-xs text-stone-400 ml-1">${historyCount}</span>` : ''}</td>
+                    <td class="col-p2 px-4 sm:px-6 py-4 text-sm text-stone-600 font-mono">${fmtUnit(ing.costPerUnit, ing.packageUnit)}</td>
+                    <td class="col-p4 px-4 sm:px-6 py-4">${spark}${historyCount > 0 ? `<span class="text-xs text-stone-400 ml-1">${historyCount}</span>` : ''}</td>
                     ${renderActionCell(ing.id, deps)}
                 </tr>`;
             }
@@ -782,17 +791,17 @@
                 <div class="${state._meta.ingredientFiltersOpen ? 'block' : 'hidden'} mt-3"><div class="mini-seg">${categoryPills}</div></div>
             </div>
             <div class="bg-white rounded-2xl overflow-hidden">
-                <div class="sm:overflow-x-auto">
-                    <table class="w-full sm:min-w-full">
+                <div>
+                    <table class="w-full">
                         <thead>
                             <tr class="border-b border-stone-100">
                                 <th class="px-4 sm:px-6 py-4 text-left text-xs font-semibold text-stone-500 uppercase tracking-wider">Ingredient</th>
-                                <th class="${mobileHide}px-4 sm:px-6 py-4 text-left text-xs font-semibold text-stone-500 uppercase tracking-wider">Category</th>
-                                <th class="${mobileHide}px-4 sm:px-6 py-4 text-left text-xs font-semibold text-stone-500 uppercase tracking-wider">Pkg Size</th>
-                                <th class="${mobileHide}px-4 sm:px-6 py-4 text-left text-xs font-semibold text-stone-500 uppercase tracking-wider">Amount</th>
+                                <th class="col-p2 px-4 sm:px-6 py-4 text-left text-xs font-semibold text-stone-500 uppercase tracking-wider">Category</th>
+                                <th class="col-p3 px-4 sm:px-6 py-4 text-left text-xs font-semibold text-stone-500 uppercase tracking-wider">Pkg Size</th>
+                                <th class="col-p3 px-4 sm:px-6 py-4 text-left text-xs font-semibold text-stone-500 uppercase tracking-wider">Amount</th>
                                 <th class="px-4 sm:px-6 py-4 text-left text-xs font-semibold text-stone-500 uppercase tracking-wider">Price</th>
-                                <th class="px-4 sm:px-6 py-4 text-left text-xs font-semibold text-stone-500 uppercase tracking-wider">Cost/Unit</th>
-                                <th class="${mobileHide}px-4 sm:px-6 py-4 text-left text-xs font-semibold text-stone-500 uppercase tracking-wider">Trend</th>
+                                <th class="col-p2 px-4 sm:px-6 py-4 text-left text-xs font-semibold text-stone-500 uppercase tracking-wider">Cost/Unit</th>
+                                <th class="col-p4 px-4 sm:px-6 py-4 text-left text-xs font-semibold text-stone-500 uppercase tracking-wider">Trend</th>
                                 <th class="px-4 sm:px-6 py-4"></th>
                             </tr>
                         </thead>
